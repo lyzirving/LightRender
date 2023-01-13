@@ -1,10 +1,10 @@
-#include "LightRender.h"
+#include "LrWidget.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    LightRender w;
+    LrWidget w;
     w.show();
     return a.exec();
 }
