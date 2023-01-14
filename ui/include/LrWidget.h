@@ -5,7 +5,7 @@
 
 #include "ui_LightRender.h"
 
-class Shader;
+class GfxContext;
 
 class LrWidget : public QWidget
 {
@@ -13,7 +13,7 @@ class LrWidget : public QWidget
 
 public:
     LrWidget(QWidget *parent = nullptr);
-    ~LrWidget();
+    virtual ~LrWidget();
 
     virtual QPaintEngine* paintEngine() const override;
 
@@ -22,6 +22,5 @@ protected:
 
 private:
     Ui::LrWidgetClass ui;
-
-    std::shared_ptr<Shader> m_shader;
+    std::shared_ptr<GfxContext> m_ctx;
 };

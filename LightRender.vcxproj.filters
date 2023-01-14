@@ -46,12 +46,24 @@
     <ClCompile Include="common\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="engine\gfx\GfxDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\gfx\GfxContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common\include\Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gfx\include\GfxDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gfx\include\GfxContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

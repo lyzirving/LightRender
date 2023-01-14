@@ -62,7 +62,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;Opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
@@ -78,7 +78,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;Opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy "$(SolutionDir)third\lib\bin" "$(OutDir)"  /A /F /I /Y /C</Command>
@@ -115,12 +115,16 @@
     <QtUic Include="LightRender.ui" />
     <QtMoc Include="ui\include\LrWidget.h" />
     <ClCompile Include="common\Logger.cpp" />
+    <ClCompile Include="engine\gfx\GfxContext.cpp" />
+    <ClCompile Include="engine\gfx\GfxDevice.cpp" />
     <ClCompile Include="engine\gfx\Shader.cpp" />
     <ClCompile Include="ui\LrWidget.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\include\Logger.h" />
+    <ClInclude Include="engine\gfx\include\GfxContext.h" />
+    <ClInclude Include="engine\gfx\include\GfxDevice.h" />
     <ClInclude Include="engine\gfx\include\Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

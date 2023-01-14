@@ -1,18 +1,23 @@
 #include "LrWidget.h"
-#include "Shader.h"
+#include "GfxContext.h"
+#include "GfxDevice.h"
 
-LrWidget::LrWidget(QWidget *parent) : QWidget(parent, Qt::MSWindowsOwnDC)
+LrWidget::LrWidget(QWidget *parent) : QWidget(parent, Qt::MSWindowsOwnDC), m_ctx(new GfxContext)
 {
     setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(true);
 
     ui.setupUi(this);
+
+    m_ctx->bind(((HWND)winId()));
+
+    GfxDevice::init();
 }
 
 LrWidget::~LrWidget() 
 {
-    m_shader.reset();
+    m_ctx.reset();
 }
  
 QPaintEngine* LrWidget::paintEngine() const { return nullptr; }
