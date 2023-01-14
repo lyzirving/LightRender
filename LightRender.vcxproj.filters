@@ -29,10 +29,10 @@
     <QtUic Include="LightRender.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="LrWidget.h">
+    <QtMoc Include="ui\include\LrWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClCompile Include="LrWidget.cpp">
+    <ClCompile Include="ui\LrWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
