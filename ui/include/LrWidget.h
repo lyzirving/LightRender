@@ -19,8 +19,10 @@ public:
 
 protected:
     virtual void closeEvent(QCloseEvent* e) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
+
+    std::shared_ptr<GfxContext> m_ctx;
 
 private:
     Ui::LrWidgetClass ui;
-    std::shared_ptr<GfxContext> m_ctx;
 };

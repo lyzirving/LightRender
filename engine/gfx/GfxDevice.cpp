@@ -4,7 +4,12 @@
 #include <GL/wglew.h>
 
 #include "GfxDevice.h"
+
 #include "Logger.h"
+#ifdef LOCAL_TAG
+#undef LOCAL_TAG
+#endif
+#define LOCAL_TAG "GfxDevice"
 
 static std::mutex g_mutex{};
 static GfxDevice* g_device{ nullptr };
@@ -26,7 +31,17 @@ void GfxDevice::init()
 {
 	if (glewInit() != GLEW_OK)
 	{
-		Logger::err("fail to init glew");
+		LOG_ERR("fail to init glew");
 		assert(0);
 	}
+	GLint major{ 0 }, minor{0};
+	glGetIntegerv(GL_MAJOR_VERSION, &major);
+	glGetIntegerv(GL_MINOR_VERSION, &minor);
+
+	LOG_INFO("gl version, major[%d], minor[%d]", major, minor);
+}
+
+void GfxDevice::setViewport(int l, int b, int width, int height)
+{
+	glViewport(l, b, width, height);
 }

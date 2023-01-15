@@ -3,7 +3,13 @@
 #include <GL/wglew.h>
 
 #include "GfxContext.h"
+#include "GfxDevice.h"
+
 #include "Logger.h"
+#ifdef LOCAL_TAG
+#undef LOCAL_TAG
+#endif
+#define LOCAL_TAG "GfxContext"
 
 GfxContext::GfxContext() : m_winInfo()
 {
@@ -23,9 +29,13 @@ void GfxContext::bind(HWND hWnd)
 	m_winInfo.hRc = wglCreateContext(m_winInfo.hDc);
 	if (!makeCurrent())
 	{
-		Logger::err("fail to make current when binding");
+		LOG_ERR("fail to make current when binding");
 		assert(0);
 	}
+	GfxDevice::init();
+
+	//close v-sync, let OpenGL gets the full control
+	wglSwapIntervalEXT(false);
 }
 
 bool GfxContext::makeCurrent()
@@ -70,12 +80,12 @@ void GfxContext::setGLPixFmt()
 	m_winInfo.pixFmt = ChoosePixelFormat(m_winInfo.hDc, &pfd);
 	if (m_winInfo.pixFmt == 0)
 	{
-		Logger::err("fail to get pixel format");
+		LOG_ERR("fail to get pixel format");
 		assert(0);
 	}
 	if (!SetPixelFormat(m_winInfo.hDc, m_winInfo.pixFmt, &pfd))
 	{
-		Logger::err("fail to set pixel format");
+		LOG_ERR("fail to set pixel format");
 		assert(0);
 	}
 }
