@@ -14,6 +14,8 @@ void Logger::init()
     FLAGS_alsologtostderr = true;
     FLAGS_colorlogtostderr = true;
 
+#ifndef TYPE_DEBUG
+
     std::string root = getRootPath();
     root.append("/logs");
 
@@ -29,6 +31,9 @@ void Logger::init()
     google::SetLogDestination(google::GLOG_INFO, infoPath.c_str());
     google::SetLogDestination(google::GLOG_WARNING, warnPath.c_str());
     google::SetLogDestination(google::GLOG_ERROR, errPath.c_str());
+
+#endif // !TYPE_DEBUG
+
 }
 
 void Logger::release()

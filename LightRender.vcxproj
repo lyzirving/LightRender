@@ -67,6 +67,7 @@
     </Link>
     <ClCompile>
       <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>TYPE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <PreBuildEvent>
       <Command>xcopy "$(SolutionDir)third\lib\bin" "$(OutDir)"  /A /F /I /Y /C</Command>
