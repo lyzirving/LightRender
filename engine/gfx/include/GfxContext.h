@@ -3,31 +3,31 @@
 
 #include <Windows.h>
 
-struct WinInfo
-{
-	int   pixFmt;
-	// handle of window
-	HWND  hWnd;
-	// context of device
-	HDC	  hDc;
-	// context of opengl
-	HGLRC hRc;
-
-	WinInfo() : pixFmt(0), hWnd(0), hDc(0), hRc(0) {}
-};
-
 class GfxContext
 {
 public:
 	GfxContext();
 	~GfxContext();
 
-	void bind(HWND hWnd);
+	void bind(HWND wnd);
 	bool makeCurrent();
 	void release();
 	bool swapBuf();
 
 protected:
+	struct WinInfo
+	{
+		int   pixFmt;
+		// handle of window
+		HWND  hdl_wnd;
+		// context of device
+		HDC	  hdl_dc;
+		// context of opengl
+		HGLRC hdl_rc;
+
+		WinInfo() : pixFmt(0), hdl_wnd(nullptr), hdl_dc(nullptr), hdl_rc(nullptr) {}
+	};
+
 	void setGLPixFmt();
 
 	WinInfo m_winInfo;

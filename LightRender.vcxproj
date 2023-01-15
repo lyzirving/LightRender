@@ -115,17 +115,23 @@
     <QtRcc Include="LightRender.qrc" />
     <QtUic Include="LightRender.ui" />
     <QtMoc Include="ui\include\LrWidget.h" />
+    <ClCompile Include="common\LightThread.cpp" />
     <ClCompile Include="common\Logger.cpp" />
+    <ClCompile Include="common\SystemUtil.cpp" />
     <ClCompile Include="engine\gfx\GfxContext.cpp" />
     <ClCompile Include="engine\gfx\GfxDevice.cpp" />
+    <ClCompile Include="engine\gfx\GfxThread.cpp" />
     <ClCompile Include="engine\gfx\Shader.cpp" />
     <ClCompile Include="ui\LrWidget.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\include\LightThread.h" />
     <ClInclude Include="common\include\Logger.h" />
+    <ClInclude Include="common\include\SystemUtil.h" />
     <ClInclude Include="engine\gfx\include\GfxContext.h" />
     <ClInclude Include="engine\gfx\include\GfxDevice.h" />
+    <ClInclude Include="engine\gfx\include\GfxThread.h" />
     <ClInclude Include="engine\gfx\include\Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

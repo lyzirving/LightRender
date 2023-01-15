@@ -52,6 +52,15 @@
     <ClCompile Include="engine\gfx\GfxContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="common\LightThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\gfx\GfxThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\SystemUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\Shader.h">
@@ -64,6 +73,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\gfx\include\GfxContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\include\LightThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gfx\include\GfxThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\include\SystemUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

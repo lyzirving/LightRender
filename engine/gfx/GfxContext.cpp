@@ -21,12 +21,12 @@ GfxContext::~GfxContext()
 	release();
 }
 
-void GfxContext::bind(HWND hWnd)
+void GfxContext::bind(HWND wnd)
 {
-	m_winInfo.hWnd = hWnd;
-	m_winInfo.hDc = GetDC(hWnd);
+	m_winInfo.hdl_wnd = wnd;
+	m_winInfo.hdl_dc = GetDC(wnd);
 	setGLPixFmt();
-	m_winInfo.hRc = wglCreateContext(m_winInfo.hDc);
+	m_winInfo.hdl_rc = wglCreateContext(m_winInfo.hdl_dc);
 	if (!makeCurrent())
 	{
 		LOG_ERR("fail to make current when binding");
@@ -40,28 +40,28 @@ void GfxContext::bind(HWND hWnd)
 
 bool GfxContext::makeCurrent()
 {
-	return wglMakeCurrent(m_winInfo.hDc, m_winInfo.hRc);
+	return wglMakeCurrent(m_winInfo.hdl_dc, m_winInfo.hdl_rc);
 }
 
 void GfxContext::release()
 {
-	if (m_winInfo.hRc != nullptr)
+	if (m_winInfo.hdl_rc != nullptr)
 	{
 		wglMakeCurrent(nullptr, nullptr);
-		wglDeleteContext(m_winInfo.hRc);
+		wglDeleteContext(m_winInfo.hdl_rc);
 	}
-	if (m_winInfo.hDc != nullptr)
+	if (m_winInfo.hdl_dc != nullptr)
 	{
-		ReleaseDC(m_winInfo.hWnd, m_winInfo.hDc);
+		ReleaseDC(m_winInfo.hdl_wnd, m_winInfo.hdl_dc);
 	}
 
-	m_winInfo.hDc = nullptr;
-	m_winInfo.hRc = nullptr;
+	m_winInfo.hdl_dc = nullptr;
+	m_winInfo.hdl_rc = nullptr;
 }
 
 bool GfxContext::swapBuf()
 {
-	return SwapBuffers(m_winInfo.hDc);
+	return SwapBuffers(m_winInfo.hdl_dc);
 }
 
 void GfxContext::setGLPixFmt()
@@ -77,13 +77,13 @@ void GfxContext::setGLPixFmt()
 	pfd.iLayerType = PFD_MAIN_PLANE;
 	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 
-	m_winInfo.pixFmt = ChoosePixelFormat(m_winInfo.hDc, &pfd);
+	m_winInfo.pixFmt = ChoosePixelFormat(m_winInfo.hdl_dc, &pfd);
 	if (m_winInfo.pixFmt == 0)
 	{
 		LOG_ERR("fail to get pixel format");
 		assert(0);
 	}
-	if (!SetPixelFormat(m_winInfo.hDc, m_winInfo.pixFmt, &pfd))
+	if (!SetPixelFormat(m_winInfo.hdl_dc, m_winInfo.pixFmt, &pfd))
 	{
 		LOG_ERR("fail to set pixel format");
 		assert(0);

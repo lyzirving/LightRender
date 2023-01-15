@@ -8,6 +8,8 @@ public:
 
 	static void init();
 	static void setViewport(int l, int b, int width, int height);
+
+	void update();
 private:
 	GfxDevice() {};
 	virtual ~GfxDevice() = default;

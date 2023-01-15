@@ -1,8 +1,7 @@
 #include <QtGui/qevent.h>
 
 #include "LrWidget.h"
-#include "GfxContext.h"
-#include "GfxDevice.h"
+#include "GfxThread.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
@@ -10,33 +9,35 @@
 #endif
 #define LOCAL_TAG "LrWidget"
 
-LrWidget::LrWidget(QWidget *parent) : QWidget(parent, Qt::MSWindowsOwnDC), m_ctx(new GfxContext)
+LrWidget::LrWidget(QWidget *parent) : QWidget(parent, Qt::MSWindowsOwnDC), m_renderThread(new GfxThread("light render"))
 {
     setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(true);
-
     ui.setupUi(this);
-
-    m_ctx->bind(((HWND)winId()));
     
     LOG_INFO("window pos[%d, %d], size[%d, %d]", this->x(), this->y(), this->width(), this->height());
-    GfxDevice::setViewport(0, 0, this->width(), this->height());
+    m_renderThread->setWindowInfo(((HWND)winId()), 0, 0, this->width(), this->height());
+    m_renderThread->start();
 }
 
 LrWidget::~LrWidget() 
 {
-    m_ctx.reset();
+    m_renderThread.reset();
 }
  
 QPaintEngine* LrWidget::paintEngine() const { return nullptr; }
 
 void LrWidget::closeEvent(QCloseEvent* e)
 {
+    if (m_renderThread)
+    {
+        m_renderThread->interrupt();
+        m_renderThread->join();
+    }
 }
 
 void LrWidget::resizeEvent(QResizeEvent* event)
 {
     LOG_INFO("resize[%d, %d]", event->size().width(), event->size().height());
-    GfxDevice::setViewport(0, 0, event->size().width(), event->size().height());
 }
