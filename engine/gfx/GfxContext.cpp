@@ -3,7 +3,6 @@
 #include <GL/wglew.h>
 
 #include "GfxContext.h"
-#include "GfxDevice.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
@@ -32,10 +31,6 @@ void GfxContext::bind(HWND wnd)
 		LOG_ERR("fail to make current when binding");
 		assert(0);
 	}
-	GfxDevice::init();
-
-	//close v-sync, let OpenGL gets the full control
-	wglSwapIntervalEXT(false);
 }
 
 bool GfxContext::makeCurrent()

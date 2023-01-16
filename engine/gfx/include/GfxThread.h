@@ -7,6 +7,7 @@
 #include "LightThread.h"
 
 class GfxContext;
+class Render;
 
 class GfxThread : public LightThread
 {
@@ -35,6 +36,7 @@ protected:
 
     WindowInfo m_wnd;
     std::shared_ptr<GfxContext> m_ctx;
+    std::shared_ptr<Render> m_render;
 
     uint64_t m_lastUpdateTime, m_lastRecTime;
     int64_t m_interval;

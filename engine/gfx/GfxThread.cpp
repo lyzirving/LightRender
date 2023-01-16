@@ -3,7 +3,7 @@
 
 #include "GfxThread.h"
 #include "GfxContext.h"
-#include "GfxDevice.h"
+#include "Render.h"
 
 #include "SystemUtil.h"
 
@@ -13,7 +13,8 @@
 #endif
 #define LOCAL_TAG "GfxThread"
 
-GfxThread::GfxThread(const char* name, int32_t fps) : LightThread(name, true), m_wnd(), m_ctx(new GfxContext), m_lastUpdateTime(0),
+GfxThread::GfxThread(const char* name, int32_t fps) : LightThread(name, true), m_wnd(), m_ctx(new GfxContext), 
+													  m_render(new Render), m_lastUpdateTime(0),
 													  m_lastRecTime(0), m_interval(1000 / fps), m_frameCnt(0), m_fpsCnt(0)
 {
 }
@@ -32,11 +33,13 @@ void GfxThread::onFirst()
 		assert(0);
 	}
 	m_ctx->bind(m_wnd.hdl_wnd);
-	GfxDevice::setViewport(m_wnd.x, m_wnd.y, m_wnd.width, m_wnd.height);
+	m_render->setViewport(m_wnd.x, m_wnd.y, m_wnd.width, m_wnd.height);
+	m_render->init();
 }
 
 void GfxThread::onQuit()
 {
+	m_render->release();
 	m_ctx->release();
 	m_wnd.hdl_wnd = nullptr;
 }
@@ -75,7 +78,7 @@ void GfxThread::setWindowInfo(HWND wnd, int x, int y, int width, int height)
 
 void GfxThread::render()
 {
-	GfxDevice::get()->update();
+	m_render->update();
 	m_ctx->swapBuf();
 	recordFps();
 }
