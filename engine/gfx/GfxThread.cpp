@@ -1,4 +1,5 @@
 #include <cassert>
+#include <limits>
 
 #include "GfxThread.h"
 #include "GfxContext.h"
@@ -12,8 +13,8 @@
 #endif
 #define LOCAL_TAG "GfxThread"
 
-GfxThread::GfxThread(const char* name, int32_t fps) : LightThread(name, true), m_wnd(), m_ctx(new GfxContext), m_interval(1000 / fps),
-                                                      m_lastTimeMs(0)
+GfxThread::GfxThread(const char* name, int32_t fps) : LightThread(name, true), m_wnd(), m_ctx(new GfxContext), m_lastUpdateTime(0),
+													  m_lastRecTime(0), m_interval(1000 / fps), m_frameCnt(0), m_fpsCnt(0)
 {
 }
 
@@ -40,23 +41,26 @@ void GfxThread::onQuit()
 	m_wnd.hdl_wnd = nullptr;
 }
 
+//TODO the way the render thread loops needs to be optimized
 void GfxThread::onLoop()
 {
-	int64_t cur = SystemUtil::curTimeMs();
+	int64_t start = SystemUtil::curTimeMs();
 
-	//TODO use microseconds to control frame rate
-	if (m_lastTimeMs == 0 || (m_lastTimeMs + m_interval) >= cur)
+	render();
+
+	int64_t end = SystemUtil::curTimeMs();
+	int64_t cost = end - start;
+	int64_t wait = m_interval - cost;
+
+	if (wait <= 0)
+		return;
+
+	Sleep(wait);
+
+	int64_t nextTick = start + m_interval;
+	while (SystemUtil::curTimeMs() < nextTick)
 	{
-		//first time enter or the time exceeds the limit, do work direcly
-		m_lastTimeMs = cur;
-		render();
-	}
-	else 
-	{
-		// sleep and do work
-		Sleep(cur - (m_lastTimeMs + m_interval));
-		m_lastTimeMs = SystemUtil::curTimeMs();
-		render();
+		//do nothing£¬ let the thread runs empty
 	}
 }
 
@@ -73,4 +77,28 @@ void GfxThread::render()
 {
 	GfxDevice::get()->update();
 	m_ctx->swapBuf();
+	recordFps();
+}
+
+void GfxThread::recordFps()
+{
+	m_frameCnt++;
+	m_fpsCnt++;
+	if (m_frameCnt == INT_MAX)
+		m_frameCnt = 0;
+
+	uint64_t cur = GetTickCount64();
+	if (m_lastRecTime == 0)
+	{
+		m_lastRecTime = cur;
+	}
+	else
+	{
+		if (cur - m_lastRecTime >= 1000)
+		{
+			LOG_INFO("fps[%d], total frame[%d]", m_fpsCnt, m_frameCnt);
+			m_fpsCnt = 0;
+			m_lastRecTime = cur;
+		}
+	}
 }

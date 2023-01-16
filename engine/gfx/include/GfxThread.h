@@ -31,12 +31,14 @@ protected:
     };
 
     void render();
+    void recordFps();
 
     WindowInfo m_wnd;
     std::shared_ptr<GfxContext> m_ctx;
 
-    int64_t m_lastTimeMs;
+    uint64_t m_lastUpdateTime, m_lastRecTime;
     int64_t m_interval;
+    int32_t m_frameCnt, m_fpsCnt;
 };
 
 #endif // !GFX_THREAD_H
