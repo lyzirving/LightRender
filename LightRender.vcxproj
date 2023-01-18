@@ -118,11 +118,13 @@
     <ClCompile Include="common\LightThread.cpp" />
     <ClCompile Include="common\Logger.cpp" />
     <ClCompile Include="common\SystemUtil.cpp" />
+    <ClCompile Include="engine\gfx\Camera.cpp" />
     <ClCompile Include="engine\gfx\GfxContext.cpp" />
     <ClCompile Include="engine\gfx\GfxThread.cpp" />
     <ClCompile Include="engine\gfx\Render.cpp" />
     <ClCompile Include="engine\gfx\Shader.cpp" />
     <ClCompile Include="engine\gfx\ViewLib.cpp" />
+    <ClCompile Include="engine\gfx\ViewTransform.cpp" />
     <ClCompile Include="ui\LrWidget.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -130,10 +132,12 @@
     <ClInclude Include="common\include\LightThread.h" />
     <ClInclude Include="common\include\Logger.h" />
     <ClInclude Include="common\include\SystemUtil.h" />
+    <ClInclude Include="engine\gfx\include\Camera.h" />
     <ClInclude Include="engine\gfx\include\GfxContext.h" />
     <ClInclude Include="engine\gfx\include\GfxThread.h" />
     <ClInclude Include="engine\gfx\include\Render.h" />
     <ClInclude Include="engine\gfx\include\Shader.h" />
+    <ClInclude Include="engine\gfx\include\ViewTransform.h" />
     <ClInclude Include="engine\gfx\include\ViewLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

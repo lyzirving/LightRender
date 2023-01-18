@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-class ViewLib;
+class ViewTransform;
 
 class Render
 {
@@ -25,7 +25,7 @@ protected:
 
 	//x, y, z, w separately mean left, bottom, width and height
 	glm::vec4 m_viewport;
-	std::shared_ptr<ViewLib> m_viewLib;
+	std::shared_ptr<ViewTransform> m_transform;
 };
 
 #endif // !RENDER_H

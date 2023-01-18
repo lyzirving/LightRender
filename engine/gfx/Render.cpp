@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include "Render.h"
-#include "ViewLib.h"
+#include "ViewTransform.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
@@ -11,11 +11,11 @@
 #endif
 #define LOCAL_TAG "Render"
 
-Render::Render() : m_viewport(), m_viewLib(new ViewLib) {}
+Render::Render() : m_viewport(), m_transform(new ViewTransform) {}
 
 Render::~Render() 
 {
-	m_viewLib.reset();
+	m_transform.reset();
 }
 
 void Render::init()
