@@ -61,13 +61,25 @@
     <ClCompile Include="engine\gfx\Render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\gfx\ViewLib.cpp">
+    <ClCompile Include="engine\view\ViewLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\gfx\Camera.cpp">
+    <ClCompile Include="engine\view\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\gfx\ViewTransform.cpp">
+    <ClCompile Include="engine\view\ViewTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\view\Frustum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\view\Viewport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\view\layer\Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\view\render\SceneRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,13 +105,31 @@
     <ClInclude Include="engine\gfx\include\Render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\gfx\include\ViewLib.h">
+    <ClInclude Include="engine\view\include\ViewLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\gfx\include\Camera.h">
+    <ClInclude Include="engine\view\include\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\gfx\include\ViewTransform.h">
+    <ClInclude Include="engine\view\include\ViewTransform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\include\Frustum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\include\Viewport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\layer\include\Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\include\ViewDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\layer\items\include\LayerItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\render\include\SceneRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

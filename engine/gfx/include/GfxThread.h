@@ -5,6 +5,7 @@
 #include <Windows.h>
 
 #include "LightThread.h"
+#include "ViewDef.h"
 
 class GfxContext;
 class Render;
@@ -13,7 +14,7 @@ class GfxThread : public LightThread
 {
 public:
 
-    GfxThread(const char* name, int32_t fps = 60);
+    GfxThread(const char* name, int32_t fps = 60, RenderType type = RenderType::SCENE);
     
     virtual ~GfxThread();
     virtual void onFirst() override;
@@ -37,6 +38,7 @@ protected:
     WindowInfo m_wnd;
     std::shared_ptr<GfxContext> m_ctx;
     std::shared_ptr<Render> m_render;
+    RenderType m_renderType;
 
     uint64_t m_lastUpdateTime, m_lastRecTime;
     int64_t m_interval;

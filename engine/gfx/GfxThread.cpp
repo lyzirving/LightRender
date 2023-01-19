@@ -3,7 +3,7 @@
 
 #include "GfxThread.h"
 #include "GfxContext.h"
-#include "Render.h"
+#include "SceneRender.h"
 
 #include "SystemUtil.h"
 
@@ -13,10 +13,18 @@
 #endif
 #define LOCAL_TAG "GfxThread"
 
-GfxThread::GfxThread(const char* name, int32_t fps) : LightThread(name, true), m_wnd(), m_ctx(new GfxContext), 
-													  m_render(new Render), m_lastUpdateTime(0),
-													  m_lastRecTime(0), m_interval(1000 / fps), m_frameCnt(0), m_fpsCnt(0)
+GfxThread::GfxThread(const char* name, int32_t fps, RenderType type) 
+		   : LightThread(name, true), m_wnd(), m_ctx(new GfxContext), m_renderType(type), m_lastUpdateTime(0),
+			 m_lastRecTime(0), m_interval(1000 / fps), m_frameCnt(0), m_fpsCnt(0)
 {
+	switch (m_renderType)
+	{
+	case SCENE:
+		m_render = std::make_shared<SceneRender>();
+		break;
+	default:
+		break;
+	}
 }
 
 GfxThread::~GfxThread()
@@ -30,6 +38,11 @@ void GfxThread::onFirst()
 	if (!m_wnd.hdl_wnd)
 	{
 		LOG_ERR("window handle is null");
+		assert(0);
+	}
+	if (!m_render)
+	{
+		LOG_ERR("render is null");
 		assert(0);
 	}
 	m_ctx->bind(m_wnd.hdl_wnd);

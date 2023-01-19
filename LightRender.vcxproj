@@ -66,7 +66,7 @@
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TYPE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <PreBuildEvent>
@@ -75,7 +75,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -118,13 +118,17 @@
     <ClCompile Include="common\LightThread.cpp" />
     <ClCompile Include="common\Logger.cpp" />
     <ClCompile Include="common\SystemUtil.cpp" />
-    <ClCompile Include="engine\gfx\Camera.cpp" />
+    <ClCompile Include="engine\view\Camera.cpp" />
+    <ClCompile Include="engine\view\Frustum.cpp" />
     <ClCompile Include="engine\gfx\GfxContext.cpp" />
     <ClCompile Include="engine\gfx\GfxThread.cpp" />
     <ClCompile Include="engine\gfx\Render.cpp" />
     <ClCompile Include="engine\gfx\Shader.cpp" />
-    <ClCompile Include="engine\gfx\ViewLib.cpp" />
-    <ClCompile Include="engine\gfx\ViewTransform.cpp" />
+    <ClCompile Include="engine\view\layer\Layer.cpp" />
+    <ClCompile Include="engine\view\render\SceneRender.cpp" />
+    <ClCompile Include="engine\view\ViewLib.cpp" />
+    <ClCompile Include="engine\view\Viewport.cpp" />
+    <ClCompile Include="engine\view\ViewTransform.cpp" />
     <ClCompile Include="ui\LrWidget.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -132,13 +136,19 @@
     <ClInclude Include="common\include\LightThread.h" />
     <ClInclude Include="common\include\Logger.h" />
     <ClInclude Include="common\include\SystemUtil.h" />
-    <ClInclude Include="engine\gfx\include\Camera.h" />
+    <ClInclude Include="engine\view\include\Camera.h" />
+    <ClInclude Include="engine\view\include\Frustum.h" />
     <ClInclude Include="engine\gfx\include\GfxContext.h" />
     <ClInclude Include="engine\gfx\include\GfxThread.h" />
     <ClInclude Include="engine\gfx\include\Render.h" />
     <ClInclude Include="engine\gfx\include\Shader.h" />
-    <ClInclude Include="engine\gfx\include\ViewTransform.h" />
-    <ClInclude Include="engine\gfx\include\ViewLib.h" />
+    <ClInclude Include="engine\view\include\ViewDef.h" />
+    <ClInclude Include="engine\view\include\Viewport.h" />
+    <ClInclude Include="engine\view\include\ViewTransform.h" />
+    <ClInclude Include="engine\view\include\ViewLib.h" />
+    <ClInclude Include="engine\view\layer\include\Layer.h" />
+    <ClInclude Include="engine\view\layer\items\include\LayerItem.h" />
+    <ClInclude Include="engine\view\render\include\SceneRender.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
