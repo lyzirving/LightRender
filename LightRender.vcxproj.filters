@@ -82,6 +82,12 @@
     <ClCompile Include="engine\view\render\SceneRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="engine\view\layer\ClearLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\view\layer\ObjLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\Shader.h">
@@ -130,6 +136,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\view\render\include\SceneRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\layer\include\ClearLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\layer\include\ObjLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

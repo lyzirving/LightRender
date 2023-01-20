@@ -70,7 +70,8 @@
       <PreprocessorDefinitions>TYPE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)third\lib\bin" "$(OutDir)"  /A /F /I /Y /C</Command>
+      <Command>xcopy "$(SolutionDir)third\lib\bin" "$(OutDir)"  /A /F /I /Y /C
+xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -82,7 +83,8 @@
       <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;Opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)third\lib\bin" "$(OutDir)"  /A /F /I /Y /C</Command>
+      <Command>xcopy "$(SolutionDir)third\lib\bin" "$(OutDir)"  /A /F /I /Y /C
+xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -124,7 +126,9 @@
     <ClCompile Include="engine\gfx\GfxThread.cpp" />
     <ClCompile Include="engine\gfx\Render.cpp" />
     <ClCompile Include="engine\gfx\Shader.cpp" />
+    <ClCompile Include="engine\view\layer\ClearLayer.cpp" />
     <ClCompile Include="engine\view\layer\Layer.cpp" />
+    <ClCompile Include="engine\view\layer\ObjLayer.cpp" />
     <ClCompile Include="engine\view\render\SceneRender.cpp" />
     <ClCompile Include="engine\view\ViewLib.cpp" />
     <ClCompile Include="engine\view\Viewport.cpp" />
@@ -146,7 +150,9 @@
     <ClInclude Include="engine\view\include\Viewport.h" />
     <ClInclude Include="engine\view\include\ViewTransform.h" />
     <ClInclude Include="engine\view\include\ViewLib.h" />
+    <ClInclude Include="engine\view\layer\include\ClearLayer.h" />
     <ClInclude Include="engine\view\layer\include\Layer.h" />
+    <ClInclude Include="engine\view\layer\include\ObjLayer.h" />
     <ClInclude Include="engine\view\layer\items\include\LayerItem.h" />
     <ClInclude Include="engine\view\render\include\SceneRender.h" />
   </ItemGroup>

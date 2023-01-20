@@ -12,6 +12,7 @@ public:
 
 protected:
 	virtual void createLayers() override;
+	virtual void onRender() override;
 };
 
 #endif // !SCENE_RENDER_H
