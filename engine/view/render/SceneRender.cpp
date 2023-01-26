@@ -1,6 +1,3 @@
-#include <Windows.h>
-#include <direct.h>
-
 #include "SceneRender.h"
 #include "ClearLayer.h"
 #include "ObjLayer.h"
@@ -25,10 +22,6 @@ void SceneRender::createLayers()
 
 	addLayer(clearLayer);
 	addLayer(objLayer);
-	// get project root directory
-	/*char buf[MAX_PATH];
-	getcwd(buf, MAX_PATH);
-	std::string path = buf;*/
 }
 
 void SceneRender::onRender()

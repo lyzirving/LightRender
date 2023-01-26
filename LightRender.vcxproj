@@ -62,7 +62,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;Opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;Opengl32.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
@@ -80,7 +80,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;Opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;glog.lib;Opengl32.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy "$(SolutionDir)third\lib\bin" "$(OutDir)"  /A /F /I /Y /C
@@ -117,6 +117,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <QtRcc Include="LightRender.qrc" />
     <QtUic Include="LightRender.ui" />
     <QtMoc Include="ui\include\LrWidget.h" />
+    <ClCompile Include="common\AssetsMgr.cpp" />
     <ClCompile Include="common\LightThread.cpp" />
     <ClCompile Include="common\Logger.cpp" />
     <ClCompile Include="common\SystemUtil.cpp" />
@@ -127,6 +128,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\gfx\Render.cpp" />
     <ClCompile Include="engine\gfx\Shader.cpp" />
     <ClCompile Include="engine\view\layer\ClearLayer.cpp" />
+    <ClCompile Include="engine\view\layer\items\ModelItem.cpp" />
     <ClCompile Include="engine\view\layer\Layer.cpp" />
     <ClCompile Include="engine\view\layer\ObjLayer.cpp" />
     <ClCompile Include="engine\view\render\SceneRender.cpp" />
@@ -137,6 +139,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\include\AssetsMgr.h" />
     <ClInclude Include="common\include\LightThread.h" />
     <ClInclude Include="common\include\Logger.h" />
     <ClInclude Include="common\include\SystemUtil.h" />
@@ -154,6 +157,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\view\layer\include\Layer.h" />
     <ClInclude Include="engine\view\layer\include\ObjLayer.h" />
     <ClInclude Include="engine\view\layer\items\include\LayerItem.h" />
+    <ClInclude Include="engine\view\layer\items\include\ModelItem.h" />
     <ClInclude Include="engine\view\render\include\SceneRender.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

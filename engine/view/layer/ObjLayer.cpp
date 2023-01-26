@@ -1,5 +1,5 @@
 #include "ObjLayer.h"
-#include "LayerItem.h"
+#include "ModelItem.h"
 
 ObjLayer::ObjLayer(LayerOrder order) : Layer(LayerType::OBJ_LAYER, order)
 {
@@ -10,7 +10,9 @@ ObjLayer::~ObjLayer() = default;
 
 void ObjLayer::createItems()
 {
-   
+    std::shared_ptr<LayerItem> modelItem = std::make_shared<ModelItem>("Marry");
+
+    m_items.push_back(std::move(modelItem));
 }
 
 void ObjLayer::update(const std::shared_ptr<ViewTransform>& trans)

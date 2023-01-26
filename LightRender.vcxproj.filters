@@ -88,6 +88,12 @@
     <ClCompile Include="engine\view\layer\ObjLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="engine\view\layer\items\ModelItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\AssetsMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\Shader.h">
@@ -142,6 +148,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\view\layer\include\ObjLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\layer\items\include\ModelItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\include\AssetsMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
