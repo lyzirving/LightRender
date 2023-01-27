@@ -121,6 +121,8 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="common\LightThread.cpp" />
     <ClCompile Include="common\Logger.cpp" />
     <ClCompile Include="common\SystemUtil.cpp" />
+    <ClCompile Include="engine\gfx\GfxHelper.cpp" />
+    <ClCompile Include="engine\gfx\GfxMesh.cpp" />
     <ClCompile Include="engine\view\Camera.cpp" />
     <ClCompile Include="engine\view\Frustum.cpp" />
     <ClCompile Include="engine\gfx\GfxContext.cpp" />
@@ -143,6 +145,9 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="common\include\LightThread.h" />
     <ClInclude Include="common\include\Logger.h" />
     <ClInclude Include="common\include\SystemUtil.h" />
+    <ClInclude Include="engine\gfx\include\GfxDef.h" />
+    <ClInclude Include="engine\gfx\include\GfxHelper.h" />
+    <ClInclude Include="engine\gfx\include\GfxMesh.h" />
     <ClInclude Include="engine\view\include\Camera.h" />
     <ClInclude Include="engine\view\include\Frustum.h" />
     <ClInclude Include="engine\gfx\include\GfxContext.h" />

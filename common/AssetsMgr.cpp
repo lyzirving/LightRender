@@ -12,8 +12,8 @@
 #endif
 #define LOCAL_TAG "AssetsMgr"
 
-std::mutex g_mutex{};
-AssetsMgr* g_mgr{ nullptr };
+static std::mutex g_mutex{};
+static AssetsMgr* g_mgr{ nullptr };
 
 AssetsMgr* AssetsMgr::get()
 {

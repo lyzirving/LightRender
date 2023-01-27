@@ -94,6 +94,12 @@
     <ClCompile Include="common\AssetsMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="engine\gfx\GfxMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\gfx\GfxHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\Shader.h">
@@ -154,6 +160,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common\include\AssetsMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gfx\include\GfxMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gfx\include\GfxDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gfx\include\GfxHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

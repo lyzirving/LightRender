@@ -10,7 +10,6 @@
 
 SceneRender::SceneRender() : Render("Scene")
 {
-	createLayers();
 }
 
 SceneRender::~SceneRender() = default;

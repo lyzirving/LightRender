@@ -61,6 +61,8 @@ void Render::init()
 	LOG_INFO("gl version, major[%d], minor[%d]", major, minor);
 	//close v-sync, let OpenGL gets the full control
 	wglSwapIntervalEXT(false);
+
+	createLayers();
 }
 
 void Render::update() 
