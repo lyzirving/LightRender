@@ -3,7 +3,6 @@
 #include <assimp/postprocess.h>
 #include <assimp/material.h>
 #include <limits>
-
 #include <cassert>
 
 #include "ModelItem.h"
@@ -12,6 +11,8 @@
 #include "GfxMesh.h"
 #include "GfxHelper.h"
 #include "GfxDef.h"
+#include "ShaderMgr.h"
+#include "Shader.h"
 
 #include "AssetsMgr.h"
 
@@ -21,9 +22,8 @@
 #endif
 #define LOCAL_TAG "ModelItem"
 
-ModelItem::ModelItem(const char* name) : LayerItem(), m_name(name), m_srcRoot(),
-                                         m_meshInd(0), m_mesh(),
-		                                 m_minPos(FLT_MAX), m_maxPos(FLT_MIN)
+ModelItem::ModelItem(const char* name, bool fCenter, bool fScale) : LayerItem(fCenter, fScale), 
+                                                                    m_name(name), m_srcRoot(), m_meshInd(0), m_mesh()
 {
 	if (m_name.empty())
 	{
@@ -37,7 +37,26 @@ ModelItem::~ModelItem() = default;
 
 void ModelItem::draw(const std::shared_ptr<ViewTransform>& trans)
 {
+	const glm::mat4& viewMat = trans->getViewMat();
+	const glm::mat4& prjMat = trans->getProjectMat();
 
+	const std::shared_ptr<Shader>& objShader = ShaderMgr::get()->getShader(SHADER_OBJ);
+	if (!objShader)
+	{
+		LOG_ERR("obj shader is null");
+		assert(0);
+	}
+	objShader->use(true);
+	objShader->setMat4(U_MAT_VIEW, viewMat);
+	objShader->setMat4(U_MAT_PRJ, prjMat);
+	objShader->setMat4(U_MAT_MODEL, m_modelMat * m_adjMat);
+
+	for (auto& item : m_mesh)
+	{
+		item->draw(objShader);
+	}
+
+	objShader->use(false);
 }
 
 void ModelItem::loadModel()
@@ -48,13 +67,14 @@ void ModelItem::loadModel()
 
 	// use assimp load model and get aiScene
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		LOG_ERR("fail to load model from [%s], reason[%s]", path.c_str(), importer.GetErrorString());
 		return;
 	}
 	LOG_INFO("start to load model from[%s]", path.c_str());
 	processNode(scene->mRootNode, scene);
+	computeAdjMat();
 	LOG_INFO("finish loading model[%s]", m_name.c_str());
 }
 
@@ -161,12 +181,8 @@ std::shared_ptr<GfxMesh> ModelItem::processMesh(aiMesh* mesh, const aiScene* sce
 		}
 	}
 
+	result->bind(false);
+
 	LOG_INFO("finish parse mesh, info: %s", result->getMeshInfo().c_str());
 	return result;
-}
-
-void ModelItem::updateMinMax(const glm::vec3& pos)
-{
-	m_maxPos = glm::max(pos, m_maxPos);
-	m_minPos = glm::min(pos, m_minPos);
 }

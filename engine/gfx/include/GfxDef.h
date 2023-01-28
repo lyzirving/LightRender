@@ -4,6 +4,13 @@
 #include <string>
 #include <glm/glm.hpp>
 
+static const std::string U_MAT_MODEL = std::string("u_modelMat");
+static const std::string U_MAT_VIEW  = std::string("u_viewMat");
+static const std::string U_MAT_PRJ   = std::string("u_prjMat");
+
+static const std::string U_SMP_DIFF = std::string("u_diffuse");
+static const std::string U_SMP_SPEC = std::string("u_spec");
+
 enum ShaderType : uint8_t
 {
     SHADER_OBJ,
@@ -16,6 +23,13 @@ enum TexType : uint8_t
     DIFFUSE,
     SPECULAR,
     TEX_TYPE_COUNT
+};
+
+enum DrawMode : uint8_t
+{
+    MODE_TRIANGLE,
+    MODE_LINE,
+    MODE_POINT
 };
 
 struct Vertex

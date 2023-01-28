@@ -32,6 +32,7 @@ public:
 protected:
     virtual void createMem();
     virtual void freeMem();
+    uint32_t getGlDrawMode();
 
     bool m_initialized;
     std::string m_name;
@@ -42,6 +43,8 @@ protected:
     std::vector<Texture> m_textures;
 
     std::shared_ptr<Material> m_material;
+
+    uint8_t m_drawMode;
 };
 
 #endif // !GFX_MESH_H

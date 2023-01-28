@@ -20,21 +20,8 @@ Render::Render(const char* name) : m_name(name), m_transform(new ViewTransform),
 
 Render::~Render() 
 {
+	Render::release();
 	m_transform.reset();
-
-	auto itr = m_layers.begin();
-	while (itr != m_layers.end())
-	{
-		(*itr).reset();
-		itr = m_layers.erase(itr);
-	}
-
-	auto mapItr = m_existence.begin();
-	while (mapItr != m_existence.end())
-	{
-		mapItr->second.reset();
-		mapItr = m_existence.erase(mapItr);
-	}
 }
 
 void Render::addLayer(const std::shared_ptr<Layer>& layer)
@@ -90,7 +77,22 @@ void Render::onRender() {}
 
 void Render::postRender() {}
 
-void Render::release() {}
+void Render::release() 
+{
+	auto itr = m_layers.begin();
+	while (itr != m_layers.end())
+	{
+		(*itr).reset();
+		itr = m_layers.erase(itr);
+	}
+
+	auto mapItr = m_existence.begin();
+	while (mapItr != m_existence.end())
+	{
+		mapItr->second.reset();
+		mapItr = m_existence.erase(mapItr);
+	}
+}
 
 void Render::removeLayer(const std::shared_ptr<Layer>& layer)
 {

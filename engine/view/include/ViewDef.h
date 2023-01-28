@@ -32,7 +32,7 @@ enum RenderType : uint8_t
 enum AdjFlag : uint8_t
 {
     ADJ_CENTER = 0b00000001,
-    ADJ_SCALE = 0b00000010
+    ADJ_SCALE  = 0b00000010
 };
 
 #endif // !VIEW_DEF_H

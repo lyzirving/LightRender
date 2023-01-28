@@ -3,7 +3,7 @@
 #include "ClearLayer.h"
 
 ClearLayer::ClearLayer(LayerOrder order) : Layer(LayerType::LAYER_BASIC, order), 
-                                           m_clearColor(0xffffffff)
+                                           m_clearColor(0xA9A9A9ff)
 {
 }
 

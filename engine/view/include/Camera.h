@@ -16,12 +16,15 @@ public:
     const glm::mat4& getViewMat();
     const glm::vec3& getCamPos();
 
-    void setPosition(const glm::vec3& pos);
     void setPosition(float theta, float phi, float r);
 
 private:
     void calcViewMat();
-    void checkBound();
+    void calcViewDirection();
+    void calcCameraPosition();
+    void checkCamPosPhi();
+    void checkCamPos();
+    void keepViewDirToOrigin();
 
     glm::vec3 m_worldUp;
     glm::vec3 m_camPos;

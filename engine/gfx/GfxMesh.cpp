@@ -1,22 +1,31 @@
+#include <GL/glew.h>
+
 #include "GfxMesh.h"
 #include "GfxDef.h"
+#include "GfxHelper.h"
 #include "Shader.h"
 
 #include "SystemUtil.h"
 
-#include "GL/glew.h"
+#include "Logger.h"
+#ifdef LOCAL_TAG
+#undef LOCAL_TAG
+#endif
+#define LOCAL_TAG "GfxMesh"
 
 GfxMesh::GfxMesh() : m_initialized(false), m_name(),
                      m_vao(0), m_vbo(0), m_ebo(0),
                      m_vertices(), m_indices(), m_textures(),
-                     m_material(new Material)
+                     m_material(new Material),
+                     m_drawMode(DrawMode::MODE_TRIANGLE)
 {
 }
 
 GfxMesh::GfxMesh(const char* name) : m_initialized(false), m_name(name),
                                      m_vao(0), m_vbo(0), m_ebo(0),
                                      m_vertices(), m_indices(), m_textures(),
-                                     m_material(new Material)
+                                     m_material(new Material),
+                                     m_drawMode(DrawMode::MODE_TRIANGLE)
 {
 }
 
@@ -75,6 +84,8 @@ setup:
 
     glBindVertexArray(0);
 
+    LOG_INFO("init mesh[%s], vao[%u], vbo[%u], ebo[%u]", m_name.c_str(), m_vao, m_vbo, m_ebo);
+
     m_initialized = true;
 }
 
@@ -94,6 +105,32 @@ void GfxMesh::freeMem()
 
 void GfxMesh::draw(const std::shared_ptr<Shader>& shader)
 {
+    for (int32_t i = 0; i < m_textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, m_textures[i].m_texId);
+        TexType type = m_textures[i].m_type;
+        std::string sampler = (type == TexType::DIFFUSE ? U_SMP_DIFF : U_SMP_SPEC);
+        shader->setInt(sampler, i);
+    }
+    glBindVertexArray(m_vao);
+    glDrawElements(getGlDrawMode(), m_indices.size(), GL_UNSIGNED_INT, nullptr);
+    GfxHelper::checkGlErr("mesh[%s] draw err", m_name.c_str());
+    glBindVertexArray(0);
+}
+
+uint32_t GfxMesh::getGlDrawMode()
+{
+    switch (m_drawMode)
+    {
+    case DrawMode::MODE_LINE:
+        return GL_LINES;
+    case DrawMode::MODE_POINT:
+        return GL_POINTS;
+    case DrawMode::MODE_TRIANGLE:
+    default:
+        return GL_TRIANGLES;
+    }
 }
 
 std::string GfxMesh::getMeshInfo()

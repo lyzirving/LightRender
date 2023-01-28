@@ -10,6 +10,9 @@
 class GfxContext;
 class Render;
 
+class GreEventQueue;
+struct GreEvent;
+
 class GfxThread : public LightThread
 {
 public:
@@ -21,6 +24,7 @@ public:
     virtual void onQuit() override;
     virtual void onLoop() override;
 
+    void onWindowSizeChange(int width, int height);
     void setWindowInfo(HWND wnd, int x, int y, int width, int height);
 
 protected:
@@ -32,6 +36,8 @@ protected:
         WindowInfo() : hdl_wnd(nullptr), x(0), y(0), width(0), height(0) {}
     };
 
+    void dealEvent();
+    void processUi(GreEvent &evt);
     void render();
     void recordFps();
 
@@ -43,6 +49,8 @@ protected:
     uint64_t m_lastUpdateTime, m_lastRecTime;
     int64_t m_interval;
     int32_t m_frameCnt, m_fpsCnt;
+
+    std::shared_ptr<GreEventQueue> m_uiEvtQueue;
 };
 
 #endif // !GFX_THREAD_H

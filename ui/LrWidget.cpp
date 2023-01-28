@@ -39,5 +39,8 @@ void LrWidget::closeEvent(QCloseEvent* e)
 
 void LrWidget::resizeEvent(QResizeEvent* event)
 {
-    LOG_INFO("resize[%d, %d]", event->size().width(), event->size().height());
+    if (m_renderThread)
+    {
+        m_renderThread->onWindowSizeChange(event->size().width(), event->size().height());
+    }
 }

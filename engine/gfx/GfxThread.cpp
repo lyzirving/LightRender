@@ -6,6 +6,8 @@
 #include "SceneRender.h"
 #include "ShaderMgr.h"
 
+#include "GreEventQueue.h"
+
 #include "SystemUtil.h"
 
 #include "Logger.h"
@@ -16,7 +18,8 @@
 
 GfxThread::GfxThread(const char* name, int32_t fps, RenderType type) 
 		   : LightThread(name, true), m_wnd(), m_ctx(new GfxContext), m_renderType(type), m_lastUpdateTime(0),
-			 m_lastRecTime(0), m_interval(1000 / fps), m_frameCnt(0), m_fpsCnt(0)
+			 m_lastRecTime(0), m_interval(1000 / fps), m_frameCnt(0), m_fpsCnt(0), 
+	         m_uiEvtQueue(new GreEventQueue(GreEventType::EVT_TYPE_OUTSIDE))
 {
 	switch (m_renderType)
 	{
@@ -30,8 +33,18 @@ GfxThread::GfxThread(const char* name, int32_t fps, RenderType type)
 
 GfxThread::~GfxThread()
 {
+	m_uiEvtQueue.reset();
 	m_wnd.hdl_wnd = nullptr;
 	m_ctx.reset();
+}
+
+void GfxThread::dealEvent()
+{
+	if (m_uiEvtQueue && !m_uiEvtQueue->empty())
+	{
+		GreEvent evt = m_uiEvtQueue->dequeue();
+		processUi(evt);
+	}
 }
 
 void GfxThread::onFirst()
@@ -54,8 +67,9 @@ void GfxThread::onFirst()
 
 void GfxThread::onQuit()
 {
-	ShaderMgr::release();
+	// watch out the release order
 	m_render->release();
+	ShaderMgr::release();
 	m_ctx->release();
 	m_wnd.hdl_wnd = nullptr;
 }
@@ -64,6 +78,8 @@ void GfxThread::onQuit()
 void GfxThread::onLoop()
 {
 	int64_t start = SystemUtil::curTimeMs();
+
+	dealEvent();
 
 	render();
 
@@ -80,6 +96,31 @@ void GfxThread::onLoop()
 	while (SystemUtil::curTimeMs() < nextTick)
 	{
 		//do nothing£¬ let the thread runs empty
+	}
+}
+
+void GfxThread::onWindowSizeChange(int width, int height)
+{
+	if (m_uiEvtQueue)
+	{
+		GreEvent evt = { GreEventId::EVT_WINDOW_SIZE_CHANGE, width, height };
+		m_uiEvtQueue->enqueue(std::move(evt));
+	}
+}
+
+void GfxThread::processUi(GreEvent& evt)
+{
+	switch (evt.m_id)
+	{
+	case GreEventId::EVT_WINDOW_SIZE_CHANGE:
+	{
+		m_wnd.width = evt.intArg0;
+		m_wnd.height = evt.intArg1;
+		m_render->setViewport(m_wnd.x, m_wnd.y, m_wnd.width, m_wnd.height);
+		break;
+	}
+	default:
+		break;
 	}
 }
 

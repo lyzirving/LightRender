@@ -10,7 +10,7 @@ ObjLayer::~ObjLayer() = default;
 
 void ObjLayer::createItems()
 {
-    std::shared_ptr<LayerItem> modelItem = std::make_shared<ModelItem>("Marry");
+    std::shared_ptr<LayerItem> modelItem = std::make_shared<ModelItem>("Marry", true, true);
 
     m_items.push_back(std::move(modelItem));
 }
