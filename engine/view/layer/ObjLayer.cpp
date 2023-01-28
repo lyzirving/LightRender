@@ -1,7 +1,7 @@
 #include "ObjLayer.h"
 #include "ModelItem.h"
 
-ObjLayer::ObjLayer(LayerOrder order) : Layer(LayerType::OBJ_LAYER, order)
+ObjLayer::ObjLayer(LayerOrder order) : Layer(LayerType::LAYER_OBJ, order)
 {
     ObjLayer::createItems();
 }

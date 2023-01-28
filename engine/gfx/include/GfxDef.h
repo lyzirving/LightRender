@@ -4,6 +4,13 @@
 #include <string>
 #include <glm/glm.hpp>
 
+enum ShaderType : uint8_t
+{
+    SHADER_OBJ,
+    SHADER_CANVAS,
+    SHADER_CNT
+};
+
 enum TexType : uint8_t
 {
     DIFFUSE,

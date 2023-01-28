@@ -10,10 +10,10 @@
 
 enum LayerType : uint8_t
 {
-    BASIC,
-    OBJ_LAYER,
-    CANVAS,
-    CNT
+    LAYER_BASIC,
+    LAYER_OBJ,
+    LAYER_CANVAS,
+    LAYER_CNT
 };
 
 enum LayerOrder : uint8_t

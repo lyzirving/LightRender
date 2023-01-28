@@ -4,6 +4,7 @@
 #include "GfxThread.h"
 #include "GfxContext.h"
 #include "SceneRender.h"
+#include "ShaderMgr.h"
 
 #include "SystemUtil.h"
 
@@ -48,10 +49,12 @@ void GfxThread::onFirst()
 	m_ctx->bind(m_wnd.hdl_wnd);
 	m_render->setViewport(m_wnd.x, m_wnd.y, m_wnd.width, m_wnd.height);
 	m_render->init();
+	ShaderMgr::get()->init();
 }
 
 void GfxThread::onQuit()
 {
+	ShaderMgr::release();
 	m_render->release();
 	m_ctx->release();
 	m_wnd.hdl_wnd = nullptr;

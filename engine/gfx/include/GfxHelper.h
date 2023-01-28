@@ -10,6 +10,9 @@ class GfxHelper
 {
 public:
 	static GfxHelper* get();
+
+	static uint32_t createProgram(const char* vert = nullptr, const char* frag = nullptr, 
+		                          const char* geo = nullptr);
 	static void release();
 	static uint32_t colorFormat(int component);
 	static bool checkGlErr(const char* fmt, ...);
@@ -20,6 +23,9 @@ public:
 private:
 	GfxHelper();
 	~GfxHelper();
+
+	static uint32_t createShader(uint32_t type, const char* source);
+	static void logShaderInfo(uint32_t shader);
 
 	std::unordered_map<std::string, Texture> m_texMap;
 };

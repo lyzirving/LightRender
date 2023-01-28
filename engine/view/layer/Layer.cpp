@@ -1,6 +1,6 @@
 #include "Layer.h"
 
-Layer::Layer() : m_type(LayerType::BASIC), m_order(LayerOrder::LOW),
+Layer::Layer() : m_type(LayerType::LAYER_BASIC), m_order(LayerOrder::LOW),
                  m_key(m_type, m_order), m_items()
 {
 

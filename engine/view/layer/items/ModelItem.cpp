@@ -37,6 +37,7 @@ ModelItem::~ModelItem() = default;
 
 void ModelItem::draw(const std::shared_ptr<ViewTransform>& trans)
 {
+
 }
 
 void ModelItem::loadModel()
