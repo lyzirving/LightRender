@@ -3,10 +3,12 @@
 
 #include "GfxThread.h"
 #include "GfxContext.h"
-#include "SceneRender.h"
 #include "ShaderMgr.h"
 
 #include "GreEventQueue.h"
+
+#include "SceneRender.h"
+#include "RrtRender.h"
 
 #include "SystemUtil.h"
 
@@ -25,6 +27,9 @@ GfxThread::GfxThread(const char* name, int32_t fps, RenderType type)
 	{
 	case SCENE:
 		m_render = std::make_shared<SceneRender>();
+		break;
+	case RRT_CANVAS:
+		m_render = std::make_shared<RrtRender>();
 		break;
 	default:
 		break;
@@ -60,9 +65,9 @@ void GfxThread::onFirst()
 		assert(0);
 	}
 	m_ctx->bind(m_wnd.hdl_wnd);
+	ShaderMgr::get()->init();
 	m_render->setViewport(m_wnd.x, m_wnd.y, m_wnd.width, m_wnd.height);
 	m_render->init();
-	ShaderMgr::get()->init();
 }
 
 void GfxThread::onQuit()

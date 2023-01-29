@@ -58,7 +58,7 @@
     <ClCompile Include="common\SystemUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\gfx\Render.cpp">
+    <ClCompile Include="engine\view\render\Render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine\view\ViewLib.cpp">
@@ -109,6 +109,15 @@
     <ClCompile Include="engine\gre\GreEventQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="engine\view\render\RrtRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\view\layer\RrtCanvasLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\accelerator\BVHBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\Shader.h">
@@ -129,7 +138,7 @@
     <ClInclude Include="common\include\SystemUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\gfx\include\Render.h">
+    <ClInclude Include="engine\view\render\include\Render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\view\include\ViewLib.h">
@@ -187,6 +196,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\gre\include\GreEventQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\render\include\RrtRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\view\layer\include\RrtCanvasLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\include\RrtDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

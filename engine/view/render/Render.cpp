@@ -68,12 +68,15 @@ void Render::preRender()
 {
 	const std::shared_ptr<Viewport> &viewport = m_transform->viewport();
 	glViewport(viewport->x(), viewport->y(), viewport->width(), viewport->height());
-
-	glClearColor(0.f, 0.f, 1.f, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Render::onRender() {}
+void Render::onRender() 
+{
+	for (auto& layer : m_layers)
+	{
+		layer->update(m_transform);
+	}
+}
 
 void Render::postRender() {}
 

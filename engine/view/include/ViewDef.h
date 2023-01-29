@@ -11,8 +11,8 @@
 enum LayerType : uint8_t
 {
     LAYER_BASIC,
-    LAYER_OBJ,
     LAYER_CANVAS,
+    LAYER_OBJ,
     LAYER_CNT
 };
 
@@ -26,7 +26,9 @@ enum LayerOrder : uint8_t
 
 enum RenderType : uint8_t
 {
-    SCENE
+    SCENE,
+    RRT_CANVAS,
+    RENDER_CNT
 };
 
 enum AdjFlag : uint8_t

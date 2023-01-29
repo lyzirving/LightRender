@@ -28,14 +28,6 @@ void SceneRender::createLayers()
 	addLayer(objLayer);
 }
 
-void SceneRender::onRender()
-{
-	for (auto& layer : m_layers)
-	{
-		layer->update(m_transform);
-	}
-}
-
 void SceneRender::preRender()
 {
 	Render::preRender();

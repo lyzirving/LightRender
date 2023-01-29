@@ -12,7 +12,6 @@ public:
 
 protected:
 	virtual void createLayers() override;
-	virtual void onRender() override;
 
 	virtual void preRender() override;
 	virtual void postRender() override;

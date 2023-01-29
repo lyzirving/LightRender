@@ -12,8 +12,8 @@
 static std::mutex g_mutex{};
 static ShaderMgr* g_mgr{ nullptr };
 
-static const char* STR_NONE = "none";
-static const char* STR_OBJ = "obj";
+static const char* STR_NONE   = "none";
+static const char* STR_OBJ    = "obj";
 static const char* STR_CANVAS = "cas";
 
 ShaderMgr* ShaderMgr::get()
@@ -60,6 +60,10 @@ void ShaderMgr::init()
     std::string key = STR_OBJ;
     std::shared_ptr<Shader> objShader = std::make_shared<Shader>(STR_OBJ, STR_OBJ, STR_OBJ);
     m_shaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(key, objShader));
+
+    key = STR_CANVAS;
+    std::shared_ptr<Shader> casShader = std::make_shared<Shader>(STR_CANVAS, STR_CANVAS, STR_CANVAS);
+    m_shaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(key, casShader));
 }
 
 void ShaderMgr::release()

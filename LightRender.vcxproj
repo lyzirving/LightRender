@@ -66,7 +66,7 @@
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;D:\Visual Studio Project\LightRender\engine\gre\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;D:\Visual Studio Project\LightRender\engine\gre\include;D:\Visual Studio Project\LightRender\engine\rrt\include;D:\Visual Studio Project\LightRender\engine\rrt\accelerator\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TYPE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <PreBuildEvent>
@@ -76,7 +76,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;D:\Visual Studio Project\LightRender\engine\gre\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;D:\Visual Studio Project\LightRender\engine\gre\include;D:\Visual Studio Project\LightRender\engine\rrt\include;D:\Visual Studio Project\LightRender\engine\rrt\accelerator\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -125,17 +125,20 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\gfx\GfxMesh.cpp" />
     <ClCompile Include="engine\gfx\ShaderMgr.cpp" />
     <ClCompile Include="engine\gre\GreEventQueue.cpp" />
+    <ClCompile Include="engine\rrt\accelerator\BVHBuilder.cpp" />
     <ClCompile Include="engine\view\Camera.cpp" />
     <ClCompile Include="engine\view\Frustum.cpp" />
     <ClCompile Include="engine\gfx\GfxContext.cpp" />
     <ClCompile Include="engine\gfx\GfxThread.cpp" />
-    <ClCompile Include="engine\gfx\Render.cpp" />
+    <ClCompile Include="engine\view\layer\RrtCanvasLayer.cpp" />
+    <ClCompile Include="engine\view\render\Render.cpp" />
     <ClCompile Include="engine\gfx\Shader.cpp" />
     <ClCompile Include="engine\view\layer\ClearLayer.cpp" />
     <ClCompile Include="engine\view\layer\items\LayerItem.cpp" />
     <ClCompile Include="engine\view\layer\items\ModelItem.cpp" />
     <ClCompile Include="engine\view\layer\Layer.cpp" />
     <ClCompile Include="engine\view\layer\ObjLayer.cpp" />
+    <ClCompile Include="engine\view\render\RrtRender.cpp" />
     <ClCompile Include="engine\view\render\SceneRender.cpp" />
     <ClCompile Include="engine\view\ViewLib.cpp" />
     <ClCompile Include="engine\view\Viewport.cpp" />
@@ -154,11 +157,14 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\gfx\include\ShaderMgr.h" />
     <ClInclude Include="engine\gre\include\GreDef.h" />
     <ClInclude Include="engine\gre\include\GreEventQueue.h" />
+    <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h" />
+    <ClInclude Include="engine\rrt\include\RrtDef.h" />
     <ClInclude Include="engine\view\include\Camera.h" />
     <ClInclude Include="engine\view\include\Frustum.h" />
     <ClInclude Include="engine\gfx\include\GfxContext.h" />
     <ClInclude Include="engine\gfx\include\GfxThread.h" />
-    <ClInclude Include="engine\gfx\include\Render.h" />
+    <ClInclude Include="engine\view\layer\include\RrtCanvasLayer.h" />
+    <ClInclude Include="engine\view\render\include\Render.h" />
     <ClInclude Include="engine\gfx\include\Shader.h" />
     <ClInclude Include="engine\view\include\ViewDef.h" />
     <ClInclude Include="engine\view\include\Viewport.h" />
@@ -169,6 +175,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\view\layer\include\ObjLayer.h" />
     <ClInclude Include="engine\view\layer\items\include\LayerItem.h" />
     <ClInclude Include="engine\view\layer\items\include\ModelItem.h" />
+    <ClInclude Include="engine\view\render\include\RrtRender.h" />
     <ClInclude Include="engine\view\render\include\SceneRender.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
