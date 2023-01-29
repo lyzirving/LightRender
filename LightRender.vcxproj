@@ -126,6 +126,9 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\gfx\ShaderMgr.cpp" />
     <ClCompile Include="engine\gre\GreEventQueue.cpp" />
     <ClCompile Include="engine\rrt\accelerator\BVHBuilder.cpp" />
+    <ClCompile Include="engine\rrt\RrtBuffer.cpp" />
+    <ClCompile Include="engine\rrt\RrtBVHBuf.cpp" />
+    <ClCompile Include="engine\rrt\RrtTriBuf.cpp" />
     <ClCompile Include="engine\view\Camera.cpp" />
     <ClCompile Include="engine\view\Frustum.cpp" />
     <ClCompile Include="engine\gfx\GfxContext.cpp" />
@@ -158,7 +161,10 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\gre\include\GreDef.h" />
     <ClInclude Include="engine\gre\include\GreEventQueue.h" />
     <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h" />
+    <ClInclude Include="engine\rrt\include\RrtBuffer.h" />
+    <ClInclude Include="engine\rrt\include\RrtBVHBuf.h" />
     <ClInclude Include="engine\rrt\include\RrtDef.h" />
+    <ClInclude Include="engine\rrt\include\RrtTriBuf.h" />
     <ClInclude Include="engine\view\include\Camera.h" />
     <ClInclude Include="engine\view\include\Frustum.h" />
     <ClInclude Include="engine\gfx\include\GfxContext.h" />

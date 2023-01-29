@@ -3,8 +3,10 @@
 
 #include <glm/glm.hpp>
 
-const static char* RRT_SLOT_TRI = "u_triangles";
-const static char* RRT_SLOT_BVH = "u_BVHNodes";
+static const char *RRT_SLOT_TRI = "u_triangles";
+static const char *RRT_SLOT_BVH = "u_BVHNodes";
+static const char *U_TRI_CNT    = "u_triCnt";
+static const char *U_BVH_CNT    = "u_BVHNodeCnt";
 
 struct RrtCanvasVert
 {

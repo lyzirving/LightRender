@@ -2,12 +2,16 @@
 #include <GL/glew.h>
 
 #include "RrtCanvasLayer.h"
+#include "RrtTriBuf.h"
+#include "RrtBVHBuf.h"
+#include "RrtDef.h"
+#include "BVHBuilder.h"
 
 #include "Shader.h"
 #include "ShaderMgr.h"
+#include "GfxDef.h"
 
-#include "RrtDef.h"
-#include "BVHBuilder.h"
+#include "ViewDef.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
@@ -17,7 +21,8 @@
 
 RrtCanvasLayer::RrtCanvasLayer(LayerOrder order) : Layer(LayerType::LAYER_CANVAS, order),
                                                    m_vao(0), m_vbo(0), m_ebo(0), m_bgColor(0xffffffff),
-                                                   m_shader(nullptr), m_BVHBuilder(nullptr)
+                                                   m_shader(nullptr), m_BVHBuilder(nullptr),
+                                                   m_triBuf(new RrtTriBuf), m_BVHBuf(new RrtBVHBuf)
 {
     createItems();
 }
@@ -25,7 +30,10 @@ RrtCanvasLayer::RrtCanvasLayer(LayerOrder order) : Layer(LayerType::LAYER_CANVAS
 RrtCanvasLayer::~RrtCanvasLayer()
 {
     m_shader.reset();
+
     m_BVHBuilder.reset();
+    m_triBuf.reset();
+    m_BVHBuf.reset();
 
     if (m_vbo != 0) glDeleteBuffers(1, &m_vbo);
     if (m_ebo != 0) glDeleteBuffers(1, &m_ebo);
@@ -49,10 +57,18 @@ void RrtCanvasLayer::createItems()
     m_BVHBuilder = std::make_shared<BVHBuilder>("StanfordBunny", true);
     m_BVHBuilder->build(nodes);
     m_BVHBuilder->getTriangles(triangles);
+
+    m_triBuf->addTriangles(triangles);
+    m_BVHBuf->addNodes(nodes);
 }
 
 void RrtCanvasLayer::drawCall()
 {
+    m_shader->setVec4(U_BG_COLOR, R_COMP(m_bgColor), G_COMP(m_bgColor), B_COMP(m_bgColor), A_COMP(m_bgColor));
+    m_shader->setVec3(U_EYS_POS, glm::vec3(0.f, 0.f, 5.f));
+    glBindVertexArray(m_vao);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    glBindVertexArray(0);
 }
 
 void RrtCanvasLayer::initMem()
@@ -86,5 +102,16 @@ void RrtCanvasLayer::initMem()
 
 void RrtCanvasLayer::update(const std::shared_ptr<ViewTransform>& trans)
 {
+    // if the iteration in fragment shader for each pixel is too large, performance problem will occur.
+    // if iteration count is out of driver's limit, gpu will recognize it as dead lock, and crash the application.
+    m_shader->use(true);
+    m_triBuf->bind(m_shader, 0);
+    m_shader->setInt(U_TRI_CNT, m_triBuf->triangleCnt());
+
+    m_BVHBuf->bind(m_shader, 1);
+    m_shader->setInt(U_BVH_CNT, m_BVHBuf->nodesCnt());
+
     drawCall();
+
+    m_shader->use(false);
 }

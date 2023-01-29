@@ -17,7 +17,7 @@ class GfxThread : public LightThread
 {
 public:
 
-    GfxThread(const char* name, int32_t fps = 60, RenderType type = RenderType::SCENE);
+    GfxThread(const char* name, int32_t fps, RenderType type);
     
     virtual ~GfxThread();
     virtual void onFirst() override;

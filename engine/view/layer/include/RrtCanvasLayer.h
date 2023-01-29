@@ -4,7 +4,10 @@
 #include "Layer.h"
 
 class Shader;
+
 class BVHBuilder;
+class RrtTriBuf;
+class RrtBVHBuf;
 
 class RrtCanvasLayer : public Layer
 {
@@ -26,6 +29,9 @@ private:
 
     std::shared_ptr<Shader> m_shader;
     std::shared_ptr<BVHBuilder> m_BVHBuilder;
+
+    std::shared_ptr<RrtTriBuf> m_triBuf;
+    std::shared_ptr<RrtBVHBuf> m_BVHBuf;
 };
 
 #endif //RRT_CANVAS_LAYER_H

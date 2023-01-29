@@ -4,12 +4,15 @@
 #include <string>
 #include <glm/glm.hpp>
 
-static const std::string U_MAT_MODEL = std::string("u_modelMat");
-static const std::string U_MAT_VIEW  = std::string("u_viewMat");
-static const std::string U_MAT_PRJ   = std::string("u_prjMat");
+static const char *U_MAT_MODEL = "u_modelMat";
+static const char* U_MAT_VIEW  = "u_viewMat";
+static const char* U_MAT_PRJ   = "u_prjMat";
 
-static const std::string U_SMP_DIFF = std::string("u_diffuse");
-static const std::string U_SMP_SPEC = std::string("u_spec");
+static const char* U_SMP_DIFF = "u_diffuse";
+static const char* U_SMP_SPEC = "u_spec";
+
+static const char* U_BG_COLOR = "u_bgColor";
+static const char* U_EYS_POS  = "u_eysPos";
 
 enum ShaderType : uint8_t
 {
