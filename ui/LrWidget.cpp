@@ -9,7 +9,7 @@
 #endif
 #define LOCAL_TAG "LrWidget"
 
-LrWidget::LrWidget(QWidget *parent) : QWidget(parent, Qt::MSWindowsOwnDC), m_renderThread(new GfxThread("light render", 60, RenderType::SCENE))
+LrWidget::LrWidget(QWidget *parent) : QWidget(parent, Qt::MSWindowsOwnDC), m_renderThread(new GfxThread("light render", 60, RenderType::RRT_CANVAS))
 {
     setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_NoSystemBackground);

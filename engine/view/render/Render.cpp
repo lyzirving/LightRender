@@ -1,7 +1,7 @@
-#include <GL/glew.h>
-#include <GL/wglew.h>
 #include <cassert>
 #include <algorithm>
+
+#include <GL/glew.h>
 
 #include "Render.h"
 
@@ -36,19 +36,6 @@ void Render::addLayer(const std::shared_ptr<Layer>& layer)
 
 void Render::init()
 {
-	if (glewInit() != GLEW_OK)
-	{
-		LOG_ERR("fail to init glew");
-		assert(0);
-	}
-	GLint major{ 0 }, minor{ 0 };
-	glGetIntegerv(GL_MAJOR_VERSION, &major);
-	glGetIntegerv(GL_MINOR_VERSION, &minor);
-
-	LOG_INFO("gl version, major[%d], minor[%d]", major, minor);
-	//close v-sync, let OpenGL gets the full control
-	wglSwapIntervalEXT(false);
-
 	createLayers();
 }
 

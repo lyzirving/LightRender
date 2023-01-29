@@ -10,6 +10,7 @@ public:
 	~GfxContext();
 
 	void bind(HWND wnd);
+	void initInterface();
 	bool makeCurrent();
 	void release();
 	bool swapBuf();

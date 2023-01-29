@@ -65,7 +65,9 @@ void GfxThread::onFirst()
 		assert(0);
 	}
 	m_ctx->bind(m_wnd.hdl_wnd);
+	m_ctx->initInterface();
 	ShaderMgr::get()->init();
+
 	m_render->setViewport(m_wnd.x, m_wnd.y, m_wnd.width, m_wnd.height);
 	m_render->init();
 }
