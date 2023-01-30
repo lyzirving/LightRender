@@ -8,6 +8,7 @@ class Shader;
 class BVHBuilder;
 class RrtTriBuf;
 class RrtBVHBuf;
+class ViewTransform;
 
 class RrtCanvasLayer : public Layer
 {
@@ -22,7 +23,7 @@ protected:
 
 private:
     void initMem();
-    void drawCall();
+    void drawCall(const std::shared_ptr<ViewTransform> &trans);
 
     uint32_t m_vao, m_vbo, m_ebo;
     uint32_t m_bgColor;

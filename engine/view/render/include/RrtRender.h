@@ -12,6 +12,7 @@ public:
 
 protected:
 	virtual void createLayers() override;
+	virtual void preRender() override;
 };
 
 #endif // !RRT_RENDER_H

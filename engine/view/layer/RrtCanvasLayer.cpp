@@ -7,6 +7,9 @@
 #include "RrtDef.h"
 #include "BVHBuilder.h"
 
+#include "ViewTransform.h"
+#include "Camera.h"
+
 #include "Shader.h"
 #include "ShaderMgr.h"
 #include "GfxDef.h"
@@ -62,10 +65,19 @@ void RrtCanvasLayer::createItems()
     m_BVHBuf->addNodes(nodes);
 }
 
-void RrtCanvasLayer::drawCall()
+void RrtCanvasLayer::drawCall(const std::shared_ptr<ViewTransform>& trans)
 {
+    const std::shared_ptr<Camera> &cam = trans->camera();
+    const glm::mat4 &viewMat = cam->getViewMat();
+    const glm::vec3 &eyePos = cam->getCamPos();
+
+    glm::mat4 invViewMat = glm::inverse(viewMat);
+
+    m_shader->setMat4(U_INV_VIEW_MT, invViewMat);
+    m_shader->setFloat(U_FOCAL_LEN, 2.f);
+    m_shader->setVec3(U_EYS_POS, eyePos);
+
     m_shader->setVec4(U_BG_COLOR, R_COMP(m_bgColor), G_COMP(m_bgColor), B_COMP(m_bgColor), A_COMP(m_bgColor));
-    m_shader->setVec3(U_EYS_POS, glm::vec3(0.f, 0.f, 5.f));
     glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
@@ -111,7 +123,7 @@ void RrtCanvasLayer::update(const std::shared_ptr<ViewTransform>& trans)
     m_BVHBuf->bind(m_shader, 1);
     m_shader->setInt(U_BVH_CNT, m_BVHBuf->nodesCnt());
 
-    drawCall();
+    drawCall(trans);
 
     m_shader->use(false);
 }

@@ -12,6 +12,11 @@ uniform vec4 u_bgColor;
 uniform vec3 u_eysPos;
 uniform int u_triCnt;
 uniform int u_BVHNodeCnt;
+
+// inverse of camera matrix, which transform pt in camera coordinate to world coordinate
+uniform mat4 u_invViewMat;
+// focal length define the distance between virtual viewport and camera
+uniform float u_focalLen;
 /*************************************************************/
 
 
@@ -108,8 +113,14 @@ BVHNode getBVHNode(int i) {
 
 Ray genRay() {
     Ray ray;
+    // u_eysPos is in world coordinate system
     ray.start = u_eysPos;
-    ray.dir = normalize(i_pixel - ray.start);
+    // we assume i_pixel is in camera coordinate system, so is u_focalLen. so dst.z must be minus
+    // dst is now in camera coordinate system
+    vec4 dst = vec4(i_pixel.xy, -u_focalLen, 1.f);
+    // use inverse view mat to transform dst into world coordinate system 
+    dst = u_invViewMat * dst;
+    ray.dir = normalize(dst.xyz - ray.start.xyz);
     return ray;
 }
 
