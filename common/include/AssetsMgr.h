@@ -15,6 +15,7 @@ public:
     static AssetsMgr* get();
 
     static std::string getObj(const std::string& name);
+    static std::string getRootDir();
     static std::string getTexture(const std::string& name, PIC_TYPE type = PIC_TYPE::PNG);
     static std::string getVert(const std::string& name);
     static std::string getFrag(const std::string& name);

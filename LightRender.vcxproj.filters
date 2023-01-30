@@ -118,13 +118,16 @@
     <ClCompile Include="engine\rrt\accelerator\BVHBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\rrt\RrtBuffer.cpp">
+    <ClCompile Include="engine\rrt\tools\RrtBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\rrt\RrtTriBuf.cpp">
+    <ClCompile Include="engine\rrt\tools\RrtTriBuf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\rrt\RrtBVHBuf.cpp">
+    <ClCompile Include="engine\rrt\tools\RrtBVHBuf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\RrtTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -213,19 +216,22 @@
     <ClInclude Include="engine\view\layer\include\RrtCanvasLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\rrt\include\RrtDef.h">
+    <ClInclude Include="engine\rrt\tools\include\RrtDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\rrt\include\RrtBuffer.h">
+    <ClInclude Include="engine\rrt\tools\include\RrtBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\rrt\include\RrtTriBuf.h">
+    <ClInclude Include="engine\rrt\tools\include\RrtTriBuf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\rrt\include\RrtBVHBuf.h">
+    <ClInclude Include="engine\rrt\tools\include\RrtBVHBuf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\include\RrtTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

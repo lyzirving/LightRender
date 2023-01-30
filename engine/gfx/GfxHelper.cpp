@@ -1,6 +1,4 @@
-#ifdef STB_IMAGE_IMPLEMENTATION
-#undef STB_IMAGE_IMPLEMENTATION
-#endif
+#define STB_IMAGE_STATIC
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 

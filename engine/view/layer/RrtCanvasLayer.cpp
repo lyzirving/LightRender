@@ -74,7 +74,7 @@ void RrtCanvasLayer::drawCall(const std::shared_ptr<ViewTransform>& trans)
     glm::mat4 invViewMat = glm::inverse(viewMat);
 
     m_shader->setMat4(U_INV_VIEW_MT, invViewMat);
-    m_shader->setFloat(U_FOCAL_LEN, 2.f);
+    m_shader->setFloat(U_FOCAL_LEN, 1.5f);
     m_shader->setVec3(U_EYS_POS, eyePos);
 
     m_shader->setVec4(U_BG_COLOR, R_COMP(m_bgColor), G_COMP(m_bgColor), B_COMP(m_bgColor), A_COMP(m_bgColor));

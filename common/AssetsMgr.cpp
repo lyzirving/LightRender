@@ -31,14 +31,7 @@ AssetsMgr::~AssetsMgr() = default;
 
 std::string AssetsMgr::getPath(const std::string& path, SRC_TYPE type)
 {
-    char *buf = getcwd(nullptr, 0);
-    if (!buf)
-    {
-        LOG_ERR("getcwd failed");
-        assert(0);
-    }
-    std::string root = std::string(buf);
-    std::free(buf);
+    std::string root = getRootDir();
     const char oldVal = '\\';
     const char newVal = '/';
     std::replace(root.begin(), root.end(), oldVal, newVal);
@@ -72,6 +65,19 @@ std::string AssetsMgr::getPath(const std::string& path, SRC_TYPE type)
         return root + std::string("/") + "model" + "/" + path;
     }
     }
+}
+
+std::string AssetsMgr::getRootDir()
+{
+    char* buf = getcwd(nullptr, 0);
+    if (!buf)
+    {
+        LOG_ERR("getcwd failed");
+        assert(0);
+    }
+    std::string root = std::string(buf);
+    std::free(buf);
+    return root;
 }
 
 std::string AssetsMgr::getObj(const std::string& name)

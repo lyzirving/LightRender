@@ -35,7 +35,7 @@ void Camera::calcViewMat()
         m_viewMat = glm::lookAt(m_camPos, m_camPos + m_viewDir, m_camUp);
         m_dataChange.store(false);
 
-        LOG_INFO("cam pos[%f, %f, %f], view dir[%f, %f, %f]", m_camPos.x, m_camPos.y, m_camPos.z, m_viewDir.x, m_viewDir.y, m_viewDir.z);
+        //LOG_INFO("cam pos[%f, %f, %f], view dir[%f, %f, %f]", m_camPos.x, m_camPos.y, m_camPos.z, m_viewDir.x, m_viewDir.y, m_viewDir.z);
     }
 }
 

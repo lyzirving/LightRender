@@ -23,5 +23,5 @@ void RrtRender::preRender()
 	Render::preRender();
 
 	const std::shared_ptr<Camera>& cam = m_transform->camera();
-	cam->setPosition(90.f, 60.f, 4.f);
+	cam->setPosition(90.f, 0.f, 4.f);
 }
