@@ -8,9 +8,11 @@
 
 #include <algorithm>
 #include <cassert>
+#include <limits>
 
 #include "RrtTest.h"
 #include "Ray.h"
+#include "Sphere.h"
 #include "GeoLib.h"
 
 #include "SystemUtil.h"
@@ -86,6 +88,9 @@ void RrtTest::draw(int width, int height, int channel, uint8_t* data)
 	Ray ray;
 	ray.setOrigin(cameraPos);
 
+	Sphere sphere(glm::vec3(0.f, 0.f, -2.f), 0.5f);
+	HitRecord rec;
+
 	for (int row = 0; row < height; ++row)
 	{
 		LOG_INFO("scanlines remaining: %d", height - row);
@@ -97,8 +102,8 @@ void RrtTest::draw(int width, int height, int channel, uint8_t* data)
 			dir = glm::normalize(dir - ray.origin());
 			ray.setDirection(dir);
 
-			glm::vec2 timePoint;
-			if (GeoLib::hitSphere(ray, glm::vec3(0.f, 0.f, -2.f), 0.5f, timePoint))
+			sphere.hit(ray, 0.f, FLT_MAX, rec);
+			if (rec.hit)
 			{
 				data[(row * width + col) * channel + 0] = 255;
 				data[(row * width + col) * channel + 1] = 0;
