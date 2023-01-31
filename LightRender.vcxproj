@@ -126,6 +126,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\gfx\ShaderMgr.cpp" />
     <ClCompile Include="engine\gre\GreEventQueue.cpp" />
     <ClCompile Include="engine\rrt\accelerator\BVHBuilder.cpp" />
+    <ClCompile Include="engine\rrt\Ray.cpp" />
     <ClCompile Include="engine\rrt\RrtTest.cpp" />
     <ClCompile Include="engine\rrt\tools\RrtBuffer.cpp" />
     <ClCompile Include="engine\rrt\tools\RrtBVHBuf.cpp" />
@@ -162,10 +163,11 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\gre\include\GreDef.h" />
     <ClInclude Include="engine\gre\include\GreEventQueue.h" />
     <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h" />
+    <ClInclude Include="engine\rrt\include\Ray.h" />
     <ClInclude Include="engine\rrt\include\RrtTest.h" />
     <ClInclude Include="engine\rrt\tools\include\RrtBuffer.h" />
     <ClInclude Include="engine\rrt\tools\include\RrtBVHBuf.h" />
-    <ClInclude Include="engine\rrt\tools\include\RrtDef.h" />
+    <ClInclude Include="engine\rrt\include\RrtDef.h" />
     <ClInclude Include="engine\rrt\tools\include\RrtTriBuf.h" />
     <ClInclude Include="engine\view\include\Camera.h" />
     <ClInclude Include="engine\view\include\Frustum.h" />

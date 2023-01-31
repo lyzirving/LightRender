@@ -8,6 +8,16 @@
 #endif
 #define LOCAL_TAG "ViewLib"
 
+glm::vec3 ViewLib::blend(const glm::vec3& start, const glm::vec3& end, float t)
+{
+    if (t < 0.f)
+        t = 0.f;
+    else if (t > 1.f)
+        t = 1.f;
+
+    return (1 - t) * start + t * end;
+}
+
 void ViewLib::SCStoCCS(float theta, float phi, float r, glm::vec3& out)
 {
     float projection = std::abs(r * std::sin(glm::radians(theta)));
