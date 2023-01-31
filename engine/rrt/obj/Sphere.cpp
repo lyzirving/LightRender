@@ -20,6 +20,7 @@ void Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) cons
         return;
     }
     
+    // select the smaller result at first
     float root = (-b - std::sqrt(discriminant)) / (2.f * a);
     if (root < tMin || root > tMax)
     {

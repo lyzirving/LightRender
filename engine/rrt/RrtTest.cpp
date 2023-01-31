@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <limits>
 
 #include "RrtTest.h"
@@ -105,9 +106,9 @@ void RrtTest::draw(int width, int height, int channel, uint8_t* data)
 			sphere.hit(ray, 0.f, FLT_MAX, rec);
 			if (rec.hit)
 			{
-				data[(row * width + col) * channel + 0] = 255;
-				data[(row * width + col) * channel + 1] = 0;
-				data[(row * width + col) * channel + 2] = 0;
+				data[(row * width + col) * channel + 0] = static_cast<uint8_t>((rec.n.x + 1.f) * 0.5f * 255.999);
+				data[(row * width + col) * channel + 1] = static_cast<uint8_t>((rec.n.y + 1.f) * 0.5f * 255.999);
+				data[(row * width + col) * channel + 2] = static_cast<uint8_t>((rec.n.z + 1.f) * 0.5f * 255.999);
 			}
 			else
 			{
