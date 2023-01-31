@@ -8,7 +8,7 @@ public:
 
 private:
 	static void gradientImg(int width, int height, int channel, uint8_t *data);
-	static void verticalBlendImg(int width, int height, int channel, uint8_t* data);
+	static void draw(int width, int height, int channel, uint8_t* data);
 
 	RrtTest() {};
 	~RrtTest() = default;

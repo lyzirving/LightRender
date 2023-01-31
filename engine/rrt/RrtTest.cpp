@@ -11,8 +11,7 @@
 
 #include "RrtTest.h"
 #include "Ray.h"
-
-#include "ViewLib.h"
+#include "GeoLib.h"
 
 #include "SystemUtil.h"
 #include "AssetsMgr.h"
@@ -58,7 +57,7 @@ void RrtTest::main()
 		assert(0);
 	}
 
-	verticalBlendImg(width, height, channel, data);
+	draw(width, height, channel, data);
 
 	int ret = stbi_write_png(path.c_str(), width, height, channel, data, 0);
 	if (ret == 0)
@@ -72,7 +71,7 @@ void RrtTest::main()
 	LOG_INFO("finish generating rrt img[%s], take time[%.3f]", path.c_str(), (end - start) / 1000.f);
 }
 
-void RrtTest::verticalBlendImg(int width, int height, int channel, uint8_t* data)
+void RrtTest::draw(int width, int height, int channel, uint8_t* data)
 {
 	float aspect = float(width) / float(height);
 	float viewportHeight = 2.f;
@@ -98,14 +97,24 @@ void RrtTest::verticalBlendImg(int width, int height, int channel, uint8_t* data
 			dir = glm::normalize(dir - ray.origin());
 			ray.setDirection(dir);
 
-			glm::vec3 rayDir = ray.direction();
-			// keep t in [0, 1.f]
-			float t = (rayDir.y + 1.f) * 0.5f;
-			glm::vec3 val = ViewLib::blend(start, end, t);
+			glm::vec2 timePoint;
+			if (GeoLib::hitSphere(ray, glm::vec3(0.f, 0.f, -2.f), 0.5f, timePoint))
+			{
+				data[(row * width + col) * channel + 0] = 255;
+				data[(row * width + col) * channel + 1] = 0;
+				data[(row * width + col) * channel + 2] = 0;
+			}
+			else
+			{
+				glm::vec3 rayDir = ray.direction();
+				// keep t in [0, 1.f]
+				float t = (rayDir.y + 1.f) * 0.5f;
+				glm::vec3 val = GeoLib::blend(start, end, t);
 
-			data[(row * width + col) * channel + 0] = static_cast<uint8_t>((val.x) * 255.999);
-			data[(row * width + col) * channel + 1] = static_cast<uint8_t>((val.y) * 255.999);
-			data[(row * width + col) * channel + 2] = static_cast<uint8_t>((val.z) * 255.999);
+				data[(row * width + col) * channel + 0] = static_cast<uint8_t>((val.x) * 255.999);
+				data[(row * width + col) * channel + 1] = static_cast<uint8_t>((val.y) * 255.999);
+				data[(row * width + col) * channel + 2] = static_cast<uint8_t>((val.z) * 255.999);
+			}
 		}
 	}
 }

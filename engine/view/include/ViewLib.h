@@ -6,7 +6,6 @@
 class ViewLib
 {
 public:
-	static glm::vec3 blend(const glm::vec3& start, const glm::vec3& end, float t);
 	// spherical coordinate system to cartesian coordinate system
 	static void SCStoCCS(float theta, float phi, float r, glm::vec3& out);
 	// cartesian coordinate system to spherical coordinate system
