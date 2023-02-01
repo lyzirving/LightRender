@@ -68,45 +68,45 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 {
 	glm::vec3 startColor{ 1.f }, endColor{0.5f, 0.7f, 1.f};
 
-	glm::vec3 dir{ 0.f };
-	Ray ray;
-	ray.setOrigin(camera.position());
-
-	const glm::vec3 &imgLt = camera.imgLt();
-
 	Sphere sphere(glm::vec3(0.f, 0.f, -2.f), 0.5f);
 
+	int outputRow, outputCol;
+	float u, v;
+	Ray ray;
 	HitRecord rec;
 
+	// row and col start from left-bottom(-imgWidth / 2.f, -imgHeight / 2.f) corner for rendering
+	// outputRow and outputCol start from left-top(0, 0) corner for image output
 	for (int row = 0; row < height; ++row)
 	{
-		LOG_INFO("scanlines remaining: %d", row);
+		LOG_INFO("scanlines remaining: %d", height - 1 - row);
 		for (int col = 0; col < width; ++col)
 		{
-			dir = imgLt;
-			dir.x += float(col) / float(width - 1) * camera.imgWidth();
-			dir.y -= float(row) / float(height - 1) * camera.imgHeight();
+			outputCol = col;
+			outputRow = height - 1 - row;
 
-			dir = glm::normalize(dir - ray.origin());
-			ray.setDirection(dir);
+			u = float(col) / float(width - 1);
+			v = float(row) / float(height - 1);
+
+			ray = camera.getRay(u, v);
 
 			sphere.hit(ray, 0.f, FLT_MAX, rec);
+
 			if (rec.hit)
 			{
-				data[(row * width + col) * channel + 0] = static_cast<uint8_t>((rec.n.x + 1.f) * 0.5f * 255.999);
-				data[(row * width + col) * channel + 1] = static_cast<uint8_t>((rec.n.y + 1.f) * 0.5f * 255.999);
-				data[(row * width + col) * channel + 2] = static_cast<uint8_t>((rec.n.z + 1.f) * 0.5f * 255.999);
+				data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>((rec.n.x + 1.f) * 0.5f * 255.999);
+				data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>((rec.n.y + 1.f) * 0.5f * 255.999);
+				data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>((rec.n.z + 1.f) * 0.5f * 255.999);
 			}
 			else
 			{
 				glm::vec3 rayDir = ray.direction();
-				// keep t in [0, 1.f]
 				float t = (rayDir.y + 1.f) * 0.5f;
 				glm::vec3 val = GeoLib::blend(startColor, endColor, t);
 
-				data[(row * width + col) * channel + 0] = static_cast<uint8_t>((val.x) * 255.999);
-				data[(row * width + col) * channel + 1] = static_cast<uint8_t>((val.y) * 255.999);
-				data[(row * width + col) * channel + 2] = static_cast<uint8_t>((val.z) * 255.999);
+				data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>((val.x) * 255.999);
+				data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>((val.y) * 255.999);
+				data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>((val.z) * 255.999);
 			}
 		}
 	}

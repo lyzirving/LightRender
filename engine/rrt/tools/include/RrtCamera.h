@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Ray.h"
+
 class RrtCamera
 {
 public:
@@ -11,10 +13,9 @@ public:
 
 	inline float aspect() const { return m_aspect; }
 	inline float focal() const { return m_focalLen; }
-	inline float imgWidth() const { return m_imgWidth; }
-	inline float imgHeight() const { return m_imgHeight; }
 	inline const glm::vec3 &position() const { return m_pos; }
-	inline const glm::vec3& imgLt() const { return m_imgLt; }
+
+	Ray getRay(float u, float v) const;
 
 	void setAspect(float aspect);
 	void setFocalLen(float focal);
@@ -32,8 +33,9 @@ private:
 	// image's size is measured by virtual unit.
 	float m_imgHeight, m_imgWidth;
 
-	// a left-top corner of img in camera coordinate system which is a standard right-handed coordinate system
-	glm::vec3 m_imgLt;
+	// a left-bottom corner(-m_imgWidth / 2.f, -m_imgHeight / 2.f) of img 
+	// the pt is measured in camera coordinate system which is a standard right-handed coordinate system
+	glm::vec3 m_imgLb;
 };
 
 #endif

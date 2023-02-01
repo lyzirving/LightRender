@@ -10,10 +10,22 @@ RrtCamera::~RrtCamera() = default;
 
 void RrtCamera::computeImgLb()
 {
-	m_imgLt = m_pos;
-	m_imgLt.x -= m_imgWidth / 2.f;
-	m_imgLt.y += m_imgHeight / 2.f;
-	m_imgLt.z -= m_focalLen;
+	m_imgLb = m_pos;
+	m_imgLb.x -= m_imgWidth / 2.f;
+	m_imgLb.y -= m_imgHeight / 2.f;
+	m_imgLb.z -= m_focalLen;
+}
+
+Ray RrtCamera::getRay(float u, float v) const
+{
+	Ray r;
+	r.setOrigin(m_pos);
+	glm::vec3 dir = m_imgLb;
+	dir.x += u * m_imgWidth;
+	dir.y += v * m_imgHeight;
+	dir = glm::normalize(dir - m_pos);
+	r.setDirection(dir);
+	return r;
 }
 
 void RrtCamera::setAspect(float aspect)
