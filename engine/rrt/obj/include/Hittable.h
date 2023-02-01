@@ -10,6 +10,7 @@ struct HitRecord
 	bool hit;
 	float t;
 	glm::vec3 pt;
+	// normal should always point outward from the surface
 	glm::vec3 n;
 
 	HitRecord() : hit(false), t(0.f), pt(0.f), n(0.f) {}

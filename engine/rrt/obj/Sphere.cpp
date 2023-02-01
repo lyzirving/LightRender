@@ -35,5 +35,6 @@ void Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) cons
     record.hit = true;
     record.t = root;
     record.pt = ray.at(root);
+    // the normal always points outward from the sphere 
     record.n = glm::normalize(record.pt - m_center);
 }
