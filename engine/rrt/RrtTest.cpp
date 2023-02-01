@@ -70,9 +70,10 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 
 	Sphere sphere(glm::vec3(0.f, 0.f, -2.f), 0.5f);
 
+	const int sampleCnt = 25;
+
 	int outputRow, outputCol;
 	float u, v;
-	Ray ray;
 	HitRecord rec;
 
 	// row and col start from left-bottom(-imgWidth / 2.f, -imgHeight / 2.f) corner for rendering
@@ -85,29 +86,50 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 			outputCol = col;
 			outputRow = height - 1 - row;
 
-			u = float(col) / float(width - 1);
-			v = float(row) / float(height - 1);
-
-			ray = camera.getRay(u, v);
-
-			sphere.hit(ray, 0.f, FLT_MAX, rec);
-
-			if (rec.hit)
+			if ((height - 1 - row) == 340 && (width - 1 - col) == 362)
 			{
-				data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>((rec.n.x + 1.f) * 0.5f * 255.999);
-				data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>((rec.n.y + 1.f) * 0.5f * 255.999);
-				data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>((rec.n.z + 1.f) * 0.5f * 255.999);
+				LOG_INFO("enter");
 			}
-			else
-			{
-				glm::vec3 rayDir = ray.direction();
-				float t = (rayDir.y + 1.f) * 0.5f;
-				glm::vec3 val = GeoLib::blend(startColor, endColor, t);
 
-				data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>((val.x) * 255.999);
-				data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>((val.y) * 255.999);
-				data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>((val.z) * 255.999);
+			glm::vec3 sampleColor{0.f};
+			float scale = 1.f / float(sampleCnt);
+
+			// antialiasing
+			for (int i = 0; i < sampleCnt; ++i)
+			{
+				u = (col + GeoLib::random()) / float(width - 1);
+				v = (row + GeoLib::random()) / float(height - 1);
+				Ray ray = camera.getRay(u, v);
+				glm::vec3 ret = rayColor(ray, sphere);
+				ret = ret * scale;
+				sampleColor = sampleColor + ret;
 			}
+
+			data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>(sampleColor.x * 255.999);
+			data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>(sampleColor.y * 255.999);
+			data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>(sampleColor.z * 255.999);
 		}
+	}
+}
+
+glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj)
+{
+	glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
+
+	HitRecord rec;
+	obj.hit(ray, 0.f, FLT_MAX, rec);
+
+	if (rec.hit)
+	{
+		glm::vec3 color;
+		color.x = (rec.n.x + 1.f) * 0.5f;
+		color.y = (rec.n.y + 1.f) * 0.5f;
+		color.z = (rec.n.z + 1.f) * 0.5f;
+		return color;
+	}
+	else
+	{
+		float t = (ray.direction().y + 1.f) * 0.5f;
+		return GeoLib::blend(startColor, endColor, t);
 	}
 }

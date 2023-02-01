@@ -9,6 +9,8 @@ class GeoLib
 {
 public:
 	static glm::vec3 blend(const glm::vec3& start, const glm::vec3& end, float t);
+	static double random();
+	static double random(double min, double max);
 
 private:
 	GeoLib() {};
