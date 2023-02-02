@@ -20,6 +20,24 @@ glm::vec3 GeoLib::blend(const glm::vec3& start, const glm::vec3& end, float t)
     return (1 - t) * start + t * end;
 }
 
+float GeoLib::clamp(float val, float min, float max)
+{
+    if (val < min)
+        return min;
+    else if (val > max)
+        return max;
+    return val;
+}
+
+glm::vec3 GeoLib::gamma2Correct(const glm::vec3& color)
+{
+    glm::vec3 ret;
+    ret.x = std::sqrt(color.x);
+    ret.y = std::sqrt(color.y);
+    ret.z = std::sqrt(color.z);
+    return ret;
+}
+
 double GeoLib::random()
 {
     // returns a random real in [0, 1)
@@ -29,4 +47,19 @@ double GeoLib::random()
 double GeoLib::random(double min, double max)
 {
     return min + (max - min) * random();
+}
+
+glm::vec3 GeoLib::randomVec3(double min, double max)
+{
+    return glm::vec3(random(min, max), random(min, max), random(min, max));
+}
+
+glm::vec3 GeoLib::randomInUnitSphere()
+{
+    while (true)
+    {
+        glm::vec3 ret = randomVec3(-1.f, 1.f);
+        if (glm::length(ret) >= 1.f) continue;
+        return ret;
+    }
 }

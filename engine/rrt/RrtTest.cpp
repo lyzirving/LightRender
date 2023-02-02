@@ -10,11 +10,13 @@
 #include <cassert>
 #include <cmath>
 #include <limits>
+#include <memory>
 
 #include "RrtTest.h"
 #include "RrtCamera.h"
 #include "Ray.h"
 #include "Sphere.h"
+#include "HittableList.h"
 #include "GeoLib.h"
 
 #include "SystemUtil.h"
@@ -68,9 +70,14 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 {
 	glm::vec3 startColor{ 1.f }, endColor{0.5f, 0.7f, 1.f};
 
-	Sphere sphere(glm::vec3(0.f, 0.f, -2.f), 0.5f);
+	HittableList world;
+	std::shared_ptr<Sphere> sphere0 = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, -2.f), 0.5f);
+	std::shared_ptr<Sphere> sphere1 = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, -2.f), 100.f);
 
-	const int sampleCnt = 25;
+	world.add(sphere0);
+	world.add(sphere1);
+
+	const int sampleCnt = 10;
 
 	int outputRow, outputCol;
 	float u, v;
@@ -86,11 +93,6 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 			outputCol = col;
 			outputRow = height - 1 - row;
 
-			if ((height - 1 - row) == 340 && (width - 1 - col) == 362)
-			{
-				LOG_INFO("enter");
-			}
-
 			glm::vec3 sampleColor{0.f};
 			float scale = 1.f / float(sampleCnt);
 
@@ -100,22 +102,22 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 				u = (col + GeoLib::random()) / float(width - 1);
 				v = (row + GeoLib::random()) / float(height - 1);
 				Ray ray = camera.getRay(u, v);
-				glm::vec3 ret = rayColor(ray, sphere);
+				glm::vec3 ret = rayColorDiffuse(ray, world, 0.5f, 10);
 				ret = ret * scale;
 				sampleColor = sampleColor + ret;
 			}
 
-			data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>(sampleColor.x * 255.999);
-			data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>(sampleColor.y * 255.999);
-			data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>(sampleColor.z * 255.999);
+			sampleColor = GeoLib::gamma2Correct(sampleColor);
+
+			data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>(256 * GeoLib::clamp(sampleColor.x, 0.f, 0.999f));
+			data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>(256 * GeoLib::clamp(sampleColor.y, 0.f, 0.999f));
+			data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>(256 * GeoLib::clamp(sampleColor.z, 0.f, 0.999f));
 		}
 	}
 }
 
 glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj)
 {
-	glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
-
 	HitRecord rec;
 	obj.hit(ray, 0.f, FLT_MAX, rec);
 
@@ -129,6 +131,28 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj)
 	}
 	else
 	{
+		glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
+		float t = (ray.direction().y + 1.f) * 0.5f;
+		return GeoLib::blend(startColor, endColor, t);
+	}
+}
+
+glm::vec3 RrtTest::rayColorDiffuse(const Ray& ray, const Hittable& obj, float reflectRatio, int reflectDepth)
+{
+	if (reflectDepth <= 0) return glm::vec3(0.f);
+
+	HitRecord rec;
+	obj.hit(ray, 0.f, FLT_MAX, rec);
+
+	if (rec.hit)
+	{
+		glm::vec3 target = rec.pt + rec.n + GeoLib::randomInUnitSphere();
+		Ray reflect{rec.pt, glm::normalize(target - rec.pt)};
+		return reflectRatio * rayColorDiffuse(reflect, obj, reflectRatio, --reflectDepth);
+	}
+	else
+	{
+		glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
 		float t = (ray.direction().y + 1.f) * 0.5f;
 		return GeoLib::blend(startColor, endColor, t);
 	}

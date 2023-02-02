@@ -24,6 +24,7 @@ void HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record
 		obj->hit(ray, tMin, closest, tmpRec);
 		if (tmpRec.hit)
 		{
+			// it imitates the depth test
 			closest = tmpRec.t;
 			record = tmpRec;
 		}
