@@ -17,7 +17,8 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include "HittableList.h"
-#include "GeoLib.h"
+
+#include "GfxLib.h"
 
 #include "SystemUtil.h"
 #include "AssetsMgr.h"
@@ -90,28 +91,27 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 		LOG_INFO("scanlines remaining: %d", height - 1 - row);
 		for (int col = 0; col < width; ++col)
 		{
-			outputCol = col;
-			outputRow = height - 1 - row;
-
 			glm::vec3 sampleColor{0.f};
 			float scale = 1.f / float(sampleCnt);
 
-			// antialiasing
+			// create a number of samples to form an average color of a pixel to perform antialiasing
 			for (int i = 0; i < sampleCnt; ++i)
 			{
-				u = (col + GeoLib::random()) / float(width - 1);
-				v = (row + GeoLib::random()) / float(height - 1);
+				u = (col + GfxLib::random()) / float(width - 1);
+				v = (row + GfxLib::random()) / float(height - 1);
 				Ray ray = camera.getRay(u, v);
 				glm::vec3 ret = rayColorDiffuse(ray, world, 0.5f, 10);
 				ret = ret * scale;
 				sampleColor = sampleColor + ret;
 			}
 
-			sampleColor = GeoLib::gamma2Correct(sampleColor);
+			sampleColor = GfxLib::gamma2Correct(sampleColor);
 
-			data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>(256 * GeoLib::clamp(sampleColor.x, 0.f, 0.999f));
-			data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>(256 * GeoLib::clamp(sampleColor.y, 0.f, 0.999f));
-			data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>(256 * GeoLib::clamp(sampleColor.z, 0.f, 0.999f));
+			outputCol = col;
+			outputRow = height - 1 - row;
+			data[(outputRow * width + outputCol) * channel + 0] = static_cast<uint8_t>(256 * GfxLib::clamp(sampleColor.x, 0.f, 0.999f));
+			data[(outputRow * width + outputCol) * channel + 1] = static_cast<uint8_t>(256 * GfxLib::clamp(sampleColor.y, 0.f, 0.999f));
+			data[(outputRow * width + outputCol) * channel + 2] = static_cast<uint8_t>(256 * GfxLib::clamp(sampleColor.z, 0.f, 0.999f));
 		}
 	}
 }
@@ -119,7 +119,8 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj)
 {
 	HitRecord rec;
-	obj.hit(ray, 0.f, FLT_MAX, rec);
+	// use 0.001 instead of 0.f to fix shadow acne
+	obj.hit(ray, 0.001f, FLT_MAX, rec);
 
 	if (rec.hit)
 	{
@@ -133,7 +134,7 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj)
 	{
 		glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
 		float t = (ray.direction().y + 1.f) * 0.5f;
-		return GeoLib::blend(startColor, endColor, t);
+		return GfxLib::blend(startColor, endColor, t);
 	}
 }
 
@@ -142,11 +143,16 @@ glm::vec3 RrtTest::rayColorDiffuse(const Ray& ray, const Hittable& obj, float re
 	if (reflectDepth <= 0) return glm::vec3(0.f);
 
 	HitRecord rec;
-	obj.hit(ray, 0.f, FLT_MAX, rec);
+	// use 0.001 instead of 0.f to fix shadow acne
+	obj.hit(ray, 0.001f, FLT_MAX, rec);
 
 	if (rec.hit)
 	{
-		glm::vec3 target = rec.pt + rec.n + GeoLib::randomInUnitSphere();
+		// the direction of reflection ray for diffuse material is random(unknown)
+		// so we create a random method to simulate it 
+		// if the target point is on the sphere surface, it produces true Lambertian reflection
+		// reflected ray for Lambertian reflection has higher probability to be scattered close to normal, and its distribution is uniform.
+		glm::vec3 target = rec.pt + rec.n + GfxLib::randomOnUnitSphere();
 		Ray reflect{rec.pt, glm::normalize(target - rec.pt)};
 		return reflectRatio * rayColorDiffuse(reflect, obj, reflectRatio, --reflectDepth);
 	}
@@ -154,6 +160,6 @@ glm::vec3 RrtTest::rayColorDiffuse(const Ray& ray, const Hittable& obj, float re
 	{
 		glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
 		float t = (ray.direction().y + 1.f) * 0.5f;
-		return GeoLib::blend(startColor, endColor, t);
+		return GfxLib::blend(startColor, endColor, t);
 	}
 }

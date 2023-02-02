@@ -17,6 +17,8 @@ public:
 
     virtual QPaintEngine* paintEngine() const override;
 
+    void quitThread();
+
 protected:
     virtual void closeEvent(QCloseEvent* e) override;
     virtual void resizeEvent(QResizeEvent* event) override;

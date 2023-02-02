@@ -1,9 +1,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/qdesktopwidget.h>
 
-#include "LrWidget.h"
-#include "RrtTest.h"
-
+#include "LrMainWindow.h"
 #include "Logger.h"
 
 void onInit()
@@ -33,11 +31,9 @@ int main(int argc, char *argv[])
     int top = (int)((desktop.height() - height) * 0.5f);
 
     // show ui
-    LrWidget w;
-    w.setGeometry(left, top, width, height);
-    w.show();
-
-    RrtTest::main();
+    LrMainWindow main;
+    main.setGeometry(left, top, width, height);
+    main.show();
 
     int ret = a.exec();
 

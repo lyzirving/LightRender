@@ -30,11 +30,7 @@ QPaintEngine* LrWidget::paintEngine() const { return nullptr; }
 
 void LrWidget::closeEvent(QCloseEvent* e)
 {
-    if (m_renderThread)
-    {
-        m_renderThread->interrupt();
-        m_renderThread->join();
-    }
+    quitThread();
 }
 
 void LrWidget::resizeEvent(QResizeEvent* event)
@@ -42,5 +38,14 @@ void LrWidget::resizeEvent(QResizeEvent* event)
     if (m_renderThread)
     {
         m_renderThread->onWindowSizeChange(event->size().width(), event->size().height());
+    }
+}
+
+void LrWidget::quitThread()
+{
+    if (m_renderThread)
+    {
+        m_renderThread->interrupt();
+        m_renderThread->join();
     }
 }

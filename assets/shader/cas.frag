@@ -196,8 +196,7 @@ HitResult hitTriangle(Ray ray, Triangle triangle) {
 
 float hitAABB(Ray ray, vec3 AA, vec3 BB) {
     vec3 dir = ray.dir;
-    if(abs(dir.x) < 0.000001 || abs(dir.y) < 0.000001 || abs(dir.z) < 0.000001) { return -1.f; }
-
+   
     vec3 invDir = 1.f / dir;
     vec3 far = (BB - ray.start) * invDir;
     vec3 near = (AA - ray.start) * invDir;
