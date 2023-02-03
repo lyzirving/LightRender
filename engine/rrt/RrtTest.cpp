@@ -126,28 +126,6 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 	}
 }
 
-glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj)
-{
-	HitRecord rec;
-	// use 0.001 instead of 0.f to fix shadow acne
-	obj.hit(ray, 0.001f, FLT_MAX, rec);
-
-	if (rec.hit)
-	{
-		glm::vec3 color;
-		color.x = (rec.n.x + 1.f) * 0.5f;
-		color.y = (rec.n.y + 1.f) * 0.5f;
-		color.z = (rec.n.z + 1.f) * 0.5f;
-		return color;
-	}
-	else
-	{
-		glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
-		float t = (ray.direction().y + 1.f) * 0.5f;
-		return GfxLib::blend(startColor, endColor, t);
-	}
-}
-
 glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj, int reflectDepth)
 {
 	if (reflectDepth <= 0) return glm::vec3(0.f);
@@ -165,32 +143,6 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj, int reflectDept
 		glm::vec3 retColor = rayColor(scatterRay, obj, --reflectDepth);
 		retColor = attenu * retColor;
 		return retColor;
-	}
-	else
-	{
-		glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
-		float t = (ray.direction().y + 1.f) * 0.5f;
-		return GfxLib::blend(startColor, endColor, t);
-	}
-}
-
-glm::vec3 RrtTest::rayColorDiffuse(const Ray& ray, const Hittable& obj, float reflectRatio, int reflectDepth)
-{
-	if (reflectDepth <= 0) return glm::vec3(0.f);
-
-	HitRecord rec;
-	// use 0.001 instead of 0.f to fix shadow acne
-	obj.hit(ray, 0.001f, FLT_MAX, rec);
-
-	if (rec.hit)
-	{
-		// the direction of reflection ray for diffuse material is random(unknown)
-		// so we create a random method to simulate it 
-		// if the target point is on the sphere surface, it produces true Lambertian reflection
-		// reflected ray for Lambertian reflection has higher probability to be scattered close to normal, and its distribution is uniform.
-		glm::vec3 target = rec.pt + rec.n + GfxLib::randomOnUnitSphere();
-		Ray reflect{rec.pt, glm::normalize(target - rec.pt)};
-		return reflectRatio * rayColorDiffuse(reflect, obj, reflectRatio, --reflectDepth);
 	}
 	else
 	{
