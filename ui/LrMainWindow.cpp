@@ -2,6 +2,8 @@
 #include <QtWidgets/qboxlayout.h>
 #include <QtCore/qrect.h>
 
+#include <thread>
+
 #include "LrMainWindow.h"
 #include "LrWidget.h"
 
@@ -22,7 +24,7 @@ LrMainWindow::LrMainWindow() : QMainWindow(), m_mainWidget(nullptr)
 
     m_mainWidget = new LrWidget;
 
-    QPushButton* btn = new QPushButton("Btn0: print Ray Tracing");
+    QPushButton* btn = new QPushButton("Print Ray Tracing");
     QFontMetrics metrics(btn->font());
     int txtWidth = metrics.boundingRect(btn->text()).width();
     int txtHeight = metrics.boundingRect(btn->text()).height();
@@ -34,12 +36,20 @@ LrMainWindow::LrMainWindow() : QMainWindow(), m_mainWidget(nullptr)
 
     central->setLayout(mainLayout);
 
-    connect(btn, SIGNAL(clicked()), this, SLOT(btn0Clicked()));
+    connect(btn, SIGNAL(clicked()), this, SLOT(onRrtBtnClicked()));
 }
 
-void LrMainWindow::btn0Clicked()
+void LrMainWindow::onRrtBtnClicked()
 {
-    //RrtTest::main();
+    if (!RrtTest::checkRunning())
+    {
+        std::thread t(RrtTest::main);
+        t.detach();
+    }
+    else
+    {
+        LOG_INFO("RrtTest is still running");
+    }
 }
 
 void LrMainWindow::closeEvent(QCloseEvent* e)

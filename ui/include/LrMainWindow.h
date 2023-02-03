@@ -14,7 +14,7 @@ public:
 	virtual ~LrMainWindow() = default;
 
 public Q_SLOTS:
-	void btn0Clicked();
+	void onRrtBtnClicked();
 
 protected:
 	virtual void closeEvent(QCloseEvent* e) override;

@@ -11,6 +11,7 @@
 #include <cmath>
 #include <limits>
 #include <memory>
+#include <atomic>
 
 #include "RrtTest.h"
 #include "RrtCamera.h"
@@ -30,8 +31,14 @@
 #endif
 #define LOCAL_TAG "RrtTest"
 
+static std::atomic_bool g_running{false};
+
+bool RrtTest::checkRunning() { return g_running.load(); }
+
 void RrtTest::main()
 {
+	g_running.store(true);
+
 	int64_t start = SystemUtil::curTimeMs();
 
 	const int width = 720;
@@ -65,6 +72,8 @@ void RrtTest::main()
 
 	int64_t end = SystemUtil::curTimeMs();
 	LOG_INFO("finish generating rrt img[%s], take time[%.3f]", path.c_str(), (end - start) / 1000.f);
+
+	g_running.store(false);
 }
 
 void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, uint8_t* data)

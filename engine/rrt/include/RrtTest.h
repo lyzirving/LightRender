@@ -11,6 +11,7 @@ class RrtTest
 {
 public:
 	static void main();
+	static bool checkRunning();
 
 private:
 	static void draw(const RrtCamera &camera, int width, int height, int channel, uint8_t* data);
