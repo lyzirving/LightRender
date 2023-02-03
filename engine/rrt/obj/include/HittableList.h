@@ -12,7 +12,7 @@ public:
 	HittableList();
 	virtual ~HittableList();
 
-	void add(const std::shared_ptr<Hittable>& hittable) { m_list.emplace_back(hittable); }
+	void add(std::shared_ptr<Hittable>&& hittable) { m_list.emplace_back(std::move(hittable)); }
 
 	virtual void hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const override;
 

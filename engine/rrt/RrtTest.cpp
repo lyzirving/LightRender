@@ -18,6 +18,7 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include "HittableList.h"
+#include "Material.h"
 
 #include "GfxLib.h"
 
@@ -84,8 +85,8 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 	std::shared_ptr<Sphere> sphere0 = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, -2.f), 0.5f);
 	std::shared_ptr<Sphere> sphere1 = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, -2.f), 100.f);
 
-	world.add(sphere0);
-	world.add(sphere1);
+	world.add(std::move(sphere0));
+	world.add(std::move(sphere1));
 
 	const int sampleCnt = 10;
 
@@ -109,7 +110,7 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 				u = (col + GfxLib::random()) / float(width - 1);
 				v = (row + GfxLib::random()) / float(height - 1);
 				Ray ray = camera.getRay(u, v);
-				glm::vec3 ret = rayColorDiffuse(ray, world, 0.5f, 10);
+				glm::vec3 ret = rayColor(ray, world, 10);
 				ret = ret * scale;
 				sampleColor = sampleColor + ret;
 			}
@@ -138,6 +139,32 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj)
 		color.y = (rec.n.y + 1.f) * 0.5f;
 		color.z = (rec.n.z + 1.f) * 0.5f;
 		return color;
+	}
+	else
+	{
+		glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
+		float t = (ray.direction().y + 1.f) * 0.5f;
+		return GfxLib::blend(startColor, endColor, t);
+	}
+}
+
+glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj, int reflectDepth)
+{
+	if (reflectDepth <= 0) return glm::vec3(0.f);
+
+	HitRecord rec;
+	// use 0.001 instead of 0.f to fix shadow acne
+	obj.hit(ray, 0.001f, FLT_MAX, rec);
+
+	if (rec.hit && rec.material)
+	{
+		Ray scatterRay;
+		glm::vec3 attenu{1.f};
+		
+		rec.material->scatter(ray, rec, attenu, scatterRay);
+		glm::vec3 retColor = rayColor(scatterRay, obj, --reflectDepth);
+		retColor = attenu * retColor;
+		return retColor;
 	}
 	else
 	{

@@ -1,9 +1,11 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
+#include <memory>
 #include <glm/glm.hpp>
 
 class Ray;
+class Material;
 
 struct HitRecord
 {
@@ -12,8 +14,9 @@ struct HitRecord
 	glm::vec3 pt;
 	// normal should always point outward from the surface
 	glm::vec3 n;
+	std::shared_ptr<Material> material;
 
-	HitRecord() : hit(false), t(0.f), pt(0.f), n(0.f) {}
+	HitRecord() : hit(false), t(0.f), pt(0.f), n(0.f), material(nullptr) {}
 };
 
 class Hittable
