@@ -34,10 +34,11 @@ const std::shared_ptr<Hittable>& HittableList::at(int index) const
 	return m_list[index];
 }
 
-void HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
+bool HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
 {
 	float closest = tMax;
 	HitRecord tmpRec;
+	record = tmpRec;
 
 	for (int i = 0; i < m_list.size(); ++i)
 	{
@@ -50,4 +51,5 @@ void HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record
 			record.hitInd = i;
 		}
 	}
+	return record.hit;
 }

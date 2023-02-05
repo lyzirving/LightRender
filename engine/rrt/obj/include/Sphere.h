@@ -12,7 +12,7 @@ public:
 	Sphere(const glm::vec3 & center, const float radius);
 	virtual ~Sphere();
 
-	virtual void hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const override;
+	virtual bool hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const override;
 
 private:
 	glm::vec3 m_center;

@@ -16,9 +16,12 @@
 #include "RrtTest.h"
 #include "RrtCamera.h"
 #include "Ray.h"
+
 #include "Sphere.h"
 #include "HittableList.h"
-#include "Matl.h"
+
+#include "LambDiffuse.h"
+#include "Metal.h"
 
 #include "GfxLib.h"
 
@@ -79,16 +82,31 @@ void RrtTest::main()
 
 void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, uint8_t* data)
 {
-	glm::vec3 startColor{ 1.f }, endColor{0.5f, 0.7f, 1.f};
-
 	HittableList world;
-	std::shared_ptr<Hittable> sphere0 = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, -2.f), 0.5f);
-	std::shared_ptr<Hittable> sphere1 = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, -2.f), 100.f);
+	std::shared_ptr<Hittable> sphereCenter = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, -2.f), 0.5f);
+	std::shared_ptr<Matl> centerMatl = std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f));
+	sphereCenter->setMatl(centerMatl);
 
-	world.add(sphere0);
-	world.add(sphere1);
+	std::shared_ptr<Hittable> sphereLeft = std::make_shared<Sphere>(glm::vec3(-1.f, 0.f, -2.f), 0.5f);
+	std::shared_ptr<Matl> leftMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f));
+	sphereLeft->setMatl(leftMatl);
+
+	std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, -2.f), 0.5f);
+	std::shared_ptr<Matl> rightMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f));
+	static_cast<Metal*>(rightMatl.get())->setFluzzy(0.5f);
+	sphereRight->setMatl(rightMatl);
+
+	std::shared_ptr<Hittable> sphereGround = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, -2.f), 100.f);
+	std::shared_ptr<Matl> groundMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f));
+	sphereGround->setMatl(groundMatl);
+
+	world.add(sphereCenter);
+	world.add(sphereLeft);
+	world.add(sphereRight);
+	world.add(sphereGround);
 
 	const int sampleCnt = 10;
+	const int reflectCnt = 5;
 
 	int outputRow, outputCol;
 	float u, v;
@@ -109,7 +127,7 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 				u = (col + GfxLib::random()) / float(width - 1);
 				v = (row + GfxLib::random()) / float(height - 1);
 				Ray ray = camera.getRay(u, v);
-				glm::vec3 ret = rayColor(ray, world, 10);
+				glm::vec3 ret = rayColor(ray, world, reflectCnt);
 				sampleColor = sampleColor + ret * scale;
 			}
 
@@ -130,15 +148,14 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 
 	HitRecord rec;
 	// use 0.001 instead of 0.f to fix shadow acne
-	objList.hit(ray, 0.001f, FLT_MAX, rec);
-
-	if (rec.hit && rec.hitInd >= 0)
+	if (objList.hit(ray, 0.001f, FLT_MAX, rec) && rec.hitInd >= 0)
 	{
 		Ray scatterRay;
-		glm::vec3 attenu{1.f};
-		
+		glm::vec3 attenu{ 1.f };
+
 		std::shared_ptr<Matl> mat = objList.at(rec.hitInd)->getMatl();
-		mat->scatter(ray, rec, attenu, scatterRay);
+		if (!mat->scatter(ray, rec, attenu, scatterRay))
+			return glm::vec3(0.f);
 
 		glm::vec3 retColor = rayColor(scatterRay, objList, --reflectDepth);
 		return attenu * retColor;

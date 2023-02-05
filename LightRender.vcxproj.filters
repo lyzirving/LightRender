@@ -151,6 +151,9 @@
     <ClCompile Include="engine\rrt\material\LambDiffuse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="engine\rrt\material\Metal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\Shader.h">
@@ -277,6 +280,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\rrt\material\include\Matl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\material\include\Metal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

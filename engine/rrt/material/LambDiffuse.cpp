@@ -11,7 +11,7 @@
 #endif
 #define LOCAL_TAG "Diffuse"
 
-LambDiffuse::LambDiffuse(const glm::vec3& albedo) : Matl(), m_albedo(albedo) {}
+LambDiffuse::LambDiffuse(const glm::vec3& color) : Matl(color) {}
 
 LambDiffuse::~LambDiffuse() = default;
 

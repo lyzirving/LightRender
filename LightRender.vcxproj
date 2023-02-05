@@ -128,6 +128,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\gre\GreEventQueue.cpp" />
     <ClCompile Include="engine\rrt\accelerator\BVHBuilder.cpp" />
     <ClCompile Include="engine\rrt\material\LambDiffuse.cpp" />
+    <ClCompile Include="engine\rrt\material\Metal.cpp" />
     <ClCompile Include="engine\rrt\obj\HittableList.cpp" />
     <ClCompile Include="engine\rrt\obj\Ray.cpp" />
     <ClCompile Include="engine\rrt\obj\Sphere.cpp" />
@@ -172,6 +173,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h" />
     <ClInclude Include="engine\rrt\material\include\LambDiffuse.h" />
     <ClInclude Include="engine\rrt\material\include\Matl.h" />
+    <ClInclude Include="engine\rrt\material\include\Metal.h" />
     <ClInclude Include="engine\rrt\obj\include\Hittable.h" />
     <ClInclude Include="engine\rrt\obj\include\HittableList.h" />
     <ClInclude Include="engine\rrt\obj\include\Ray.h" />

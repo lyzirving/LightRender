@@ -1,6 +1,7 @@
 #include "Sphere.h"
 #include "Ray.h"
 #include "LambDiffuse.h"
+#include "Metal.h"
 
 #include "GfxLib.h"
 
@@ -23,7 +24,7 @@ Sphere::Sphere(const glm::vec3& center, const float radius) : Hittable(), m_cent
 
 Sphere::~Sphere() = default;
 
-void Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
+bool Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
 {
     glm::vec3 oc = ray.origin() - m_center;
     float a = glm::dot(ray.direction(), ray.direction());
@@ -33,7 +34,8 @@ void Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) cons
     if (discriminant < 0.f)
     {
         record.hit = false;
-        return;
+        record.hitInd = -1;
+        return false;
     }
     
     // select the smaller result at first
@@ -44,7 +46,8 @@ void Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) cons
         if (root < tMin || root > tMax)
         {
             record.hit = false;
-            return;
+            record.hitInd = -1;
+            return false;
         }
     }
 
@@ -53,4 +56,5 @@ void Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) cons
     record.pt = ray.at(root);
     // the normal always points outward from the sphere 
     record.n = glm::normalize(record.pt - m_center);
+    return true;
 }

@@ -26,8 +26,9 @@ public:
 	virtual ~Hittable() { m_matl.reset(); }
 
 	inline const std::shared_ptr<Matl>& getMatl() const { return m_matl; };
+	inline void setMatl(const std::shared_ptr<Matl>& matl) { m_matl = matl; }
 
-	virtual void hit(const Ray &ray, float tMin, float tMax, HitRecord &record) const = 0;
+	virtual bool hit(const Ray &ray, float tMin, float tMax, HitRecord &record) const = 0;
 
 protected:
 	std::shared_ptr<Matl> m_matl;
