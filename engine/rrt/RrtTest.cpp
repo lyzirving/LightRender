@@ -18,7 +18,7 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include "HittableList.h"
-#include "Material.h"
+#include "Matl.h"
 
 #include "GfxLib.h"
 
@@ -82,23 +82,22 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 	glm::vec3 startColor{ 1.f }, endColor{0.5f, 0.7f, 1.f};
 
 	HittableList world;
-	std::shared_ptr<Sphere> sphere0 = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, -2.f), 0.5f);
-	std::shared_ptr<Sphere> sphere1 = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, -2.f), 100.f);
+	std::shared_ptr<Hittable> sphere0 = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, -2.f), 0.5f);
+	std::shared_ptr<Hittable> sphere1 = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, -2.f), 100.f);
 
-	world.add(std::move(sphere0));
-	world.add(std::move(sphere1));
+	world.add(sphere0);
+	world.add(sphere1);
 
 	const int sampleCnt = 10;
 
 	int outputRow, outputCol;
 	float u, v;
-	HitRecord rec;
 
 	// row and col start from left-bottom(-imgWidth / 2.f, -imgHeight / 2.f) corner for rendering
 	// outputRow and outputCol start from left-top(0, 0) corner for image output
 	for (int row = 0; row < height; ++row)
 	{
-		LOG_INFO("scanlines remaining: %d", height - 1 - row);
+		LOG_INFO("scanlines remaining: %d", (height - 1 - row));
 		for (int col = 0; col < width; ++col)
 		{
 			glm::vec3 sampleColor{0.f};
@@ -111,8 +110,7 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 				v = (row + GfxLib::random()) / float(height - 1);
 				Ray ray = camera.getRay(u, v);
 				glm::vec3 ret = rayColor(ray, world, 10);
-				ret = ret * scale;
-				sampleColor = sampleColor + ret;
+				sampleColor = sampleColor + ret * scale;
 			}
 
 			sampleColor = GfxLib::gamma2Correct(sampleColor);
@@ -126,23 +124,24 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 	}
 }
 
-glm::vec3 RrtTest::rayColor(const Ray& ray, const Hittable& obj, int reflectDepth)
+glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int reflectDepth)
 {
 	if (reflectDepth <= 0) return glm::vec3(0.f);
 
 	HitRecord rec;
 	// use 0.001 instead of 0.f to fix shadow acne
-	obj.hit(ray, 0.001f, FLT_MAX, rec);
+	objList.hit(ray, 0.001f, FLT_MAX, rec);
 
-	if (rec.hit && rec.material)
+	if (rec.hit && rec.hitInd >= 0)
 	{
 		Ray scatterRay;
 		glm::vec3 attenu{1.f};
 		
-		rec.material->scatter(ray, rec, attenu, scatterRay);
-		glm::vec3 retColor = rayColor(scatterRay, obj, --reflectDepth);
-		retColor = attenu * retColor;
-		return retColor;
+		std::shared_ptr<Matl> mat = objList.at(rec.hitInd)->getMatl();
+		mat->scatter(ray, rec, attenu, scatterRay);
+
+		glm::vec3 retColor = rayColor(scatterRay, objList, --reflectDepth);
+		return attenu * retColor;
 	}
 	else
 	{

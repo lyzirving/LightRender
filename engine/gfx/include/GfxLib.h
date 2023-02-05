@@ -14,6 +14,8 @@ public:
 	// divide the color by gamma-correct for gamma = 2.0.
 	static glm::vec3 gamma2Correct(const glm::vec3& color);
 
+	static bool nearZero(const glm::vec3 &input);
+
 	static double random();
 	static double random(double min, double max);
 

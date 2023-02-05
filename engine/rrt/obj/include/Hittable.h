@@ -5,27 +5,32 @@
 #include <glm/glm.hpp>
 
 class Ray;
-class Material;
+class Matl;
 
 struct HitRecord
 {
 	bool hit;
 	float t;
+	int hitInd;
 	glm::vec3 pt;
 	// normal should always point outward from the surface
 	glm::vec3 n;
-	std::shared_ptr<Material> material;
 
-	HitRecord() : hit(false), t(0.f), pt(0.f), n(0.f), material(nullptr) {}
+	HitRecord() : hit(false), t(0.f), hitInd(-1), pt(0.f), n(0.f) {}
 };
 
 class Hittable
 {
 public:
-	Hittable() {}
-	virtual ~Hittable() = default;
+	Hittable() : m_matl(nullptr) {}
+	virtual ~Hittable() { m_matl.reset(); }
+
+	inline const std::shared_ptr<Matl>& getMatl() const { return m_matl; };
 
 	virtual void hit(const Ray &ray, float tMin, float tMax, HitRecord &record) const = 0;
+
+protected:
+	std::shared_ptr<Matl> m_matl;
 };
 
 #endif

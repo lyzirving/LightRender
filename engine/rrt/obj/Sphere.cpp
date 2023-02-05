@@ -2,18 +2,26 @@
 #include "Ray.h"
 #include "LambDiffuse.h"
 
-Sphere::Sphere() : Hittable(), m_center(0.f), m_radius(0.f), m_lambDiffuse(new LambDiffuse) {}
+#include "GfxLib.h"
 
-Sphere::Sphere(const glm::vec3& center, const float radius) : Hittable(), 
-                                                              m_center(center), m_radius(radius),
-                                                              m_lambDiffuse(new LambDiffuse)
+#include "Logger.h"
+
+#ifdef LOCAL_TAG
+#undef LOCAL_TAG
+#endif
+#define LOCAL_TAG "Sphere"
+
+Sphere::Sphere() : Hittable(), m_center(0.f), m_radius(0.f) 
 {
+    m_matl = std::make_shared<LambDiffuse>();
 }
 
-Sphere::~Sphere()
+Sphere::Sphere(const glm::vec3& center, const float radius) : Hittable(), m_center(center), m_radius(radius)
 {
-    m_lambDiffuse.reset();
+    m_matl = std::make_shared<LambDiffuse>();
 }
+
+Sphere::~Sphere() = default;
 
 void Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
 {
@@ -45,5 +53,4 @@ void Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) cons
     record.pt = ray.at(root);
     // the normal always points outward from the sphere 
     record.n = glm::normalize(record.pt - m_center);
-    record.material = m_lambDiffuse;
 }

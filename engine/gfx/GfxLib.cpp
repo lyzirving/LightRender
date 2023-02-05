@@ -41,6 +41,12 @@ glm::vec3 GfxLib::gamma2Correct(const glm::vec3& color)
     return ret;
 }
 
+bool GfxLib::nearZero(const glm::vec3& input)
+{
+    const double s = 1e-8;
+    return (std::abs(input.x) < s && std::abs(input.y) < s && std::abs(input.z) < s);
+}
+
 double GfxLib::random()
 {
     // returns a random real in [0, 1)

@@ -11,21 +11,26 @@
 #endif
 #define LOCAL_TAG "Diffuse"
 
-LambDiffuse::LambDiffuse(const glm::vec3& albedo) : Material(), m_albedo(albedo) {}
+LambDiffuse::LambDiffuse(const glm::vec3& albedo) : Matl(), m_albedo(albedo) {}
 
 LambDiffuse::~LambDiffuse() = default;
 
 bool LambDiffuse::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const
 {
-	if (rec.hit && rec.material)
+	if (rec.hit)
 	{
 		// the direction of reflection ray for diffuse material is random(unknown)
 		// so we create a random method to simulate it 
 		// if the target point is on the sphere surface, it produces true Lambertian reflection
 		// reflected ray for Lambertian reflection has higher probability to be scattered close to normal, as its distribution is uniform.
-		glm::vec3 target = rec.pt + rec.n + GfxLib::randomOnUnitSphere();
+		glm::vec3 dir = rec.n + GfxLib::randomOnUnitSphere();
+		if (GfxLib::nearZero(dir))
+		{
+			LOG_INFO("near zero, use old normal");
+			dir = rec.n;
+		}
 		scatterRay.setOrigin(rec.pt);
-		scatterRay.setDirection(glm::normalize(target - rec.pt));
+		scatterRay.setDirection(dir);
 		attenuation = m_albedo;
 		return true;
 	}

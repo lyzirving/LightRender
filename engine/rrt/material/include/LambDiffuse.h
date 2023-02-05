@@ -1,10 +1,10 @@
 #ifndef LAMB_DIFFUSE_H
 #define LAMB_DIFFUSE_H
 
-#include "Material.h"
+#include "Matl.h"
 
 // Lambertian diffuse material
-class LambDiffuse : public Material
+class LambDiffuse : public Matl
 {
 public:
 	LambDiffuse(const glm::vec3 &albedo = glm::vec3(0.5f));

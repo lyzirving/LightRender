@@ -171,7 +171,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\gre\include\GreEventQueue.h" />
     <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h" />
     <ClInclude Include="engine\rrt\material\include\LambDiffuse.h" />
-    <ClInclude Include="engine\rrt\material\include\Material.h" />
+    <ClInclude Include="engine\rrt\material\include\Matl.h" />
     <ClInclude Include="engine\rrt\obj\include\Hittable.h" />
     <ClInclude Include="engine\rrt\obj\include\HittableList.h" />
     <ClInclude Include="engine\rrt\obj\include\Ray.h" />

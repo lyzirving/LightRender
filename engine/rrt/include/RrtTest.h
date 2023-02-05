@@ -5,7 +5,7 @@
 
 class RrtCamera;
 class Ray;
-class Hittable;
+class HittableList;
 
 class RrtTest
 {
@@ -15,7 +15,7 @@ public:
 
 private:
 	static void draw(const RrtCamera &camera, int width, int height, int channel, uint8_t* data);
-	static glm::vec3 rayColor(const Ray& ray, const Hittable& obj, int reflectDepth);
+	static glm::vec3 rayColor(const Ray& ray, const HittableList& obj, int reflectDepth);
 
 	RrtTest() {};
 	~RrtTest() = default;

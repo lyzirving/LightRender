@@ -3,7 +3,7 @@
 
 #include "Hittable.h"
 
-class Material;
+class Matl;
 
 class Sphere : public Hittable
 {
@@ -17,7 +17,6 @@ public:
 private:
 	glm::vec3 m_center;
 	float m_radius;
-	std::shared_ptr<Material> m_lambDiffuse;
 };
 
 #endif

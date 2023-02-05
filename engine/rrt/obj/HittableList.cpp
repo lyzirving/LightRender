@@ -1,4 +1,13 @@
+#include <cassert>
+
 #include "HittableList.h"
+
+#include "Logger.h"
+
+#ifdef LOCAL_TAG
+#undef LOCAL_TAG
+#endif
+#define LOCAL_TAG "HittableList"
 
 HittableList::HittableList() : Hittable(), m_list()
 {
@@ -14,19 +23,31 @@ HittableList::~HittableList()
 	}
 }
 
+const std::shared_ptr<Hittable>& HittableList::at(int index) const
+{
+	int size = m_list.size();
+	if (index < 0 || index >= size)
+	{
+		LOG_ERR("invalid index[%d], size[%d]", index, size);
+		assert(0);
+	}
+	return m_list[index];
+}
+
 void HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
 {
 	float closest = tMax;
 	HitRecord tmpRec;
 
-	for (auto& obj : m_list)
+	for (int i = 0; i < m_list.size(); ++i)
 	{
-		obj->hit(ray, tMin, closest, tmpRec);
+		m_list[i]->hit(ray, tMin, closest, tmpRec);
 		if (tmpRec.hit)
 		{
 			// it imitates the depth test
 			closest = tmpRec.t;
 			record = tmpRec;
+			record.hitInd = i;
 		}
 	}
 }
