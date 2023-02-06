@@ -9,14 +9,14 @@ class Matl;
 
 struct HitRecord
 {
-	bool hit;
+	bool hit, frontFace;
 	float t;
 	int hitInd;
 	glm::vec3 pt;
 	// normal should always point outward from the surface
 	glm::vec3 n;
 
-	HitRecord() : hit(false), t(0.f), hitInd(-1), pt(0.f), n(0.f) {}
+	HitRecord() : hit(false), frontFace(false), t(0.f), hitInd(-1), pt(0.f), n(0.f) {}
 };
 
 class Hittable

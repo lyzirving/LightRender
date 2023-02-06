@@ -127,6 +127,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\gfx\ShaderMgr.cpp" />
     <ClCompile Include="engine\gre\GreEventQueue.cpp" />
     <ClCompile Include="engine\rrt\accelerator\BVHBuilder.cpp" />
+    <ClCompile Include="engine\rrt\material\Dilectric.cpp" />
     <ClCompile Include="engine\rrt\material\LambDiffuse.cpp" />
     <ClCompile Include="engine\rrt\material\Metal.cpp" />
     <ClCompile Include="engine\rrt\obj\HittableList.cpp" />
@@ -171,6 +172,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\gre\include\GreDef.h" />
     <ClInclude Include="engine\gre\include\GreEventQueue.h" />
     <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h" />
+    <ClInclude Include="engine\rrt\material\include\Dielectric.h" />
     <ClInclude Include="engine\rrt\material\include\LambDiffuse.h" />
     <ClInclude Include="engine\rrt\material\include\Matl.h" />
     <ClInclude Include="engine\rrt\material\include\Metal.h" />
