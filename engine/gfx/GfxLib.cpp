@@ -92,3 +92,18 @@ glm::vec3 GfxLib::randomOnUnitSphere()
 
     return ret;
 }
+
+glm::vec3 GfxLib::reflect(const glm::vec3& directionIn, const glm::vec3& n)
+{
+    float b = glm::dot(directionIn, n);
+    glm::vec3 refDir = directionIn - 2 * b * n;
+    return glm::normalize(refDir);
+}
+
+glm::vec3 GfxLib::refract(const glm::vec3& directionIn, const glm::vec3& n, float etaOverEta)
+{
+    float cosTheta = std::fmin(glm::dot(-directionIn, n), 1.f);
+    glm::vec3 rayPerp = etaOverEta * (directionIn + cosTheta * n);
+    glm::vec3 rayParal = -(float)std::sqrt(std::fabs(1.f - glm::length(rayPerp))) * n;
+    return glm::normalize(rayPerp + rayParal);
+}

@@ -23,6 +23,12 @@ public:
 	static glm::vec3 randomInUnitSphere();
 	static glm::vec3 randomOnUnitSphere();
 
+	static glm::vec3 reflect(const glm::vec3& directionIn, const glm::vec3& n);
+	// refract effect obey the Snell's Law where eta1 * sin(theta1) = eta2 * sin(theta2)
+	// the refract index in vacuum is 1.0, and other dilectric's refract index is always greater than 1.
+	// etaOverEta is eta1 / eta2, eta1 is from the space where the ray come, eta2 belongs to the refracted space
+	static glm::vec3 refract(const glm::vec3& directionIn, const glm::vec3& n, float etaOverEta);
+
 
 private:
 	GfxLib() {};

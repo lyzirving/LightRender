@@ -16,16 +16,9 @@ Metal::Metal(const glm::vec3& color) : Matl(color), m_fuzzy(0.f) {}
 
 Metal::~Metal() = default;
 
-glm::vec3 Metal::reflect(const glm::vec3& rayIn, const glm::vec3& n) const
-{
-	float b = -dot(rayIn, n);
-	glm::vec3 refDir = rayIn + 2 * b * n;
-	return glm::normalize(refDir);
-}
-
 bool Metal::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const
 {
-	glm::vec3 refDir = reflect(input.direction(), rec.n);
+	glm::vec3 refDir = GfxLib::reflect(input.direction(), rec.n);
 
 	scatterRay.setOrigin(rec.pt);
 	scatterRay.setDirection(refDir + m_fuzzy * GfxLib::randomOnUnitSphere());
