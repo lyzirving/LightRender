@@ -54,8 +54,8 @@ bool Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) cons
     record.hit = true;
     record.t = root;
     record.pt = ray.at(root);
-    // the normal always points outward from the sphere 
-    record.n = glm::normalize(record.pt - m_center);
-    record.frontFace = glm::dot(ray.direction(), record.n) < 0.f;
+    glm::vec3 outsideN = glm::normalize(record.pt - m_center);
+    record.frontFace = glm::dot(ray.direction(), outsideN) < 0.f;
+    record.n = record.frontFace ? outsideN : -outsideN;
     return true;
 }
