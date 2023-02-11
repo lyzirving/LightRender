@@ -56,10 +56,11 @@ void RrtTest::main()
 	path.append("/RrtTest.png");
 
 	RrtCamera camera;
-	camera.setPosition(glm::vec3(-2.f, 2.f, 3.f));
+	camera.setPosition(glm::vec3(-2.f, 2.f, 6.f));
 	camera.setLookAt(glm::vec3(0.f, 0.f, -1.f));
-	camera.setAspect(float(width) / float(height));
-	camera.setFov(45);
+	camera.setViewportSize(glm::vec2(width, height));
+	camera.setFov(35);
+	camera.apply();
 
 	uint8_t* data = (uint8_t *)std::calloc(width * height * channel, sizeof(uint8_t));
 	if (!data)
@@ -132,8 +133,8 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 			// create a number of samples to form an average color of a pixel to perform antialiasing
 			for (int i = 0; i < sampleCnt; ++i)
 			{
-				u = (col + GfxLib::random()) / float(width - 1);
-				v = (row + GfxLib::random()) / float(height - 1);
+				u = float(col) + GfxLib::random();
+				v = float(row) + GfxLib::random();
 				Ray ray = camera.getRay(u, v);
 				glm::vec3 ret = rayColor(ray, world, reflectCnt);
 				sampleColor = sampleColor + ret * scale;
