@@ -56,7 +56,7 @@ void RrtTest::main()
 	path.append("/RrtTest.png");
 
 	RrtCamera camera;
-	camera.setPosition(glm::vec3(-2.f, 2.f, 6.f));
+	camera.setPosition(glm::vec3(0.f, 0.f, 4.5f));
 	camera.setLookAt(glm::vec3(0.f, 0.f, -1.f));
 	camera.setViewportSize(glm::vec2(width, height));
 	camera.setFov(35);
@@ -96,14 +96,14 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 	std::shared_ptr<Matl> leftMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f));
 	sphereLeft->setMatl(leftMatl);
 
-	std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, -1.f), 0.5f);
+	/*std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, -1.f), 0.5f);
 	std::shared_ptr<Matl> rightMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f));
 	static_cast<Metal*>(rightMatl.get())->setFluzzy(0.5f);
-	sphereRight->setMatl(rightMatl);
-
-	/*std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, -2.f), 0.5f);
-	std::shared_ptr<Matl> rightMatl = std::make_shared<Dilectric>(1.5f);
 	sphereRight->setMatl(rightMatl);*/
+
+	std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, -1.f), 0.5f);
+	std::shared_ptr<Matl> rightMatl = std::make_shared<Dilectric>(1.5f);
+	sphereRight->setMatl(rightMatl);
 
 	std::shared_ptr<Hittable> sphereGround = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, -1.f), 100.f);
 	std::shared_ptr<Matl> groundMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f));

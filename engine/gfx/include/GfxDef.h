@@ -14,6 +14,9 @@ static const char* U_SMP_SPEC = "u_spec";
 static const char* U_BG_COLOR = "u_bgColor";
 static const char* U_EYS_POS  = "u_eysPos";
 
+/* Single-precision epsilon. */
+#define EPSILON 1e-5f
+
 enum ShaderType : uint8_t
 {
     SHADER_OBJ,
