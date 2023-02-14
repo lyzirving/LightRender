@@ -54,7 +54,7 @@ bool Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) cons
     record.hit = true;
     record.t = root;
     record.pt = ray.at(record.t);
-    glm::vec3 outsideN = glm::normalize(record.pt - m_center);
+    glm::vec3 outsideN = (record.pt - m_center) / m_radius;
     record.frontFace = glm::dot(ray.direction(), outsideN) < 0.f;
     record.n = record.frontFace ? outsideN : -outsideN;
     return true;

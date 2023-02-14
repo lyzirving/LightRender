@@ -107,3 +107,11 @@ glm::vec3 GfxLib::refract(const glm::vec3& directionIn, const glm::vec3& n, floa
     glm::vec3 rayParal = -(float)std::sqrt(std::fabs(1.f - glm::length(rayPerp))) * n;
     return glm::normalize(rayPerp + rayParal);
 }
+
+double GfxLib::reflectance(double cosine, double refractIndex)
+{
+    // Schlick's approximation for reflectance
+    double r0 = (1.0 - refractIndex) / (1.0 + refractIndex);
+    r0 = std::pow(r0, 2);
+    return r0 + (1 - r0) * std::pow((1 - cosine), 5);
+}
