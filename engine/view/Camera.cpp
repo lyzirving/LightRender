@@ -14,7 +14,7 @@ Camera::Camera(float camTheta, float camPhi, float camRadius, float viewDirTheta
 		m_worldUp(0.f, 1.f, 0.f), m_camPos(0.f), m_camRight(0.f), m_camUp(0.f), m_viewDir(0.f),
 		m_camPosTheta(camTheta), m_camPosPhi(camPhi), m_camPosRadius(camRadius),
 		m_viewDirTheta(viewDirTheta), m_viewDirPhi(viewDirPhi),
-		m_viewMat(1.f), m_dataChange(true)
+		m_viewMat(1.f), m_dataChange(true), m_stateStack()
 {
     // compute view direction at first
     // camera always look at the origin of world by now
@@ -127,6 +127,31 @@ void Camera::keepViewDirToOrigin()
     calcViewDirection();
 }
 
+void Camera::popState()
+{
+    if (m_stateStack.empty())
+    {
+        LOG_ERR("state stack is empty, err operation");
+        assert(0);
+    }
+    CameraState state = m_stateStack.front();
+    m_camPosTheta = state.m_posTheta;
+    m_camPosPhi = state.m_posPhi;
+    m_camPosRadius = state.m_posRadius;
+    m_viewDirTheta = state.m_dirTheta;
+    m_viewDirPhi = state.m_dirPhi;
+    calcCameraPosition();
+    calcViewDirection();
+    m_stateStack.pop_front();
+    m_dataChange.store(true);
+}
+
+void Camera::restoreState()
+{
+    CameraState state{ m_camPosTheta, m_camPosPhi, m_camPosRadius, m_viewDirTheta, m_viewDirPhi };
+    m_stateStack.push_back(state);
+}
+
 void Camera::setPosition(float theta, float phi, float r)
 {
     if (r != m_camPosRadius || theta != m_camPosTheta || phi != m_camPosPhi)
@@ -137,4 +162,29 @@ void Camera::setPosition(float theta, float phi, float r)
         checkCamPos();
         m_dataChange.store(true);
     }
+}
+
+void Camera::setPosition(const glm::vec3& pos)
+{
+    if (m_camPos != pos)
+    {
+        glm::vec3 camPosSCS;
+        ViewLib::CCStoSCS(pos, camPosSCS);
+        m_camPosTheta = camPosSCS.x;
+        m_camPosPhi = camPosSCS.y;
+        m_camPosRadius = camPosSCS.z;
+        checkCamPos();
+        m_dataChange.store(true);
+    }
+}
+
+void Camera::setLookAt(const glm::vec3& lookAt)
+{
+    // need to be implemented
+    m_viewDir = glm::normalize(lookAt - m_camPos);
+    glm::vec3 out;
+    ViewLib::CCStoSCS(m_viewDir, out);
+    m_viewDirTheta = out.x;
+    m_viewDirPhi = out.y;
+    m_dataChange.store(true);
 }

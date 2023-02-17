@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include <glm/glm.hpp>
+#include <list>
 
 class Camera
 {
@@ -16,9 +17,26 @@ public:
     const glm::mat4& getViewMat();
     const glm::vec3& getCamPos();
 
+    void popState();
+    void restoreState();
+
     void setPosition(float theta, float phi, float r);
+    void setPosition(const glm::vec3& pos);
+    void setLookAt(const glm::vec3& lookAt);
 
 private:
+    struct CameraState
+    {
+        float m_posTheta, m_posPhi;
+        float m_posRadius;
+        float m_dirTheta, m_dirPhi;
+
+        CameraState() : m_posTheta(0.f), m_posPhi(0.f), m_posRadius(0.f), m_dirTheta(0.f), m_dirPhi(0.f) {}
+        CameraState(float posTheta, float posPhi, float posRadius, float dirTheta, float dirPhi) :
+            m_posTheta(posTheta), m_posPhi(posPhi), m_posRadius(posRadius),
+            m_dirTheta(dirTheta), m_dirPhi(dirPhi) {}
+    };
+
     void calcViewMat();
     void calcViewDirection();
     void calcCameraPosition();
@@ -54,6 +72,8 @@ private:
     glm::mat4 m_viewMat;
 
     std::atomic_bool m_dataChange;
+
+    std::list<CameraState> m_stateStack;
 };
 
 #endif // !CAMERA_H

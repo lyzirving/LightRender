@@ -10,7 +10,7 @@
 #define LOCAL_TAG "Frustum"
 
 Frustum::Frustum(float fov, float aspect, float near, float far) : m_fov(fov), m_aspect(aspect), m_near(near), m_far(far),
-                                                                   m_change(true), m_projectMat(1.f)
+                                                                   m_change(true), m_projectMat(1.f), m_stateStack()
 {
 }
 
@@ -34,6 +34,28 @@ const glm::mat4& Frustum::getProjectMat()
 {
     calcProjectMat();
     return m_projectMat;
+}
+
+void Frustum::restoreState()
+{
+    FrustumState state{ m_fov, m_aspect, m_near, m_far };
+    m_stateStack.push_back(state);
+}
+
+void Frustum::popState()
+{
+    if (m_stateStack.empty())
+    {
+        LOG_ERR("state stack is empty, err operation");
+        assert(0);
+    }
+    FrustumState state = m_stateStack.front();
+    m_fov = state.m_fov;
+    m_aspect = state.m_aspect;
+    m_near = state.m_near;
+    m_far = state.m_far;
+    m_stateStack.pop_front();
+    m_change.store(true);
 }
 
 void Frustum::setFov(float fov)

@@ -7,9 +7,9 @@
 #endif
 #define LOCAL_TAG "Viewport"
 
-Viewport::Viewport() : m_start(0.f), m_size(0.f), m_dist(0.f), m_viewportMat(1.f), m_change(true) {}
+Viewport::Viewport() : m_start(0.f), m_size(0.f), m_dist(0.f), m_viewportMat(1.f), m_change(true), m_stateStack() {}
 
-Viewport::Viewport(float startX, float startY, float width, float height, float dist) : m_start(startX, startY), m_size(width, height), m_dist(dist), m_viewportMat(1.f), m_change(true)
+Viewport::Viewport(float startX, float startY, float width, float height, float dist) : m_start(startX, startY), m_size(width, height), m_dist(dist), m_viewportMat(1.f), m_change(true), m_stateStack()
 {
     calcMat();
 }
@@ -35,6 +35,27 @@ const glm::mat4& Viewport::getMat()
 {
     calcMat();
     return m_viewportMat;
+}
+
+void Viewport::restoreState()
+{
+    ViewportState state{ m_start, m_size, m_dist };
+    m_stateStack.push_back(state);
+}
+
+void Viewport::popState()
+{
+    if (m_stateStack.empty())
+    {
+        LOG_ERR("state stack is empty, err operation");
+        assert(0);
+    }
+    ViewportState state = m_stateStack.front();
+    m_start = state.m_start;
+    m_size = state.m_size;
+    m_dist = state.m_dist;
+    m_stateStack.pop_front();
+    m_change.store(true);
 }
 
 void Viewport::setStart(float x, float y)
