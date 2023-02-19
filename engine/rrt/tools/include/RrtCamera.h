@@ -15,6 +15,7 @@ public:
 
 	void apply();
 
+	void setApertureLen(float len);
 	void setFocalLen(float focal);
 	void setFov(float fov);
 	void setLookAt(const glm::vec3& at);
@@ -22,13 +23,14 @@ public:
 	void setViewportSize(const glm::vec2& size);
 
 private:
-	void calcViewMat();
+	void calcCamMat();
 	void calcPrjMat();
-	void calcViewportMat();
+	void calcScreenMat();
 	void calcInvMat();
 
 	float m_focalLen;
 	float m_fov;
+	float m_apertureLen;
 	// x is width, y is height
 	glm::vec2 m_viewportSize;
 
@@ -36,8 +38,8 @@ private:
 	glm::vec3 m_lookAt;
 	glm::vec3 m_camFront, m_camRight, m_camUp;
 
-	glm::mat4 m_viewMat, m_prjMat, m_viewportMat;
-	glm::mat4 m_invMat;
+	glm::mat4 m_camMat, m_prjMat, m_screenMat;
+	glm::mat4 m_invMat, m_camInv, m_screenPrjInv;
 };
 
 #endif

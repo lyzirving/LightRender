@@ -43,8 +43,14 @@ glm::vec3 GfxLib::gamma2Correct(const glm::vec3& color)
 
 bool GfxLib::nearZero(const glm::vec3& input)
 {
-    const double s = 1e-8;
+    const double s = 1e-6;
     return (std::abs(input.x) < s && std::abs(input.y) < s && std::abs(input.z) < s);
+}
+
+bool GfxLib::nearZero(float input)
+{
+    const float s = 1e-6;
+    return std::abs(input) < s;
 }
 
 double GfxLib::random()

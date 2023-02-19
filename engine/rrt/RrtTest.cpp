@@ -56,11 +56,40 @@ void RrtTest::main()
 	path.append("/RrtTest.png");
 
 	RrtCamera camera;
-	camera.setPosition(glm::vec3(0.f, 0.f, 4.5f));
-	camera.setLookAt(glm::vec3(0.f, 0.f, -1.f));
+	camera.setPosition(glm::vec3(3.5f, 1.f, 2.f));
+	camera.setLookAt(glm::vec3(0.f, 0.f, 0.f));
 	camera.setViewportSize(glm::vec2(width, height));
 	camera.setFov(35);
+	//camera.setApertureLen(0.06f);
 	camera.apply();
+
+	HittableList world;
+	std::shared_ptr<Hittable> sphereCenter = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, 0.f), 0.5f);
+	std::shared_ptr<Matl> centerMatl = std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f));
+	sphereCenter->setMatl(centerMatl);
+
+	std::shared_ptr<Hittable> sphereLeft = std::make_shared<Sphere>(glm::vec3(-1.f, 0.f, 0.f), 0.5f);
+	std::shared_ptr<Matl> leftMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f));
+	sphereLeft->setMatl(leftMatl);
+
+	std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f);
+	std::shared_ptr<Matl> rightMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f));
+	static_cast<Metal*>(rightMatl.get())->setFluzzy(0.5f);
+	sphereRight->setMatl(rightMatl);
+
+	// todo: fix the dilectric material's bug when total internal reflection is enabled
+	/*std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f);
+	std::shared_ptr<Matl> rightMatl = std::make_shared<Dilectric>(1.5f);
+	sphereRight->setMatl(rightMatl);*/
+
+	std::shared_ptr<Hittable> sphereGround = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, 0.f), 100.f);
+	std::shared_ptr<Matl> groundMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f));
+	sphereGround->setMatl(groundMatl);
+
+	world.add(sphereCenter);
+	world.add(sphereLeft);
+	world.add(sphereRight);
+	world.add(sphereGround);
 
 	uint8_t* data = (uint8_t *)std::calloc(width * height * channel, sizeof(uint8_t));
 	if (!data)
@@ -69,7 +98,7 @@ void RrtTest::main()
 		assert(0);
 	}
 
-	draw(camera, width, height, channel, data);
+	draw(camera, world, width, height, channel, 10, 5, data);
 
 	int ret = stbi_write_png(path.c_str(), width, height, channel, data, 0);
 	if (ret == 0)
@@ -85,39 +114,9 @@ void RrtTest::main()
 	g_running.store(false);
 }
 
-void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, uint8_t* data)
+void RrtTest::draw(const RrtCamera& camera, const HittableList& obj, const int width, const int height, const int channel,
+	               const int sampleCnt, const int reflectCnt, uint8_t* data)
 {
-	HittableList world;
-	std::shared_ptr<Hittable> sphereCenter = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, -1.f), 0.5f);
-	std::shared_ptr<Matl> centerMatl = std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f));
-	sphereCenter->setMatl(centerMatl);
-
-	std::shared_ptr<Hittable> sphereLeft = std::make_shared<Sphere>(glm::vec3(-1.f, 0.f, -1.f), 0.5f);
-	std::shared_ptr<Matl> leftMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f));
-	sphereLeft->setMatl(leftMatl);
-
-	std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, -1.f), 0.5f);
-	std::shared_ptr<Matl> rightMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f));
-	static_cast<Metal*>(rightMatl.get())->setFluzzy(0.5f);
-	sphereRight->setMatl(rightMatl);
-
-	// todo: fix the dilectric material's bug when total internal reflection is enabled
-	/*std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, -1.f), 0.5f);
-	std::shared_ptr<Matl> rightMatl = std::make_shared<Dilectric>(1.5f);
-	sphereRight->setMatl(rightMatl);*/
-
-	std::shared_ptr<Hittable> sphereGround = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, -1.f), 100.f);
-	std::shared_ptr<Matl> groundMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f));
-	sphereGround->setMatl(groundMatl);
-
-	world.add(sphereCenter);
-	world.add(sphereLeft);
-	world.add(sphereRight);
-	world.add(sphereGround);
-
-	const int sampleCnt = 10;
-	const int reflectCnt = 5;
-
 	int outputRow, outputCol;
 	float u, v;
 
@@ -137,7 +136,7 @@ void RrtTest::draw(const RrtCamera& camera, int width, int height, int channel, 
 				u = float(col) + GfxLib::random();
 				v = float(row) + GfxLib::random();
 				Ray ray = camera.getRay(u, v);
-				glm::vec3 ret = rayColor(ray, world, reflectCnt);
+				glm::vec3 ret = rayColor(ray, obj, reflectCnt);
 				sampleColor = sampleColor + ret * scale;
 			}
 

@@ -14,7 +14,8 @@ public:
 	static bool checkRunning();
 
 private:
-	static void draw(const RrtCamera &camera, int width, int height, int channel, uint8_t* data);
+	static void draw(const RrtCamera &camera, const HittableList& obj, const int width, const int height, const int channel,
+		             const int sampleCnt, const int reflectCnt, uint8_t* data);
 	static glm::vec3 rayColor(const Ray& ray, const HittableList& obj, int reflectDepth);
 
 	RrtTest() {};
