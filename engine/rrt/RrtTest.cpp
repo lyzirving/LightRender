@@ -15,6 +15,8 @@
 
 #include "RrtTest.h"
 #include "RrtCamera.h"
+#include "LensCamera.h"
+#include "PinholeCamera.h"
 #include "Ray.h"
 
 #include "Sphere.h"

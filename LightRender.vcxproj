@@ -134,6 +134,9 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\rrt\obj\Ray.cpp" />
     <ClCompile Include="engine\rrt\obj\Sphere.cpp" />
     <ClCompile Include="engine\rrt\RrtTest.cpp" />
+    <ClCompile Include="engine\rrt\tools\ICamera.cpp" />
+    <ClCompile Include="engine\rrt\tools\LensCamera.cpp" />
+    <ClCompile Include="engine\rrt\tools\PinholeCamera.cpp" />
     <ClCompile Include="engine\rrt\tools\RrtBuffer.cpp" />
     <ClCompile Include="engine\rrt\tools\RrtBVHBuf.cpp" />
     <ClCompile Include="engine\rrt\tools\RrtCamera.cpp" />
@@ -181,6 +184,9 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\rrt\obj\include\Ray.h" />
     <ClInclude Include="engine\rrt\include\RrtTest.h" />
     <ClInclude Include="engine\rrt\obj\include\Sphere.h" />
+    <ClInclude Include="engine\rrt\tools\include\ICamera.h" />
+    <ClInclude Include="engine\rrt\tools\include\LensCamera.h" />
+    <ClInclude Include="engine\rrt\tools\include\PinholeCamera.h" />
     <ClInclude Include="engine\rrt\tools\include\RrtBuffer.h" />
     <ClInclude Include="engine\rrt\tools\include\RrtBVHBuf.h" />
     <ClInclude Include="engine\rrt\include\RrtDef.h" />

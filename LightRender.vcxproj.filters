@@ -157,6 +157,15 @@
     <ClCompile Include="engine\rrt\material\Dilectric.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="engine\rrt\tools\LensCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\tools\ICamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\tools\PinholeCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\Shader.h">
@@ -289,6 +298,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\rrt\material\include\Dielectric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\tools\include\LensCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\tools\include\ICamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\tools\include\PinholeCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
