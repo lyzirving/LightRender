@@ -14,6 +14,10 @@ public:
 
 	virtual Ray getRay(float u, float v) = 0;
 
+	inline const glm::vec3 front() { return m_camFront; }
+	inline const glm::vec3 right() { return m_camRight; }
+	inline const glm::vec3 up() { return m_camUp; }
+
 	void apply();
 	void setLookAt(const glm::vec3& at);
 	void setNearFar(float near, float far);
