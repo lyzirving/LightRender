@@ -2,8 +2,8 @@
 
 #include "ICamera.h"
 
-ICamera::ICamera() : m_fov(60.f), m_near(0.1f), m_far(10.f),
-	                 m_camPos(0.f), m_lookAt(0.f, 0.f, -1.f), 
+ICamera::ICamera() : m_fov(60.f), m_near(1.f), m_far(10.f),
+	                 m_camPos(0.f, 0.f, 4.f), m_lookAt(0.f, 0.f, 0.f), 
                      m_camFront(0.f), m_camRight(0.f), m_camUp(0.f),
 					 m_viewportSize(500.f),
 	                 m_camMat(1.f), m_prjMat(1.f), m_screenMat(1.f),

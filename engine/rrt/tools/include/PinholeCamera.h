@@ -3,6 +3,9 @@
 
 #include "ICamera.h"
 
+/*
+ * for pinhole camera, near is the focal distance
+ */
 class PinholeCamera : public ICamera
 {
 public:

@@ -14,7 +14,6 @@
 #include <atomic>
 
 #include "RrtTest.h"
-#include "RrtCamera.h"
 #include "LensCamera.h"
 #include "PinholeCamera.h"
 #include "Ray.h"
@@ -57,13 +56,9 @@ void RrtTest::main()
 	std::replace(path.begin(), path.end(), oldVal, newVal);
 	path.append("/RrtTest.png");
 
-	RrtCamera camera;
-	camera.setPosition(glm::vec3(3.5f, 1.f, 2.f));
-	camera.setLookAt(glm::vec3(0.f, 0.f, 0.f));
-	camera.setViewportSize(glm::vec2(width, height));
-	camera.setFov(35);
-	//camera.setApertureLen(0.06f);
-	camera.apply();
+	std::shared_ptr<ICamera> camera = std::make_shared<PinholeCamera>();
+	camera->setViewportSize(glm::vec2(width, height));
+	camera->apply();
 
 	HittableList world;
 	std::shared_ptr<Hittable> sphereCenter = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, 0.f), 0.5f);
@@ -116,7 +111,7 @@ void RrtTest::main()
 	g_running.store(false);
 }
 
-void RrtTest::draw(const RrtCamera& camera, const HittableList& obj, const int width, const int height, const int channel,
+void RrtTest::draw(const std::shared_ptr<ICamera>& camera, const HittableList& obj, const int width, const int height, const int channel,
 	               const int sampleCnt, const int reflectCnt, uint8_t* data)
 {
 	int outputRow, outputCol;
@@ -137,7 +132,7 @@ void RrtTest::draw(const RrtCamera& camera, const HittableList& obj, const int w
 			{
 				u = float(col) + GfxLib::random();
 				v = float(row) + GfxLib::random();
-				Ray ray = camera.getRay(u, v);
+				Ray ray = camera->getRay(u, v);
 				glm::vec3 ret = rayColor(ray, obj, reflectCnt);
 				sampleColor = sampleColor + ret * scale;
 			}

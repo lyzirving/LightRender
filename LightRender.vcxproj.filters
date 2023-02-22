@@ -139,9 +139,6 @@
     <ClCompile Include="engine\rrt\obj\Sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\rrt\tools\RrtCamera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="engine\gfx\GfxLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -280,9 +277,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\rrt\include\RrtDef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\rrt\tools\include\RrtCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\gfx\include\GfxLib.h">
