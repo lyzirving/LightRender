@@ -11,10 +11,10 @@
 #endif
 #define LOCAL_TAG "LensCamera"
 
-LensCamera::LensCamera() : ICamera(), m_focalDist(0.4f), m_distLensToSensor(0.6f), m_distLensToSubject(0.f), m_apertureRadius(0.5f) 
+LensCamera::LensCamera() : ICamera(), m_focalDist(0.4f), m_distI(0.6f), m_distO(0.f), m_apertureRadius(0.5f)
 {
-	m_distLensToSubject = m_focalDist * m_distLensToSensor / std::abs(m_distLensToSensor - m_focalDist);
-	LOG_INFO("focal dist[%f], lens to sensor[%f], lens to subject[%f]", m_focalDist, m_distLensToSensor, m_distLensToSubject);
+	m_distO = m_focalDist * m_distI / std::abs(m_distI - m_focalDist);
+	LOG_INFO("focal dist[%f], dist from lens to sensor[%f], dist from lens to object[%f]", m_focalDist, m_focalDist, m_distO);
 }
 
 LensCamera::~LensCamera() = default;
@@ -26,7 +26,7 @@ Ray LensCamera::getRay(float u, float v)
 
 	// camera space
 	glm::vec3 sensorCenter = glm::vec3(0.f, 0.f, -m_near);
-	glm::vec3 lensCenter = glm::vec3(0.f, 0.f, -m_near - m_distLensToSensor);
+	glm::vec3 lensCenter = glm::vec3(0.f, 0.f, -m_near - m_distI);
 	glm::vec3 ptOnSensor, ptOnLens;
 	glm::vec3 dirInCam;
 
@@ -35,11 +35,15 @@ Ray LensCamera::getRay(float u, float v)
 
 	// make homogeneous coordinate as 1.f to represent for a point
 	// pt being in camera space is located on near plane(z is -m_near), and near plane is our sensor
-	ptOnSensor = glm::vec3(m_screenPrjInv * glm::vec4(screenPt, 1.f));
+	ptOnSensor = m_screenPrjInv * glm::vec4(screenPt, 1.f);
+	// notice that the lens will flip the image
+	ptOnSensor.x *= -1.f;
+	ptOnSensor.y *= -1.f;
+
 	ptOnLens = lensCenter + glm::vec3(GfxLib::random(0.f, m_apertureRadius), GfxLib::random(0.f, m_apertureRadius), 0.f);
 	dirInCam = glm::normalize(lensCenter - ptOnSensor);
 
-	float t = m_distLensToSubject / std::abs(dirInCam.z);
+	float t = m_distO / std::abs(dirInCam.z);
 	crossPt = lensCenter + dirInCam * t;
 	crossPt = m_camInv * glm::vec4(crossPt, 1.f);
 	origin = m_camInv * glm::vec4(ptOnLens, 1.f);

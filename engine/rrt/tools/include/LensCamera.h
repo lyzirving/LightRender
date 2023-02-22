@@ -12,8 +12,10 @@ public:
 	virtual Ray getRay(float u, float v) override;
 private:
 	float m_focalDist;
-	float m_distLensToSensor;
-	float m_distLensToSubject;
+	// distance from lens to sensor(image)  
+	float m_distI;
+	// distance from lens to object(world)
+	float m_distO;
 	float m_apertureRadius;
 };
 
