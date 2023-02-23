@@ -18,24 +18,24 @@ struct RrtCanvasVert
 };
 
 /*
-* RrtTriangle is used to transform data from cpu to gpu.
+* EncodeTriangle is used to transform data from cpu to gpu.
 * make sure every field should be vec3.
 */
-struct RrtTriangle
+struct EncodeTriangle
 {
     // make sure p0, p1, p2 is in counter-clockwise order
     glm::vec3 p0, p1, p2;
     glm::vec3 n0, n1, n2;
     glm::vec3 color;
 
-    RrtTriangle() : p0(0.f), p1(0.f), p2(0.f), n0(0.f), n1(0.f), n2(0.f), color(0.f) {}
+    EncodeTriangle() : p0(0.f), p1(0.f), p2(0.f), n0(0.f), n1(0.f), n2(0.f), color(0.f) {}
 };
 
 /*
-* RrtBVHNode is used to transform data from cpu to gpu.
+* EncodeBVH is used to transform data from cpu to gpu.
 * make sure every field should be vec3.
 */
-struct RrtBVHNode
+struct EncodeBVH
 {
     // childInfo.x stores left child's index.
     // childInfo.y stores right child's index.
@@ -48,7 +48,7 @@ struct RrtBVHNode
     glm::vec3 posInfo;
     glm::vec3 AA, BB;
 
-    RrtBVHNode() : childInfo(0.f), posInfo(0.f), AA(0.f), BB(0.f) {}
+    EncodeBVH() : childInfo(0.f), posInfo(0.f), AA(0.f), BB(0.f) {}
 };
 
 #endif // !RRT_DEF_H

@@ -1,9 +1,9 @@
 #ifndef LENS_CAMERA_H
 #define LENS_CAMERA_H
 
-#include "ICamera.h"
+#include "RrtCamera.h"
 
-class LensCamera : public ICamera
+class LensCamera : public RrtCamera
 {
 public:
 	LensCamera();

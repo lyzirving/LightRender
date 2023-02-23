@@ -56,31 +56,31 @@ void RrtTest::main()
 	std::replace(path.begin(), path.end(), oldVal, newVal);
 	path.append("/RrtTest.png");
 
-	std::shared_ptr<ICamera> camera = std::make_shared<PinholeCamera>();
+	std::shared_ptr<RrtCamera> camera = std::make_shared<PinholeCamera>();
 	camera->setViewportSize(glm::vec2(width, height));
 	camera->apply();
 
 	HittableList world;
 	std::shared_ptr<Hittable> sphereCenter = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, 0.f), 0.5f);
-	std::shared_ptr<Matl> centerMatl = std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f));
+	std::shared_ptr<RrtMaterial> centerMatl = std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f));
 	sphereCenter->setMatl(centerMatl);
 
 	std::shared_ptr<Hittable> sphereLeft = std::make_shared<Sphere>(glm::vec3(-1.f, 0.f, 0.f), 0.5f);
-	std::shared_ptr<Matl> leftMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f));
+	std::shared_ptr<RrtMaterial> leftMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f));
 	sphereLeft->setMatl(leftMatl);
 
 	std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f);
-	std::shared_ptr<Matl> rightMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f));
+	std::shared_ptr<RrtMaterial> rightMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f));
 	static_cast<Metal*>(rightMatl.get())->setFluzzy(0.5f);
 	sphereRight->setMatl(rightMatl);
 
 	// todo: fix the dilectric material's bug when total internal reflection is enabled
 	/*std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f);
-	std::shared_ptr<Matl> rightMatl = std::make_shared<Dilectric>(1.5f);
+	std::shared_ptr<RrtMaterial> rightMatl = std::make_shared<Dilectric>(1.5f);
 	sphereRight->setMatl(rightMatl);*/
 
 	std::shared_ptr<Hittable> sphereGround = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, 0.f), 100.f);
-	std::shared_ptr<Matl> groundMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f));
+	std::shared_ptr<RrtMaterial> groundMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f));
 	sphereGround->setMatl(groundMatl);
 
 	world.add(sphereCenter);
@@ -111,7 +111,7 @@ void RrtTest::main()
 	g_running.store(false);
 }
 
-void RrtTest::draw(const std::shared_ptr<ICamera>& camera, const HittableList& obj, const int width, const int height, const int channel,
+void RrtTest::draw(const std::shared_ptr<RrtCamera>& camera, const HittableList& obj, const int width, const int height, const int channel,
 	               const int sampleCnt, const int reflectCnt, uint8_t* data)
 {
 	int outputRow, outputCol;
@@ -159,7 +159,7 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 		Ray scatterRay;
 		glm::vec3 attenu{ 1.f };
 
-		std::shared_ptr<Matl> mat = objList.at(rec.hitInd)->getMatl();
+		std::shared_ptr<RrtMaterial> mat = objList.at(rec.hitInd)->getMatl();
 		if (!mat->scatter(ray, rec, attenu, scatterRay))
 			return glm::vec3(0.f);
 

@@ -2,7 +2,7 @@
 
 #include "RrtBuffer.h"
 
-#include "Shader.h"
+#include "GfxShader.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
@@ -24,7 +24,7 @@ RrtBuffer::~RrtBuffer()
     m_texId = 0;
 }
 
-void RrtBuffer::bind(const std::shared_ptr<Shader>& shader, int texUnit)
+void RrtBuffer::bind(const std::shared_ptr<GfxShader>& shader, int texUnit)
 {
     if (!shader)
     {

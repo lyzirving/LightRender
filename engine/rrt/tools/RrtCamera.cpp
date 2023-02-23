@@ -1,8 +1,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "ICamera.h"
+#include "RrtCamera.h"
 
-ICamera::ICamera() : m_fov(60.f), m_near(1.f), m_far(10.f),
+RrtCamera::RrtCamera() : m_fov(60.f), m_near(1.f), m_far(10.f),
 	                 m_camPos(0.f, 0.f, 4.f), m_lookAt(0.f, 0.f, 0.f), 
                      m_camFront(0.f), m_camRight(0.f), m_camUp(0.f),
 					 m_viewportSize(500.f),
@@ -13,9 +13,9 @@ ICamera::ICamera() : m_fov(60.f), m_near(1.f), m_far(10.f),
 	apply();
 }
 
-ICamera::~ICamera() = default;
+RrtCamera::~RrtCamera() = default;
 
-void ICamera::apply()
+void RrtCamera::apply()
 {
 	if (m_dataChange.load())
 	{
@@ -27,7 +27,7 @@ void ICamera::apply()
 	}
 }
 
-void ICamera::calcCamMat()
+void RrtCamera::calcCamMat()
 {
 	m_camFront = glm::normalize(m_camPos - m_lookAt);
 	m_camRight = glm::normalize(glm::cross(glm::vec3(0.f, 1.f, 0.f), m_camFront));
@@ -36,12 +36,12 @@ void ICamera::calcCamMat()
 	m_camMat = glm::lookAt(m_camPos, m_camPos - m_camFront, m_camUp);
 }
 
-void ICamera::calcPrjMat()
+void RrtCamera::calcPrjMat()
 {
 	m_prjMat = glm::perspective(glm::radians(m_fov), m_viewportSize.x / m_viewportSize.y, m_near, m_far);
 }
 
-void ICamera::calcScreenMat()
+void RrtCamera::calcScreenMat()
 {
 	m_screenMat = glm::mat4(1.f);
 
@@ -56,7 +56,7 @@ void ICamera::calcScreenMat()
 	m_screenMat[3][2] = d / 2.f;
 }
 
-void ICamera::calcInvMat()
+void RrtCamera::calcInvMat()
 {
 	glm::mat4 mat = m_screenMat * m_prjMat * m_camMat;
 	m_invMat = glm::inverse(mat);
@@ -67,7 +67,7 @@ void ICamera::calcInvMat()
 	m_screenPrjInv = glm::inverse(mat);
 }
 
-void ICamera::setLookAt(const glm::vec3& at)
+void RrtCamera::setLookAt(const glm::vec3& at)
 {
 	if (m_lookAt != at)
 	{
@@ -76,7 +76,7 @@ void ICamera::setLookAt(const glm::vec3& at)
 	}
 }
 
-void ICamera::setNearFar(float near, float far)
+void RrtCamera::setNearFar(float near, float far)
 {
 	if (m_near != near || m_far != far)
 	{
@@ -86,7 +86,7 @@ void ICamera::setNearFar(float near, float far)
 	}
 }
 
-void ICamera::setPosition(const glm::vec3& pos)
+void RrtCamera::setPosition(const glm::vec3& pos)
 {
 	if (m_camPos != pos)
 	{
@@ -95,7 +95,7 @@ void ICamera::setPosition(const glm::vec3& pos)
 	}
 }
 
-void ICamera::setViewportSize(const glm::vec2& size)
+void RrtCamera::setViewportSize(const glm::vec2& size)
 {
 	if (m_viewportSize != size)
 	{

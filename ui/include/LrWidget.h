@@ -5,7 +5,7 @@
 
 #include "ui_LightRender.h"
 
-class GfxThread;
+class GreThread;
 
 class LrWidget : public QWidget
 {
@@ -23,7 +23,7 @@ protected:
     virtual void closeEvent(QCloseEvent* e) override;
     virtual void resizeEvent(QResizeEvent* event) override;
 
-    std::shared_ptr<GfxThread> m_renderThread;
+    std::shared_ptr<GreThread> m_renderThread;
 
 private:
     Ui::LrWidgetClass ui;

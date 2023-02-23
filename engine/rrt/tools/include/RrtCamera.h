@@ -1,16 +1,16 @@
-#ifndef I_CAMERA_H
-#define I_CAMERA_H
+#ifndef RRT_CAMERA_H
+#define RRT_CAMERA_H
 
 #include <glm/glm.hpp>
 #include <atomic>
 
 #include "Ray.h"
 
-class ICamera
+class RrtCamera
 {
 public:
-	ICamera();
-	virtual ~ICamera();
+	RrtCamera();
+	virtual ~RrtCamera();
 
 	virtual Ray getRay(float u, float v) = 0;
 

@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-class Shader;
+class GfxShader;
 
 class RrtBuffer
 {
@@ -12,7 +12,7 @@ public:
     RrtBuffer();
     virtual ~RrtBuffer();
 
-    virtual void bind(const std::shared_ptr<Shader>& shader, int texUnit);
+    virtual void bind(const std::shared_ptr<GfxShader>& shader, int texUnit);
 
 protected:
     void initBuf();

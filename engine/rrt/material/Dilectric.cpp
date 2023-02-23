@@ -7,7 +7,7 @@
 #include "GfxLib.h"
 #include "GfxDef.h"
 
-Dilectric::Dilectric(float refractIndex) : Matl(glm::vec3(1.f)), m_refractIndex(refractIndex)
+Dilectric::Dilectric(float refractIndex) : RrtMaterial(glm::vec3(1.f)), m_refractIndex(refractIndex)
 {
 }
 

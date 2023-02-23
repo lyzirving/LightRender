@@ -11,7 +11,7 @@
 #endif
 #define LOCAL_TAG "LensCamera"
 
-LensCamera::LensCamera() : ICamera(), m_focalDist(0.4f), m_distI(0.6f), m_distO(0.f), m_apertureRadius(0.3f)
+LensCamera::LensCamera() : RrtCamera(), m_focalDist(0.4f), m_distI(0.6f), m_distO(0.f), m_apertureRadius(0.3f)
 {
 	// The Thin Lens Equation: 1 / f = 1 / zo + 1 / zi
 	m_distO = m_focalDist * m_distI / std::abs(m_distI - m_focalDist);

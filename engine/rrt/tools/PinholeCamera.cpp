@@ -1,6 +1,6 @@
 #include "PinholeCamera.h"
 
-PinholeCamera::PinholeCamera() : ICamera() {}
+PinholeCamera::PinholeCamera() : RrtCamera() {}
 
 PinholeCamera::~PinholeCamera() = default;
 

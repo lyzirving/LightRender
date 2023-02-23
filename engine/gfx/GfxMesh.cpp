@@ -3,7 +3,7 @@
 #include "GfxMesh.h"
 #include "GfxDef.h"
 #include "GfxHelper.h"
-#include "Shader.h"
+#include "GfxShader.h"
 
 #include "SystemUtil.h"
 
@@ -16,16 +16,16 @@
 GfxMesh::GfxMesh() : m_initialized(false), m_name(),
                      m_vao(0), m_vbo(0), m_ebo(0),
                      m_vertices(), m_indices(), m_textures(),
-                     m_material(new Material),
-                     m_drawMode(DrawMode::MODE_TRIANGLE)
+                     m_material(new GfxMaterial),
+                     m_drawMode(GfxDrawMode::MODE_TRIANGLE)
 {
 }
 
 GfxMesh::GfxMesh(const char* name) : m_initialized(false), m_name(name),
                                      m_vao(0), m_vbo(0), m_ebo(0),
                                      m_vertices(), m_indices(), m_textures(),
-                                     m_material(new Material),
-                                     m_drawMode(DrawMode::MODE_TRIANGLE)
+                                     m_material(new GfxMaterial),
+                                     m_drawMode(GfxDrawMode::MODE_TRIANGLE)
 {
 }
 
@@ -34,7 +34,7 @@ GfxMesh::~GfxMesh()
     GfxMesh::freeMem();
 
     m_material.reset();
-    std::vector<Vertex>().swap(m_vertices);
+    std::vector<GfxVertex>().swap(m_vertices);
     std::vector<uint32_t>().swap(m_indices);
 
     auto itr = m_textures.begin();
@@ -43,7 +43,7 @@ GfxMesh::~GfxMesh()
 
         itr = m_textures.erase(itr);
     }
-    std::vector<Texture>().swap(m_textures);
+    std::vector<GfxTexture>().swap(m_textures);
 }
 
 void GfxMesh::bind(bool force)
@@ -62,7 +62,7 @@ setup:
 
     // load vertex data into array buffer
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(GfxVertex), &m_vertices[0], GL_STATIC_DRAW);
     // load indices data into element buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
@@ -74,13 +74,13 @@ setup:
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     // set the vertex attribute pointer, vertex position
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)nullptr);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GfxVertex), (void*)nullptr);
     // vertex normal
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GfxVertex), (void*)offsetof(GfxVertex, m_normal));
     // texture coordinates
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_tex));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GfxVertex), (void*)offsetof(GfxVertex, m_tex));
 
     glBindVertexArray(0);
 
@@ -103,14 +103,14 @@ void GfxMesh::freeMem()
     if (m_vao != 0) glDeleteVertexArrays(1, &m_vao);
 }
 
-void GfxMesh::draw(const std::shared_ptr<Shader>& shader)
+void GfxMesh::draw(const std::shared_ptr<GfxShader>& shader)
 {
     for (int32_t i = 0; i < m_textures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, m_textures[i].m_texId);
-        TexType type = m_textures[i].m_type;
-        std::string sampler = (type == TexType::DIFFUSE ? U_SMP_DIFF : U_SMP_SPEC);
+        GfxTexType type = m_textures[i].m_type;
+        std::string sampler = (type == GfxTexType::DIFFUSE ? U_SMP_DIFF : U_SMP_SPEC);
         shader->setInt(sampler, i);
     }
     glBindVertexArray(m_vao);
@@ -123,11 +123,11 @@ uint32_t GfxMesh::getGlDrawMode()
 {
     switch (m_drawMode)
     {
-    case DrawMode::MODE_LINE:
+    case GfxDrawMode::MODE_LINE:
         return GL_LINES;
-    case DrawMode::MODE_POINT:
+    case GfxDrawMode::MODE_POINT:
         return GL_POINTS;
-    case DrawMode::MODE_TRIANGLE:
+    case GfxDrawMode::MODE_TRIANGLE:
     default:
         return GL_TRIANGLES;
     }
@@ -139,7 +139,7 @@ std::string GfxMesh::getMeshInfo()
                                           m_name, m_vertices.size(), m_indices.size(), m_textures.size());
 }
 
-void GfxMesh::pushBackVert(Vertex&& vert)
+void GfxMesh::pushBackVert(GfxVertex&& vert)
 {
     m_vertices.push_back(std::move(vert));
 }
@@ -149,7 +149,7 @@ void GfxMesh::pushBackIndices(uint32_t ind)
     m_indices.push_back(ind);
 }
 
-void GfxMesh::pushBackTexVec(const std::vector<Texture>& texVec)
+void GfxMesh::pushBackTexVec(const std::vector<GfxTexture>& texVec)
 {
     for (auto& item : texVec)
     {

@@ -192,7 +192,7 @@ bool GfxHelper::loadTex(const std::string& path, uint32_t& texId,
     auto itr = m_texMap.find(path);
     if (itr != m_texMap.end())
     {
-        Texture& tex = itr->second;
+        GfxTexture& tex = itr->second;
         texId = itr->second.m_texId;
         width = itr->second.m_width;
         height = itr->second.m_height;
@@ -203,7 +203,7 @@ bool GfxHelper::loadTex(const std::string& path, uint32_t& texId,
     }
 
     bool ret{ false };
-    Texture tex;
+    GfxTexture tex;
     tex.m_path = path;
     unsigned char* data = stbi_load(path.c_str(), &tex.m_width, &tex.m_height, &tex.m_channel, 0);
     if (data)
@@ -227,7 +227,7 @@ bool GfxHelper::loadTex(const std::string& path, uint32_t& texId,
             width = tex.m_width;
             height = tex.m_height;
             channel = tex.m_channel;
-            m_texMap.insert(std::pair<std::string, Texture>(path, tex));
+            m_texMap.insert(std::pair<std::string, GfxTexture>(path, tex));
             ret = true;
             LOG_INFO("succeed to load texture. size[%d, %d], channel[%d], id[%u], path[%s]", 
                      width, height, channel, texId, path.c_str());

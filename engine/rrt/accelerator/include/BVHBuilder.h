@@ -10,8 +10,8 @@ class aiScene;
 class aiNode;
 class aiMesh;
 
-struct RrtBVHNode;
-struct RrtTriangle;
+struct EncodeBVH;
+struct EncodeTriangle;
 
 class BVHBuilder
 {
@@ -19,8 +19,8 @@ public:
     BVHBuilder(const char* name, bool adj = false);
     virtual ~BVHBuilder();
 
-    void build(std::vector<RrtBVHNode>& outNodes);
-    void getTriangles(std::vector<RrtTriangle>& out);
+    void build(std::vector<EncodeBVH>& outNodes);
+    void getTriangles(std::vector<EncodeTriangle>& out);
 
 protected:
     void adjust();
@@ -30,15 +30,15 @@ protected:
 
     std::string m_name;
     bool m_adjFlag;
-    std::vector<RrtTriangle> m_triangles;
+    std::vector<EncodeTriangle> m_triangles;
     glm::vec3 m_maxPos, m_minPos;
 
 private:
-    static int buildBVHWithSAH(std::vector<RrtTriangle>& triangles, std::vector<RrtBVHNode>& outNodes, int l, int r, int limit);
-    static bool cmpX(const RrtTriangle& lhs, const RrtTriangle& rhs);
-    static bool cmpY(const RrtTriangle& lhs, const RrtTriangle& rhs);
-    static bool cmpZ(const RrtTriangle& lhs, const RrtTriangle& rhs);
-    static void lowestCostSAH(std::vector<RrtTriangle>& triangles, int l, int r, float& lowCost, int& lowAxis, int& lowSplit);
+    static int buildBVHWithSAH(std::vector<EncodeTriangle>& triangles, std::vector<EncodeBVH>& outNodes, int l, int r, int limit);
+    static bool cmpX(const EncodeTriangle& lhs, const EncodeTriangle& rhs);
+    static bool cmpY(const EncodeTriangle& lhs, const EncodeTriangle& rhs);
+    static bool cmpZ(const EncodeTriangle& lhs, const EncodeTriangle& rhs);
+    static void lowestCostSAH(std::vector<EncodeTriangle>& triangles, int l, int r, float& lowCost, int& lowAxis, int& lowSplit);
 };
 
 #endif //BVH_BUILDER_H

@@ -1,9 +1,9 @@
 #ifndef METAL_H
 #define METAL_H
 
-#include "Matl.h"
+#include "RrtMaterial.h"
 
-class Metal : public Matl
+class Metal : public RrtMaterial
 {
 public:
 	Metal(const glm::vec3& color = glm::vec3(0.5f));

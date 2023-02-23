@@ -1,13 +1,13 @@
-#ifndef GFX_CONTEXT_H
-#define GFX_CONTEXT_H
+#ifndef GRE_CONTEXT_H
+#define GRE_CONTEXT_H
 
 #include <Windows.h>
 
-class GfxContext
+class GreContext
 {
 public:
-	GfxContext();
-	~GfxContext();
+	GreContext();
+	~GreContext();
 
 	void bind(HWND wnd);
 	void initInterface();
@@ -35,5 +35,5 @@ protected:
 
 };
 
-#endif // !GFX_CONTEXT_H
+#endif // !GRE_CONTEXT_H
 

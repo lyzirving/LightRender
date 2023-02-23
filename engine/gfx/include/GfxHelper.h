@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-struct Texture;
+struct GfxTexture;
 
 class GfxHelper
 {
@@ -27,7 +27,7 @@ private:
 	static uint32_t createShader(uint32_t type, const char* source);
 	static void logShaderInfo(uint32_t shader);
 
-	std::unordered_map<std::string, Texture> m_texMap;
+	std::unordered_map<std::string, GfxTexture> m_texMap;
 };
 
 #endif // !GFX_HELPER_H

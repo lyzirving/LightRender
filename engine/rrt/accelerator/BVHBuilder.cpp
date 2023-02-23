@@ -32,7 +32,7 @@ BVHBuilder::BVHBuilder(const char* name, bool adj) : m_name(name), m_adjFlag(adj
 
 BVHBuilder::~BVHBuilder()
 {
-    std::vector<RrtTriangle>().swap(m_triangles);
+    std::vector<EncodeTriangle>().swap(m_triangles);
 }
 
 void BVHBuilder::adjust()
@@ -43,7 +43,7 @@ void BVHBuilder::adjust()
 
     if (m_adjFlag)
     {
-        for (RrtTriangle& item : m_triangles)
+        for (EncodeTriangle& item : m_triangles)
         {
             item.p0 -= center;
             item.p0 *= scale;
@@ -57,7 +57,7 @@ void BVHBuilder::adjust()
     }
 }
 
-void BVHBuilder::build(std::vector<RrtBVHNode>& outNodes)
+void BVHBuilder::build(std::vector<EncodeBVH>& outNodes)
 {
     if (m_triangles.empty())
     {
@@ -75,7 +75,7 @@ void BVHBuilder::build(std::vector<RrtBVHNode>& outNodes)
     LOG_INFO("finish build BVH, cost[%.3f]s, node size[%lu]", (SystemUtil::curTimeMs() - startTime) / 1000.f, outNodes.size());
 }
 
-int BVHBuilder::buildBVHWithSAH(std::vector<RrtTriangle>& triangles, std::vector<RrtBVHNode>& outNodes, int l, int r, int limit)
+int BVHBuilder::buildBVHWithSAH(std::vector<EncodeTriangle>& triangles, std::vector<EncodeBVH>& outNodes, int l, int r, int limit)
 {
     if (l > r)
     {
@@ -94,7 +94,7 @@ int BVHBuilder::buildBVHWithSAH(std::vector<RrtTriangle>& triangles, std::vector
     // find AABB
     for (int i = l; i <= r; ++i) 
     {
-        RrtTriangle& item = triangles[i];
+        EncodeTriangle& item = triangles[i];
         glm::vec3 min = glm::min(item.p0, glm::min(item.p1, item.p2));
         glm::vec3 max = glm::max(item.p0, glm::max(item.p1, item.p2));
         outNodes[id].AA = glm::min(outNodes[id].AA, min);
@@ -128,33 +128,33 @@ int BVHBuilder::buildBVHWithSAH(std::vector<RrtTriangle>& triangles, std::vector
     return id;
 }
 
-bool BVHBuilder::cmpX(const RrtTriangle& lhs, const RrtTriangle& rhs)
+bool BVHBuilder::cmpX(const EncodeTriangle& lhs, const EncodeTriangle& rhs)
 {
     glm::vec3 lhsCenter = (lhs.p0 + lhs.p1 + lhs.p2) / 3.f;
     glm::vec3 rhsCenter = (rhs.p0 + rhs.p1 + rhs.p2) / 3.f;
     return lhsCenter.x < rhsCenter.x;
 }
 
-bool BVHBuilder::cmpY(const RrtTriangle& lhs, const RrtTriangle& rhs)
+bool BVHBuilder::cmpY(const EncodeTriangle& lhs, const EncodeTriangle& rhs)
 {
     glm::vec3 lhsCenter = (lhs.p0 + lhs.p1 + lhs.p2) / 3.f;
     glm::vec3 rhsCenter = (rhs.p0 + rhs.p1 + rhs.p2) / 3.f;
     return lhsCenter.y < rhsCenter.y;
 }
 
-bool BVHBuilder::cmpZ(const RrtTriangle& lhs, const RrtTriangle& rhs)
+bool BVHBuilder::cmpZ(const EncodeTriangle& lhs, const EncodeTriangle& rhs)
 {
     glm::vec3 lhsCenter = (lhs.p0 + lhs.p1 + lhs.p2) / 3.f;
     glm::vec3 rhsCenter = (rhs.p0 + rhs.p1 + rhs.p2) / 3.f;
     return lhsCenter.z < rhsCenter.z;
 }
 
-void BVHBuilder::getTriangles(std::vector<RrtTriangle>& out)
+void BVHBuilder::getTriangles(std::vector<EncodeTriangle>& out)
 {
     out.assign(m_triangles.begin(), m_triangles.end());
 }
 
-void BVHBuilder::lowestCostSAH(std::vector<RrtTriangle>& triangles, int l, int r, float& lowCost, int& lowAxis, int& lowSplit)
+void BVHBuilder::lowestCostSAH(std::vector<EncodeTriangle>& triangles, int l, int r, float& lowCost, int& lowAxis, int& lowSplit)
 {
     for (int axisInd = 0; axisInd < 3; ++axisInd)
     {
@@ -167,7 +167,7 @@ void BVHBuilder::lowestCostSAH(std::vector<RrtTriangle>& triangles, int l, int r
         std::vector<glm::vec3> leftMax(r - l + 1, glm::vec3(-INF));
         for (int i = l; i <= r; ++i)
         {
-            RrtTriangle& tri = triangles[i];
+            EncodeTriangle& tri = triangles[i];
             int bias = ((i == l) ? 0 : 1);
 
             leftMin[i - l] = glm::min(leftMin[i - l - bias], glm::min(tri.p0, glm::min(tri.p1, tri.p2)));
@@ -178,7 +178,7 @@ void BVHBuilder::lowestCostSAH(std::vector<RrtTriangle>& triangles, int l, int r
         std::vector<glm::vec3> rightMax(r - l + 1, glm::vec3(-INF));
         for (int i = r; i >= l; --i)
         {
-            RrtTriangle& tri = triangles[i];
+            EncodeTriangle& tri = triangles[i];
             int bias = ((i == r) ? 0 : 1);
 
             rightMin[i - l] = glm::min(rightMin[i - l + bias], glm::min(tri.p0, glm::min(tri.p1, tri.p2)));
@@ -265,7 +265,7 @@ void BVHBuilder::processMesh(aiMesh* mesh, const aiScene* scene)
         return;
 
     aiVector3D aiVert, aiNormal;
-    RrtTriangle tri;
+    EncodeTriangle tri;
 
     bool normalExist = (mesh->mNormals != nullptr);
 

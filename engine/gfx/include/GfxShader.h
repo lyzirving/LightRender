@@ -1,16 +1,16 @@
-#ifndef SHADER_H
-#define SHADER_H
+#ifndef GFX_SHADER_H
+#define GFX_SHADER_H
 
 #include <string>
 #include <stdint.h>
 
 #include <glm/glm.hpp>
 
-class Shader
+class GfxShader
 {
 public:
-	Shader(const char* name, const char* vertPath, const char* fragPath);
-	virtual ~Shader();
+	GfxShader(const char* name, const char* vertPath, const char* fragPath);
+	virtual ~GfxShader();
 
     inline bool isInit() { return m_program > 0; }
     inline const std::string& name() { return m_name; }
@@ -35,5 +35,5 @@ protected:
 	uint32_t m_program;
 };
 
-#endif // !SHADER_H
+#endif // !GFX_SHADER_H
 

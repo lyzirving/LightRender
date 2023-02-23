@@ -1,9 +1,9 @@
 #ifndef DILECTRIC_H
 #define DILECTRIC_H
 
-#include "Matl.h"
+#include "RrtMaterial.h"
 
-class Dilectric : public Matl
+class Dilectric : public RrtMaterial
 {
 public:
 	Dilectric(float refractIndex);

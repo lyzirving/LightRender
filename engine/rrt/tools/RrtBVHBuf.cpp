@@ -3,7 +3,7 @@
 #include "RrtBVHBuf.h"
 #include "RrtDef.h"
 
-#include "Shader.h"
+#include "GfxShader.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
@@ -18,10 +18,10 @@ RrtBVHBuf::RrtBVHBuf() : RrtBuffer(), m_nodes()
 
 RrtBVHBuf::~RrtBVHBuf()
 {
-    std::vector<RrtBVHNode>().swap(m_nodes);
+    std::vector<EncodeBVH>().swap(m_nodes);
 }
 
-void RrtBVHBuf::addNodes(const std::vector<RrtBVHNode>& input)
+void RrtBVHBuf::addNodes(const std::vector<EncodeBVH>& input)
 {
     if (!input.empty())
     {
@@ -31,14 +31,14 @@ void RrtBVHBuf::addNodes(const std::vector<RrtBVHNode>& input)
         initBuf();
 
         glBindBuffer(GL_TEXTURE_BUFFER, m_bufId);
-        glBufferData(GL_TEXTURE_BUFFER, m_nodes.size() * sizeof(RrtBVHNode), &m_nodes[0], GL_STATIC_DRAW);
+        glBufferData(GL_TEXTURE_BUFFER, m_nodes.size() * sizeof(EncodeBVH), &m_nodes[0], GL_STATIC_DRAW);
 
         glBindTexture(GL_TEXTURE_BUFFER, m_texId);
         glTexBuffer(GL_TEXTURE_BUFFER, GL_RGB32F, m_bufId);
     }
 }
 
-void RrtBVHBuf::bind(const std::shared_ptr<Shader>& shader, int texUnit)
+void RrtBVHBuf::bind(const std::shared_ptr<GfxShader>& shader, int texUnit)
 {
     if (m_nodes.empty())
     {

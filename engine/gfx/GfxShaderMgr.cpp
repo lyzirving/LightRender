@@ -1,34 +1,34 @@
 #include <mutex>
 
-#include "ShaderMgr.h"
-#include "Shader.h"
+#include "GfxShaderMgr.h"
+#include "GfxShader.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
 #undef LOCAL_TAG
 #endif
-#define LOCAL_TAG "ShaderMgr"
+#define LOCAL_TAG "GfxShaderMgr"
 
 static std::mutex g_mutex{};
-static ShaderMgr* g_mgr{ nullptr };
+static GfxShaderMgr* g_mgr{ nullptr };
 
 static const char* STR_NONE   = "none";
 static const char* STR_OBJ    = "obj";
 static const char* STR_CANVAS = "cas";
 
-ShaderMgr* ShaderMgr::get()
+GfxShaderMgr* GfxShaderMgr::get()
 {
     if (!g_mgr) {
         std::lock_guard<std::mutex> lock(g_mutex);
         if (!g_mgr)
-            g_mgr = new ShaderMgr;
+            g_mgr = new GfxShaderMgr;
     }
     return g_mgr;
 }
 
-ShaderMgr::ShaderMgr() : m_shaders() {}
+GfxShaderMgr::GfxShaderMgr() : m_shaders() {}
 
-ShaderMgr::~ShaderMgr() 
+GfxShaderMgr::~GfxShaderMgr() 
 { 
     auto itr = m_shaders.begin();
     while (itr != m_shaders.end())
@@ -38,50 +38,50 @@ ShaderMgr::~ShaderMgr()
     }
 }
 
-const std::shared_ptr<Shader>& ShaderMgr::getShader(ShaderType type)
+const std::shared_ptr<GfxShader>& GfxShaderMgr::getShader(GfxShaderType type)
 {
     std::string key(type2Str(type));
 
     auto itr = m_shaders.find(key);
     if (itr != m_shaders.end())
     {
-        const std::shared_ptr<Shader>& shader = itr->second;
+        const std::shared_ptr<GfxShader>& shader = itr->second;
         return shader;
     }
     else
     {
         LOG_ERR("fail to find shader[%u][%s]", type, type2Str(type));
-        return std::shared_ptr<Shader>(nullptr);
+        return std::shared_ptr<GfxShader>(nullptr);
     }
 }
 
-void ShaderMgr::init()
+void GfxShaderMgr::init()
 {
     std::string key = STR_OBJ;
-    std::shared_ptr<Shader> objShader = std::make_shared<Shader>(STR_OBJ, STR_OBJ, STR_OBJ);
-    m_shaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(key, objShader));
+    std::shared_ptr<GfxShader> objShader = std::make_shared<GfxShader>(STR_OBJ, STR_OBJ, STR_OBJ);
+    m_shaders.insert(std::pair<std::string, std::shared_ptr<GfxShader>>(key, objShader));
 
     key = STR_CANVAS;
-    std::shared_ptr<Shader> casShader = std::make_shared<Shader>(STR_CANVAS, STR_CANVAS, STR_CANVAS);
-    m_shaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(key, casShader));
+    std::shared_ptr<GfxShader> casShader = std::make_shared<GfxShader>(STR_CANVAS, STR_CANVAS, STR_CANVAS);
+    m_shaders.insert(std::pair<std::string, std::shared_ptr<GfxShader>>(key, casShader));
 }
 
-void ShaderMgr::release()
+void GfxShaderMgr::release()
 {
     std::lock_guard<std::mutex> lock(g_mutex);
     delete g_mgr;
     g_mgr = nullptr;
 }
 
-const char* ShaderMgr::type2Str(ShaderType type)
+const char* GfxShaderMgr::type2Str(GfxShaderType type)
 {
     switch (type)
     {
-    case ShaderType::SHADER_OBJ:
+    case GfxShaderType::SHADER_OBJ:
     {
         return STR_OBJ;
     }
-    case ShaderType::SHADER_CANVAS:
+    case GfxShaderType::SHADER_CANVAS:
     {
         return STR_CANVAS;
     }

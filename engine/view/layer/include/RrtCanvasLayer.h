@@ -3,7 +3,7 @@
 
 #include "Layer.h"
 
-class Shader;
+class GfxShader;
 
 class BVHBuilder;
 class RrtTriBuf;
@@ -28,7 +28,7 @@ private:
     uint32_t m_vao, m_vbo, m_ebo;
     uint32_t m_bgColor;
 
-    std::shared_ptr<Shader> m_shader;
+    std::shared_ptr<GfxShader> m_shader;
     std::shared_ptr<BVHBuilder> m_BVHBuilder;
 
     std::shared_ptr<RrtTriBuf> m_triBuf;

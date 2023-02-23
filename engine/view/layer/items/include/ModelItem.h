@@ -13,7 +13,7 @@ struct aiMaterial;
 enum aiTextureType;
 
 class GfxMesh;
-struct Texture;
+struct GfxTexture;
 
 class ModelItem : public LayerItem
 {
@@ -25,7 +25,7 @@ public:
 
 protected:
     void loadModel();
-    std::vector<Texture> loadTexture(aiMaterial* mt, aiTextureType type, uint8_t texType);
+    std::vector<GfxTexture> loadTexture(aiMaterial* mt, aiTextureType type, uint8_t texType);
     void processNode(aiNode* node, const aiScene* scene);
     std::shared_ptr<GfxMesh> processMesh(aiMesh* mesh, const aiScene* scene);
 

@@ -5,9 +5,9 @@
 
 #include "RrtBuffer.h"
 
-class Shader;
+class GfxShader;
 
-struct RrtTriangle;
+struct EncodeTriangle;
 
 class RrtTriBuf : public RrtBuffer
 {
@@ -15,13 +15,13 @@ public:
 	RrtTriBuf();
 	virtual ~RrtTriBuf();
 
-	void addTriangles(const std::vector<RrtTriangle>& input);
-	virtual void bind(const std::shared_ptr<Shader>& shader, int texUnit) override;
+	void addTriangles(const std::vector<EncodeTriangle>& input);
+	virtual void bind(const std::shared_ptr<GfxShader>& shader, int texUnit) override;
 
 	inline int32_t triangleCnt() { return m_triangles.size(); }
 
 protected:
-	std::vector<RrtTriangle> m_triangles;
+	std::vector<EncodeTriangle> m_triangles;
 };
 
 #endif // RRT_TRI_BUFFER_H

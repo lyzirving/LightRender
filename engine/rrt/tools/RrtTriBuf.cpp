@@ -3,7 +3,7 @@
 #include "RrtTriBuf.h"
 #include "RrtDef.h"
 
-#include "Shader.h"
+#include "GfxShader.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
@@ -18,10 +18,10 @@ RrtTriBuf::RrtTriBuf() : RrtBuffer(), m_triangles()
 
 RrtTriBuf::~RrtTriBuf()
 {
-    std::vector<RrtTriangle>().swap(m_triangles);
+    std::vector<EncodeTriangle>().swap(m_triangles);
 }
 
-void RrtTriBuf::addTriangles(const std::vector<RrtTriangle>& input)
+void RrtTriBuf::addTriangles(const std::vector<EncodeTriangle>& input)
 {
     if (!input.empty())
     {
@@ -31,14 +31,14 @@ void RrtTriBuf::addTriangles(const std::vector<RrtTriangle>& input)
         initBuf();
 
         glBindBuffer(GL_TEXTURE_BUFFER, m_bufId);
-        glBufferData(GL_TEXTURE_BUFFER, m_triangles.size() * sizeof(RrtTriangle), &m_triangles[0], GL_STATIC_DRAW);
+        glBufferData(GL_TEXTURE_BUFFER, m_triangles.size() * sizeof(EncodeTriangle), &m_triangles[0], GL_STATIC_DRAW);
 
         glBindTexture(GL_TEXTURE_BUFFER, m_texId);
         glTexBuffer(GL_TEXTURE_BUFFER, GL_RGB32F, m_bufId);
     }
 }
 
-void RrtTriBuf::bind(const std::shared_ptr<Shader>& shader, int texUnit)
+void RrtTriBuf::bind(const std::shared_ptr<GfxShader>& shader, int texUnit)
 {
     if (m_triangles.empty())
     {

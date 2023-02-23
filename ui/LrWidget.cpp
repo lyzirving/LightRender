@@ -1,7 +1,7 @@
 #include <QtGui/qevent.h>
 
 #include "LrWidget.h"
-#include "GfxThread.h"
+#include "GreThread.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
@@ -9,7 +9,7 @@
 #endif
 #define LOCAL_TAG "LrWidget"
 
-LrWidget::LrWidget(QWidget *parent) : QWidget(parent, Qt::MSWindowsOwnDC), m_renderThread(new GfxThread("light render", 60, RenderType::RRT_CANVAS))
+LrWidget::LrWidget(QWidget *parent) : QWidget(parent, Qt::MSWindowsOwnDC), m_renderThread(new GreThread("light render", 60, RenderType::RRT_CANVAS))
 {
     setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_NoSystemBackground);

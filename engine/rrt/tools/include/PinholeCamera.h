@@ -1,12 +1,12 @@
 #ifndef PINHOLE_CAMERA_H
 #define PINHOLE_CAMERA_H
 
-#include "ICamera.h"
+#include "RrtCamera.h"
 
 /*
  * for pinhole camera, near is the focal distance
  */
-class PinholeCamera : public ICamera
+class PinholeCamera : public RrtCamera
 {
 public:
 	PinholeCamera();

@@ -5,11 +5,11 @@
 #include <string>
 #include <vector>
 
-class Shader;
+class GfxShader;
 
-struct Vertex;
-struct Texture;
-struct Material;
+struct GfxVertex;
+struct GfxTexture;
+struct GfxMaterial;
 
 class GfxMesh
 {
@@ -19,15 +19,15 @@ public:
 
     virtual ~GfxMesh();
     virtual void bind(bool force);
-    virtual void draw(const std::shared_ptr<Shader>& shader);
+    virtual void draw(const std::shared_ptr<GfxShader>& shader);
 
-    inline const std::shared_ptr<Material>& getMaterial() { return m_material; }
+    inline const std::shared_ptr<GfxMaterial>& getMaterial() { return m_material; }
     inline const std::string& getName() { return m_name; }
     std::string getMeshInfo();
 
-    void pushBackVert(Vertex &&vert);
+    void pushBackVert(GfxVertex &&vert);
     void pushBackIndices(uint32_t ind);
-    void pushBackTexVec(const std::vector<Texture> &texVec);
+    void pushBackTexVec(const std::vector<GfxTexture> &texVec);
 
 protected:
     virtual void createMem();
@@ -38,11 +38,11 @@ protected:
     std::string m_name;
     uint32_t m_vao, m_vbo, m_ebo;
 
-    std::vector<Vertex> m_vertices;
+    std::vector<GfxVertex> m_vertices;
     std::vector<uint32_t> m_indices;
-    std::vector<Texture> m_textures;
+    std::vector<GfxTexture> m_textures;
 
-    std::shared_ptr<Material> m_material;
+    std::shared_ptr<GfxMaterial> m_material;
 
     uint8_t m_drawMode;
 };

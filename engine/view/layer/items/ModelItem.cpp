@@ -11,8 +11,8 @@
 #include "GfxMesh.h"
 #include "GfxHelper.h"
 #include "GfxDef.h"
-#include "ShaderMgr.h"
-#include "Shader.h"
+#include "GfxShaderMgr.h"
+#include "GfxShader.h"
 
 #include "AssetsMgr.h"
 
@@ -40,7 +40,7 @@ void ModelItem::draw(const std::shared_ptr<ViewTransform>& trans)
 	const glm::mat4& viewMat = trans->getViewMat();
 	const glm::mat4& prjMat = trans->getProjectMat();
 
-	const std::shared_ptr<Shader>& objShader = ShaderMgr::get()->getShader(SHADER_OBJ);
+	const std::shared_ptr<GfxShader>& objShader = GfxShaderMgr::get()->getShader(SHADER_OBJ);
 	if (!objShader)
 	{
 		LOG_ERR("obj shader is null");
@@ -78,17 +78,17 @@ void ModelItem::loadModel()
 	LOG_INFO("finish loading model[%s]", m_name.c_str());
 }
 
-std::vector<Texture> ModelItem::loadTexture(aiMaterial* mt, aiTextureType type, uint8_t texType)
+std::vector<GfxTexture> ModelItem::loadTexture(aiMaterial* mt, aiTextureType type, uint8_t texType)
 {
-	std::vector<Texture> result;
+	std::vector<GfxTexture> result;
 	unsigned int count = mt->GetTextureCount(type);
 	for (unsigned int i = 0; i < count; i++)
 	{
 		aiString texName;
 		mt->GetTexture(type, i, &texName);
 		std::string texPath = m_srcRoot + '/' + texName.C_Str();
-		Texture texture{};
-		texture.m_type = TexType(texType);
+		GfxTexture texture{};
+		texture.m_type = GfxTexType(texType);
 		texture.m_path = texPath;
 		GfxHelper::get()->loadTex(texPath, texture.m_texId, texture.m_width, texture.m_height, texture.m_channel);
 		result.push_back(std::move(texture));
@@ -119,7 +119,7 @@ std::shared_ptr<GfxMesh> ModelItem::processMesh(aiMesh* mesh, const aiScene* sce
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
-		Vertex vertex;
+		GfxVertex vertex;
 		vertex.m_pos.x = mesh->mVertices[i].x;
 		vertex.m_pos.y = mesh->mVertices[i].y;
 		vertex.m_pos.z = mesh->mVertices[i].z;
@@ -147,18 +147,18 @@ std::shared_ptr<GfxMesh> ModelItem::processMesh(aiMesh* mesh, const aiScene* sce
 			result->pushBackIndices(face.mIndices[j]);
 	}
 
-	// every mesh only has one Material
+	// every mesh only has one GfxMaterial
 	if (mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* mt = scene->mMaterials[mesh->mMaterialIndex];
 		if (mt)
 		{
-			std::vector<Texture> diffVec = loadTexture(mt, aiTextureType_DIFFUSE, TexType::DIFFUSE);
-			std::vector<Texture> specVec = loadTexture(mt, aiTextureType_SPECULAR, TexType::SPECULAR);
+			std::vector<GfxTexture> diffVec = loadTexture(mt, aiTextureType_DIFFUSE, GfxTexType::DIFFUSE);
+			std::vector<GfxTexture> specVec = loadTexture(mt, aiTextureType_SPECULAR, GfxTexType::SPECULAR);
 			if (!diffVec.empty()) result->pushBackTexVec(diffVec);
 			if(!specVec.empty()) result->pushBackTexVec(specVec);
 
-			const std::shared_ptr<Material>& gfxMt = result->getMaterial();
+			const std::shared_ptr<GfxMaterial>& gfxMt = result->getMaterial();
 
 			aiReturn ret{ aiReturn::aiReturn_SUCCESS };
 			aiColor3D color;

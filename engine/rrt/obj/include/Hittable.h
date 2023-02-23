@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 
 class Ray;
-class Matl;
+class RrtMaterial;
 
 struct HitRecord
 {
@@ -24,13 +24,13 @@ public:
 	Hittable() : m_matl(nullptr) {}
 	virtual ~Hittable() { m_matl.reset(); }
 
-	inline const std::shared_ptr<Matl>& getMatl() const { return m_matl; };
-	inline void setMatl(const std::shared_ptr<Matl>& matl) { m_matl = matl; }
+	inline const std::shared_ptr<RrtMaterial>& getMatl() const { return m_matl; };
+	inline void setMatl(const std::shared_ptr<RrtMaterial>& matl) { m_matl = matl; }
 
 	virtual bool hit(const Ray &ray, float tMin, float tMax, HitRecord &record) const = 0;
 
 protected:
-	std::shared_ptr<Matl> m_matl;
+	std::shared_ptr<RrtMaterial> m_matl;
 };
 
 #endif

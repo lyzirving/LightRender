@@ -40,19 +40,19 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\gfx\Shader.cpp">
+    <ClCompile Include="engine\gfx\GfxShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\gfx\GfxContext.cpp">
+    <ClCompile Include="engine\gre\GreContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common\LightThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\gfx\GfxThread.cpp">
+    <ClCompile Include="engine\gre\GreThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common\SystemUtil.cpp">
@@ -100,7 +100,7 @@
     <ClCompile Include="engine\gfx\GfxHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\gfx\ShaderMgr.cpp">
+    <ClCompile Include="engine\gfx\GfxShaderMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine\view\layer\items\LayerItem.cpp">
@@ -157,7 +157,7 @@
     <ClCompile Include="engine\rrt\tools\LensCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\rrt\tools\ICamera.cpp">
+    <ClCompile Include="engine\rrt\tools\RrtCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine\rrt\tools\PinholeCamera.cpp">
@@ -165,19 +165,19 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine\gfx\include\Shader.h">
+    <ClInclude Include="engine\gfx\include\GfxShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common\include\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\gfx\include\GfxContext.h">
+    <ClInclude Include="engine\gre\include\GreContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common\include\LightThread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\gfx\include\GfxThread.h">
+    <ClInclude Include="engine\gre\include\GreThread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common\include\SystemUtil.h">
@@ -234,7 +234,7 @@
     <ClInclude Include="engine\gfx\include\GfxHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\gfx\include\ShaderMgr.h">
+    <ClInclude Include="engine\gfx\include\GfxShaderMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\gre\include\GreDef.h">
@@ -285,7 +285,7 @@
     <ClInclude Include="engine\rrt\material\include\LambDiffuse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\rrt\material\include\Matl.h">
+    <ClInclude Include="engine\rrt\material\include\RrtMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\rrt\material\include\Metal.h">
@@ -297,7 +297,7 @@
     <ClInclude Include="engine\rrt\tools\include\LensCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\rrt\tools\include\ICamera.h">
+    <ClInclude Include="engine\rrt\tools\include\RrtCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\rrt\tools\include\PinholeCamera.h">

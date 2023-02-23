@@ -12,7 +12,7 @@
 #endif
 #define LOCAL_TAG "Metal"
 
-Metal::Metal(const glm::vec3& color) : Matl(color), m_fuzzy(0.f) {}
+Metal::Metal(const glm::vec3& color) : RrtMaterial(color), m_fuzzy(0.f) {}
 
 Metal::~Metal() = default;
 

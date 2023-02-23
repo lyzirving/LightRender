@@ -2,25 +2,25 @@
 #include <GL/glew.h>
 #include <GL/wglew.h>
 
-#include "GfxContext.h"
+#include "GreContext.h"
 
 #include "Logger.h"
 #ifdef LOCAL_TAG
 #undef LOCAL_TAG
 #endif
-#define LOCAL_TAG "GfxContext"
+#define LOCAL_TAG "GreContext"
 
-GfxContext::GfxContext() : m_winInfo()
+GreContext::GreContext() : m_winInfo()
 {
 	
 }
 
-GfxContext::~GfxContext()
+GreContext::~GreContext()
 {
 	release();
 }
 
-void GfxContext::bind(HWND wnd)
+void GreContext::bind(HWND wnd)
 {
 	m_winInfo.hdl_wnd = wnd;
 	m_winInfo.hdl_dc = GetDC(wnd);
@@ -33,7 +33,7 @@ void GfxContext::bind(HWND wnd)
 	}
 }
 
-void GfxContext::initInterface()
+void GreContext::initInterface()
 {
 	if (glewInit() != GLEW_OK)
 	{
@@ -49,12 +49,12 @@ void GfxContext::initInterface()
 	wglSwapIntervalEXT(false);
 }
 
-bool GfxContext::makeCurrent()
+bool GreContext::makeCurrent()
 {
 	return wglMakeCurrent(m_winInfo.hdl_dc, m_winInfo.hdl_rc);
 }
 
-void GfxContext::release()
+void GreContext::release()
 {
 	if (m_winInfo.hdl_rc != nullptr)
 	{
@@ -70,12 +70,12 @@ void GfxContext::release()
 	m_winInfo.hdl_rc = nullptr;
 }
 
-bool GfxContext::swapBuf()
+bool GreContext::swapBuf()
 {
 	return SwapBuffers(m_winInfo.hdl_dc);
 }
 
-void GfxContext::setGLPixFmt()
+void GreContext::setGLPixFmt()
 {
 	PIXELFORMATDESCRIPTOR pfd{};
 	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));

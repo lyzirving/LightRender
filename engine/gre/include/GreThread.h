@@ -1,5 +1,5 @@
-#ifndef GFX_THREAD_H
-#define GFX_THREAD_H
+#ifndef GRE_THREAD_H
+#define GRE_THREAD_H
 
 #include <memory>
 #include <Windows.h>
@@ -7,19 +7,19 @@
 #include "LightThread.h"
 #include "ViewDef.h"
 
-class GfxContext;
+class GreContext;
 class Render;
 
 class GreEventQueue;
 struct GreEvent;
 
-class GfxThread : public LightThread
+class GreThread : public LightThread
 {
 public:
 
-    GfxThread(const char* name, int32_t fps, RenderType type);
+    GreThread(const char* name, int32_t fps, RenderType type);
     
-    virtual ~GfxThread();
+    virtual ~GreThread();
     virtual void onFirst() override;
     virtual void onQuit() override;
     virtual void onLoop() override;
@@ -42,7 +42,7 @@ protected:
     void recordFps();
 
     WindowInfo m_wnd;
-    std::shared_ptr<GfxContext> m_ctx;
+    std::shared_ptr<GreContext> m_ctx;
     std::shared_ptr<Render> m_render;
     RenderType m_renderType;
 
@@ -53,5 +53,5 @@ protected:
     std::shared_ptr<GreEventQueue> m_uiEvtQueue;
 };
 
-#endif // !GFX_THREAD_H
+#endif // !GRE_THREAD_H
 

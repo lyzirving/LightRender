@@ -1,16 +1,16 @@
-#ifndef MATERIAL_H
-#define MATERIAL_H
+#ifndef RRT_MATERIAL_H
+#define RRT_MATERIAL_H
 
 class Ray;
 struct HitRecord;
 
 #include <glm/glm.hpp>
 
-class Matl
+class RrtMaterial
 {
 public:
-	Matl(const glm::vec3 &color = glm::vec3(0.5f)) : m_albedo(color) {}
-	virtual ~Matl() = default;
+	RrtMaterial(const glm::vec3 &color = glm::vec3(0.5f)) : m_albedo(color) {}
+	virtual ~RrtMaterial() = default;
 
 	inline void setColor(float r, float g, float b) { m_albedo = glm::vec3(r, g, b); }
 

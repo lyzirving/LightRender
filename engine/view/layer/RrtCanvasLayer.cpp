@@ -10,8 +10,8 @@
 #include "ViewTransform.h"
 #include "Camera.h"
 
-#include "Shader.h"
-#include "ShaderMgr.h"
+#include "GfxShader.h"
+#include "GfxShaderMgr.h"
 #include "GfxDef.h"
 
 #include "ViewDef.h"
@@ -47,15 +47,15 @@ void RrtCanvasLayer::createItems()
 {
     initMem();
 
-    m_shader = ShaderMgr::get()->getShader(ShaderType::SHADER_CANVAS);
+    m_shader = GfxShaderMgr::get()->getShader(GfxShaderType::SHADER_CANVAS);
     if (!m_shader)
     {
         LOG_ERR("failed to get rrt canvas shader");
         assert(0);
     }
 
-    std::vector<RrtTriangle> triangles{};
-    std::vector<RrtBVHNode> nodes{};
+    std::vector<EncodeTriangle> triangles{};
+    std::vector<EncodeBVH> nodes{};
 
     m_BVHBuilder = std::make_shared<BVHBuilder>("StanfordBunny", true);
     m_BVHBuilder->build(nodes);

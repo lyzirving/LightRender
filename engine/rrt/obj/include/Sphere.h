@@ -3,7 +3,7 @@
 
 #include "Hittable.h"
 
-class Matl;
+class RrtMaterial;
 
 class Sphere : public Hittable
 {
