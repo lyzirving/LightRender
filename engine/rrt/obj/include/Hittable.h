@@ -6,6 +6,7 @@
 
 class Ray;
 class RrtMaterial;
+class AABB;
 
 struct HitRecord
 {
@@ -27,6 +28,7 @@ public:
 	inline const std::shared_ptr<RrtMaterial>& getMatl() const { return m_matl; };
 	inline void setMatl(const std::shared_ptr<RrtMaterial>& matl) { m_matl = matl; }
 
+	virtual bool boundingBox(AABB &box) const = 0;
 	virtual bool hit(const Ray &ray, float tMin, float tMax, HitRecord &record) const = 0;
 
 protected:

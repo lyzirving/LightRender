@@ -2,6 +2,7 @@
 #include "Ray.h"
 #include "LambDiffuse.h"
 #include "Metal.h"
+#include "AABB.h"
 
 #include "GfxLib.h"
 
@@ -23,6 +24,11 @@ Sphere::Sphere(const glm::vec3& center, const float radius) : Hittable(), m_cent
 }
 
 Sphere::~Sphere() = default;
+
+bool Sphere::boundingBox(AABB& box) const
+{
+    return true;
+}
 
 bool Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
 {

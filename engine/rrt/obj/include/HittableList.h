@@ -17,6 +17,7 @@ public:
 
 	const std::shared_ptr<Hittable>& at(int index) const;
 
+	virtual bool boundingBox(AABB& box) const override;
 	virtual bool hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const override;
 
 private:

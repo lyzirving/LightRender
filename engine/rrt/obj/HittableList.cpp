@@ -1,6 +1,7 @@
 #include <cassert>
 
 #include "HittableList.h"
+#include "AABB.h"
 
 #include "Logger.h"
 
@@ -32,6 +33,11 @@ const std::shared_ptr<Hittable>& HittableList::at(int index) const
 		assert(0);
 	}
 	return m_list[index];
+}
+
+bool HittableList::boundingBox(AABB& box) const
+{
+	return true;
 }
 
 bool HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
