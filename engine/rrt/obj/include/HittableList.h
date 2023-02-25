@@ -9,6 +9,8 @@
 class HittableList : public Hittable
 {
 public:
+	friend class BVHEngine;
+
 	HittableList();
 	virtual ~HittableList();
 
@@ -16,6 +18,8 @@ public:
 	inline void add(const std::shared_ptr<Hittable>& hittable) { m_list.push_back(hittable); }
 
 	const std::shared_ptr<Hittable>& at(int index) const;
+	bool empty() const;
+	int size() const;
 
 	virtual bool boundingBox(AABB& box) const override;
 	virtual bool hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const override;

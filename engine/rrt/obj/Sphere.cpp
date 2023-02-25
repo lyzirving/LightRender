@@ -27,6 +27,8 @@ Sphere::~Sphere() = default;
 
 bool Sphere::boundingBox(AABB& box) const
 {
+    box.setAA(glm::vec3(m_center.x - m_radius, m_center.y - m_radius, m_center.z - m_radius));
+    box.setBB(glm::vec3(m_center.x + m_radius, m_center.y + m_radius, m_center.z + m_radius));
     return true;
 }
 

@@ -1,4 +1,5 @@
 #include <cassert>
+#include <limits>
 
 #include "HittableList.h"
 #include "AABB.h"
@@ -37,6 +38,25 @@ const std::shared_ptr<Hittable>& HittableList::at(int index) const
 
 bool HittableList::boundingBox(AABB& box) const
 {
+	if (m_list.empty())
+		return false;
+
+	AABB tmpBox;
+	bool first{true};
+	for (const std::shared_ptr<Hittable>& item : m_list)
+	{
+		if (!item->boundingBox(tmpBox)) return false;
+
+		if (first)
+		{
+			first = false;
+			box = tmpBox;
+		}
+		else
+		{
+			box = AABB::surroundingBox(box, tmpBox);
+		}
+	}
 	return true;
 }
 
@@ -58,4 +78,14 @@ bool HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record
 		}
 	}
 	return record.hit;
+}
+
+bool HittableList::empty() const
+{
+	return m_list.empty();
+}
+
+int HittableList::size() const
+{
+	return m_list.size();
 }

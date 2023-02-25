@@ -64,6 +64,11 @@ double GfxLib::random(double min, double max)
     return min + (max - min) * random();
 }
 
+int GfxLib::randomInt(int min, int max)
+{
+    return static_cast<int>(random(double(min), double(max + 1)));
+}
+
 glm::vec3 GfxLib::randomVec3(double min, double max)
 {
     return glm::vec3(random(min, max), random(min, max), random(min, max));

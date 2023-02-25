@@ -19,6 +19,7 @@ public:
 
 	static double random();
 	static double random(double min, double max);
+	static int randomInt(int min, int max);
 
 	static glm::vec3 randomVec3(double min, double max);
 	static glm::vec3 randomInUnitSphere();
