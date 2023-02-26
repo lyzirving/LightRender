@@ -19,9 +19,11 @@ public:
 
 	const std::shared_ptr<Hittable>& at(int index) const;
 	bool empty() const;
+	std::shared_ptr<HittableList> subgroup(int start, int len) const;
 	int size() const;
 
 	virtual bool boundingBox(AABB& box) const override;
+	virtual glm::vec3 center() const override;
 	virtual bool hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const override;
 
 private:

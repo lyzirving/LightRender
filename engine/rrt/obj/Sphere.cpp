@@ -32,6 +32,11 @@ bool Sphere::boundingBox(AABB& box) const
     return true;
 }
 
+glm::vec3 Sphere::center() const 
+{
+    return m_center;
+}
+
 bool Sphere::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
 {
     glm::vec3 oc = ray.origin() - m_center;

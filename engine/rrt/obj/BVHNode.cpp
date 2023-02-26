@@ -18,6 +18,11 @@ bool BVHNode::boundingBox(AABB& box) const
     return true;
 }
 
+glm::vec3 BVHNode::center() const
+{
+    return (m_box->AA() + m_box->BB()) * 0.5f;
+}
+
 bool BVHNode::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
 {
     float hitTime;

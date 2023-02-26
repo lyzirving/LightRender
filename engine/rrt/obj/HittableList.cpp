@@ -60,6 +60,17 @@ bool HittableList::boundingBox(AABB& box) const
 	return true;
 }
 
+glm::vec3 HittableList::center() const
+{
+	AABB box;
+	if (!boundingBox(box))
+	{
+		LOG_ERR("fail to find bounding box");
+		assert(0);
+	}
+	return (box.AA() + box.BB()) * 0.5f;
+}
+
 bool HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record) const
 {
 	float closest = tMax;
@@ -83,6 +94,13 @@ bool HittableList::hit(const Ray& ray, float tMin, float tMax, HitRecord& record
 bool HittableList::empty() const
 {
 	return m_list.empty();
+}
+
+std::shared_ptr<HittableList> HittableList::subgroup(int start, int len) const
+{
+	std::shared_ptr<HittableList> list = std::make_shared<HittableList>();
+	list->m_list.assign(m_list.begin() + start, m_list.begin() + start + len);
+	return list;
 }
 
 int HittableList::size() const
