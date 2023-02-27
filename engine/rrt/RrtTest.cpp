@@ -160,16 +160,46 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 		glm::vec3 attenu{ 1.f };
 
 		std::shared_ptr<RrtMaterial> mat = objList.at(rec.hitInd)->getMatl();
+
+		glm::vec3 emitVal = mat->emit(rec.u, rec.v, rec.pt);
+
 		if (!mat->scatter(ray, rec, attenu, scatterRay))
-			return glm::vec3(0.f);
+			return emitVal;
 
 		glm::vec3 retColor = rayColor(scatterRay, objList, --reflectDepth);
-		return attenu * retColor;
+		return emitVal + attenu * retColor;
 	}
 	else
 	{
 		glm::vec3 startColor{ 1.f }, endColor{ 0.5f, 0.7f, 1.f };
 		float t = (ray.direction().y + 1.f) * 0.5f;
 		return GfxLib::blend(startColor, endColor, t);
+	}
+}
+
+glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int reflectDepth, const glm::vec3& background)
+{
+	if (reflectDepth <= 0) return glm::vec3(0.f);
+
+	HitRecord rec;
+	// use 0.001 instead of 0.f to fix shadow acne
+	if (objList.hit(ray, 0.001f, FLT_MAX, rec) && rec.hitInd >= 0)
+	{
+		Ray scatterRay;
+		glm::vec3 attenu{ 1.f };
+
+		std::shared_ptr<RrtMaterial> mat = objList.at(rec.hitInd)->getMatl();
+
+		glm::vec3 emitVal = mat->emit(rec.u, rec.v, rec.pt);
+
+		if (!mat->scatter(ray, rec, attenu, scatterRay))
+			return emitVal;
+
+		glm::vec3 retColor = rayColor(scatterRay, objList, --reflectDepth, background);
+		return emitVal + attenu * retColor;
+	}
+	else
+	{
+		return background;
 	}
 }
