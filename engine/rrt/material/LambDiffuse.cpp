@@ -1,6 +1,7 @@
 #include "LambDiffuse.h"
 #include "Ray.h"
 #include "Hittable.h"
+#include "SolidColor.h"
 
 #include "GfxLib.h"
 
@@ -11,9 +12,12 @@
 #endif
 #define LOCAL_TAG "Diffuse"
 
-LambDiffuse::LambDiffuse(const glm::vec3& color) : RrtMaterial(color) {}
+LambDiffuse::LambDiffuse(const glm::vec3& color) : RrtMaterial(), m_albedo(new SolidColor(color)) {}
 
-LambDiffuse::~LambDiffuse() = default;
+LambDiffuse::~LambDiffuse()
+{
+	m_albedo.reset();
+}
 
 bool LambDiffuse::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const
 {
@@ -26,12 +30,11 @@ bool LambDiffuse::scatter(const Ray& input, const HitRecord& rec, glm::vec3& att
 		glm::vec3 dir = rec.n + GfxLib::randomOnUnitSphere();
 		if (GfxLib::nearZero(dir))
 		{
-			LOG_INFO("near zero, use old normal");
 			dir = rec.n;
 		}
 		scatterRay.setOrigin(rec.pt);
 		scatterRay.setDirection(dir);
-		attenuation = m_albedo;
+		attenuation = m_albedo->value(rec.u, rec.v, rec.pt);
 		return true;
 	}
 	else

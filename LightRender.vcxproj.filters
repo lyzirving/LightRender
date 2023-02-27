@@ -115,9 +115,6 @@
     <ClCompile Include="engine\view\layer\RrtCanvasLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\rrt\accelerator\BVHBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="engine\rrt\tools\RrtBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -161,6 +158,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine\rrt\tools\PinholeCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\obj\AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\obj\BVHNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\tools\BVHBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\tools\BVHEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rrt\material\texture\SolidColor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -249,9 +261,6 @@
     <ClInclude Include="engine\view\layer\include\RrtCanvasLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\rrt\accelerator\include\BVHBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="engine\rrt\tools\include\RrtBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -301,6 +310,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\rrt\tools\include\PinholeCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\obj\include\AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\obj\include\BVHNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\tools\include\BVHBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\tools\include\BVHEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\material\texture\include\RrtTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\material\texture\include\SolidColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

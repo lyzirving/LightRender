@@ -2,16 +2,20 @@
 
 #include "Dielectric.h"
 #include "Ray.h"
+#include "SolidColor.h"
 #include "Hittable.h"
 
 #include "GfxLib.h"
 #include "GfxDef.h"
 
-Dilectric::Dilectric(float refractIndex) : RrtMaterial(glm::vec3(1.f)), m_refractIndex(refractIndex)
+Dilectric::Dilectric(float refractIndex, const glm::vec3& color) : RrtMaterial(), m_color(new SolidColor(color)), m_refractIndex(refractIndex)
 {
 }
 
-Dilectric::~Dilectric() = default;
+Dilectric::~Dilectric()
+{
+	m_color.reset();
+}
 
 bool Dilectric::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const
 {
@@ -37,6 +41,6 @@ bool Dilectric::scatter(const Ray& input, const HitRecord& rec, glm::vec3& atten
 
 	scatterRay.setOrigin(rec.pt);
 	scatterRay.setDirection(dir);
-	attenuation = m_albedo;
+	attenuation = m_color->value(rec.u, rec.v, rec.pt);
 	return true;
 }

@@ -3,6 +3,7 @@
 #include "Metal.h"
 #include "Ray.h"
 #include "Hittable.h"
+#include "SolidColor.h"
 
 #include "GfxLib.h"
 
@@ -12,9 +13,12 @@
 #endif
 #define LOCAL_TAG "Metal"
 
-Metal::Metal(const glm::vec3& color) : RrtMaterial(color), m_fuzzy(0.f) {}
+Metal::Metal(const glm::vec3& color) : RrtMaterial(), m_color(new SolidColor(color)), m_fuzzy(0.f) {}
 
-Metal::~Metal() = default;
+Metal::~Metal()
+{
+	m_color.reset();
+}
 
 bool Metal::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const
 {
@@ -22,7 +26,7 @@ bool Metal::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuati
 
 	scatterRay.setOrigin(rec.pt);
 	scatterRay.setDirection(refDir + m_fuzzy * GfxLib::randomOnUnitSphere());
-	attenuation = m_albedo;
+	attenuation = m_color->value(rec.u, rec.v, rec.pt);
 	return (glm::dot(scatterRay.direction(), rec.n) > 0.f);
 }
 

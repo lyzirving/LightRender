@@ -10,13 +10,13 @@ class AABB;
 
 struct HitRecord
 {
-	bool hit, frontFace;
+	glm::vec3 pt, n;
 	float t;
+	float u, v;
 	int hitInd;
-	glm::vec3 pt;
-	glm::vec3 n;
-
-	HitRecord() : hit(false), frontFace(false), t(0.f), hitInd(-1), pt(0.f), n(0.f) {}
+	bool hit, frontFace;
+	
+	HitRecord() : pt(0.f), n(0.f), t(0.f), u(0.f), v(0.f), hitInd(-1), hit(false), frontFace(false) {}
 };
 
 class Hittable

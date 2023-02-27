@@ -24,7 +24,7 @@ LrMainWindow::LrMainWindow() : QMainWindow(), m_mainWidget(nullptr)
 
     m_mainWidget = new LrWidget;
 
-    QPushButton* btn = new QPushButton("Print Ray Tracing");
+    QPushButton* btn = new QPushButton("Ray tracing normal scene");
     QFontMetrics metrics(btn->font());
     int txtWidth = metrics.boundingRect(btn->text()).width();
     int txtHeight = metrics.boundingRect(btn->text()).height();
