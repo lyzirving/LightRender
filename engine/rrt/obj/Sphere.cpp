@@ -23,6 +23,11 @@ Sphere::Sphere(const glm::vec3& center, const float radius) : Hittable(), m_cent
     m_matl = std::make_shared<LambDiffuse>();
 }
 
+Sphere::Sphere(const glm::vec3& center, const float radius, const std::shared_ptr<RrtMaterial>& material) 
+       : Hittable(material), m_center(center), m_radius(radius)
+{
+}
+
 Sphere::~Sphere() = default;
 
 bool Sphere::boundingBox(AABB& box) const

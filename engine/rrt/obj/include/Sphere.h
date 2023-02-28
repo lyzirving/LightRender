@@ -10,6 +10,7 @@ class Sphere : public Hittable
 public:
 	Sphere();
 	Sphere(const glm::vec3 & center, const float radius);
+	Sphere(const glm::vec3& center, const float radius, const std::shared_ptr<RrtMaterial> &material);
 	virtual ~Sphere();
 
 	virtual bool boundingBox(AABB& box) const override;

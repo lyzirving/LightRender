@@ -126,9 +126,11 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\gfx\GfxMesh.cpp" />
     <ClCompile Include="engine\gfx\GfxShaderMgr.cpp" />
     <ClCompile Include="engine\gre\GreEventQueue.cpp" />
+    <ClCompile Include="engine\rrt\material\DiffuseLight.cpp" />
     <ClCompile Include="engine\rrt\material\texture\SolidColor.cpp" />
     <ClCompile Include="engine\rrt\obj\AABB.cpp" />
     <ClCompile Include="engine\rrt\obj\BVHNode.cpp" />
+    <ClCompile Include="engine\rrt\obj\Plane.cpp" />
     <ClCompile Include="engine\rrt\tools\BVHBuilder.cpp" />
     <ClCompile Include="engine\rrt\material\Dilectric.cpp" />
     <ClCompile Include="engine\rrt\material\LambDiffuse.cpp" />
@@ -177,10 +179,12 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\gfx\include\GfxShaderMgr.h" />
     <ClInclude Include="engine\gre\include\GreDef.h" />
     <ClInclude Include="engine\gre\include\GreEventQueue.h" />
+    <ClInclude Include="engine\rrt\material\include\DiffuseLight.h" />
     <ClInclude Include="engine\rrt\material\texture\include\RrtTexture.h" />
     <ClInclude Include="engine\rrt\material\texture\include\SolidColor.h" />
     <ClInclude Include="engine\rrt\obj\include\AABB.h" />
     <ClInclude Include="engine\rrt\obj\include\BVHNode.h" />
+    <ClInclude Include="engine\rrt\obj\include\Plane.h" />
     <ClInclude Include="engine\rrt\tools\include\BVHBuilder.h" />
     <ClInclude Include="engine\rrt\material\include\Dielectric.h" />
     <ClInclude Include="engine\rrt\material\include\LambDiffuse.h" />

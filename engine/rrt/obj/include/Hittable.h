@@ -23,6 +23,7 @@ class Hittable
 {
 public:
 	Hittable() : m_matl(nullptr) {}
+	Hittable(const std::shared_ptr<RrtMaterial> &material) : m_matl(material) {}
 	virtual ~Hittable() { m_matl.reset(); }
 
 	inline const std::shared_ptr<RrtMaterial>& getMatl() const { return m_matl; };
