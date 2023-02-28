@@ -8,7 +8,7 @@
 class Plane : public Hittable
 {
 public:
-	Plane(const glm::vec3 &center, const glm::vec3 &front, float width, float height, float thickness, const std::shared_ptr<RrtMaterial> &material);
+	Plane(const glm::vec3 &center, const glm::vec3 &front, float width, float height, const std::shared_ptr<RrtMaterial> &material);
 	virtual ~Plane();
 
 	virtual bool boundingBox(AABB& box) const override;
@@ -20,7 +20,7 @@ public:
 	void resetRotate();
 	void setCenter(const glm::vec3& center);
 	void setFront(const glm::vec3 &front);
-	void setSize(float width, float height, float thickness);
+	void setSize(float width, float height);
 
 private:
 	glm::vec3 m_center;
