@@ -178,7 +178,7 @@
     <ClCompile Include="engine\rrt\material\DiffuseLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine\rrt\obj\Rectangle.cpp">
+    <ClCompile Include="engine\rrt\obj\AARectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -339,7 +339,7 @@
     <ClInclude Include="engine\rrt\material\include\DiffuseLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine\rrt\obj\include\Rectangle.h">
+    <ClInclude Include="engine\rrt\obj\include\AARectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

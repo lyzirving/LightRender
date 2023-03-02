@@ -19,12 +19,15 @@
 #include "Ray.h"
 
 #include "Sphere.h"
-#include "Rectangle.h"
+#include "AARectangle.h"
 #include "HittableList.h"
 
 #include "LambDiffuse.h"
 #include "Metal.h"
 #include "Dielectric.h"
+#include "DiffuseLight.h"
+
+#include "SolidColor.h"
 
 #include "GfxLib.h"
 
@@ -59,40 +62,11 @@ void RrtTest::main()
 
 	std::shared_ptr<RrtCamera> camera = std::make_shared<PinholeCamera>();
 	camera->setViewportSize(glm::vec2(width, height));
-	camera->setPosition(glm::vec3(2.f, 0.f, 1.5f));
 	camera->apply();
 
 	HittableList world;
-	std::shared_ptr<Hittable> sphereCenter = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, 0.f), 0.5f);
-	std::shared_ptr<RrtMaterial> centerMatl = std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f));
-	sphereCenter->setMatl(centerMatl);
-
-	std::shared_ptr<Hittable> sphereLeft = std::make_shared<Sphere>(glm::vec3(-1.f, 0.f, 0.f), 0.5f);
-	std::shared_ptr<RrtMaterial> leftMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f));
-	sphereLeft->setMatl(leftMatl);
-
-	std::shared_ptr<RrtMaterial> planeMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.6f, 0.2f));
-	std::shared_ptr<Hittable> planeRight = std::make_shared<Rectangle>(glm::vec3(0.8f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f), 0.6f, 1.f, 0.1f, planeMatl);
-
-	std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f);
-	std::shared_ptr<RrtMaterial> rightMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f));
-	static_cast<Metal*>(rightMatl.get())->setFluzzy(0.5f);
-	sphereRight->setMatl(rightMatl);
-
-	// todo: fix the dilectric material's bug when total internal reflection is enabled
-	/*std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f);
-	std::shared_ptr<RrtMaterial> rightMatl = std::make_shared<Dilectric>(1.5f);
-	sphereRight->setMatl(rightMatl);*/
-
-	std::shared_ptr<Hittable> sphereGround = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, 0.f), 100.f);
-	std::shared_ptr<RrtMaterial> groundMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f));
-	sphereGround->setMatl(groundMatl);
-
-	world.add(sphereCenter);
-	world.add(sphereLeft);
-	world.add(planeRight);
-	//world.add(sphereRight);
-	world.add(sphereGround);
+	glm::vec3 backgroundColor;
+	scene1(world, backgroundColor);
 
 	uint8_t* data = (uint8_t *)std::calloc(width * height * channel, sizeof(uint8_t));
 	if (!data)
@@ -101,7 +75,7 @@ void RrtTest::main()
 		assert(0);
 	}
 
-	draw(camera, world, width, height, channel, 10, 5, data);
+	draw(camera, world, backgroundColor, width, height, channel, 10, 5, data);
 
 	int ret = stbi_write_png(path.c_str(), width, height, channel, data, 0);
 	if (ret == 0)
@@ -117,7 +91,8 @@ void RrtTest::main()
 	g_running.store(false);
 }
 
-void RrtTest::draw(const std::shared_ptr<RrtCamera>& camera, const HittableList& obj, const int width, const int height, const int channel,
+void RrtTest::draw(const std::shared_ptr<RrtCamera>& camera, const HittableList& obj, const glm::vec3& backgroundColor, 
+	               const int width, const int height, const int channel,
 	               const int sampleCnt, const int reflectCnt, uint8_t* data)
 {
 	int outputRow, outputCol;
@@ -139,7 +114,12 @@ void RrtTest::draw(const std::shared_ptr<RrtCamera>& camera, const HittableList&
 				u = float(col) + GfxLib::random();
 				v = float(row) + GfxLib::random();
 				Ray ray = camera->getRay(u, v);
-				glm::vec3 ret = rayColor(ray, obj, reflectCnt);
+				glm::vec3 ret;
+				// hard coded to use gradient background for invalid input background color
+				if (backgroundColor.x < 0.f || backgroundColor.y < 0.f || backgroundColor.z < 0.f)
+					ret = rayColor(ray, obj, reflectCnt);
+				else
+					ret = rayColor(ray, obj, reflectCnt, backgroundColor);
 				sampleColor = sampleColor + ret * scale;
 			}
 
@@ -208,4 +188,49 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 	{
 		return background;
 	}
+}
+
+void RrtTest::scene0(HittableList& world, glm::vec3& backgroundColor)
+{
+	std::shared_ptr<Hittable> centerSphere = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, 0.f), 0.5f, 
+		                                                              std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f)));
+
+	std::shared_ptr<Hittable> leftSphere = std::make_shared<Sphere>(glm::vec3(-1.f, 0.f, 0.f), 0.5f, 
+		                                                            std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f)));
+
+	std::shared_ptr<Hittable> rightSphere = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f,
+		                                                             std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f), 0.5f));
+
+	// todo: fix the dilectric material's bug when total internal reflection is enabled
+	/*std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f);
+	std::shared_ptr<RrtMaterial> rightMatl = std::make_shared<Dilectric>(1.5f);
+	sphereRight->setMatl(rightMatl);*/
+
+	std::shared_ptr<Hittable> groundSphere = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, 0.f), 100.f,
+		                                                              std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f)));
+	world.add(centerSphere);
+	world.add(leftSphere);
+	world.add(rightSphere);
+	world.add(groundSphere);
+
+	// invalid color
+	backgroundColor = glm::vec3(-1.f);
+}
+
+void RrtTest::scene1(HittableList &world, glm::vec3& backgroundColor)
+{
+	//scene1 is a scene with light
+
+	std::shared_ptr<Hittable> centerSphere = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, 0.f), 0.5f, 
+		                                                              std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f)));
+	std::shared_ptr<Hittable> groundSphere = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, 0.f), 100.f,
+		                                                              std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f)));
+	std::shared_ptr<AARectangle> plane = std::make_shared<AARectangle>(glm::vec3(1.f, 0.f, 0.f), glm::vec3(-1.f, 0.f, 0.f), glm::vec3(0.8f, 1.f, 0.1f),
+		                                                               std::make_shared<DiffuseLight>(std::make_shared<SolidColor>(glm::vec3(1.f))));
+
+	world.add(centerSphere);
+	world.add(groundSphere);
+	world.add(plane);
+
+	backgroundColor = glm::vec3(0.f);
 }

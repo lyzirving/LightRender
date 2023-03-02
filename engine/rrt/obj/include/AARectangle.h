@@ -5,11 +5,18 @@
 
 #include "Hittable.h"
 
-class Rectangle : public Hittable
+/*
+* Axis aligned rectangle
+*/
+class AARectangle : public Hittable
 {
 public:
-	Rectangle(const glm::vec3 &center, const glm::vec3 &front, float width, float height, float thickness, const std::shared_ptr<RrtMaterial> &material);
-	virtual ~Rectangle();
+	/*
+	* front is the +z of the axis aligned rectangle.
+	* front must be orthogonal to +x, +y and +z, or the rectangle can not be correctly drawn.
+	*/
+	AARectangle(const glm::vec3 &center, const glm::vec3 &front, const glm::vec3 &size, const std::shared_ptr<RrtMaterial> &material);
+	virtual ~AARectangle();
 
 	virtual bool boundingBox(AABB& box) const override;
 	virtual glm::vec3 center() const override;

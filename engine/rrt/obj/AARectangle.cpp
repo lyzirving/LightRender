@@ -1,27 +1,28 @@
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Rectangle.h"
+#include "AARectangle.h"
 #include "AABB.h"
 #include "Ray.h"
 #include "Hittable.h"
 
-Rectangle::Rectangle(const glm::vec3& center, const glm::vec3& front, float width, float height, float thickness, const std::shared_ptr<RrtMaterial>& material)
+AARectangle::AARectangle(const glm::vec3& center, const glm::vec3& front, const glm::vec3& size, const std::shared_ptr<RrtMaterial>& material)
 	         : Hittable(material)
 	         , m_center(center)
 	         , m_front(glm::normalize(front)), m_right(1.f, 0.f, 0.f), m_up(0.f, 1.f, 0.f)
 	         , m_rotateMat(1.f), m_aabb(new AABB)
-	         , m_width(width), m_height(height), m_thickness(thickness), m_dataChange(true)
+	         , m_width(size.x), m_height(size.y), m_thickness(size.z)
+	         , m_dataChange(true)
 {
 	apply();
 }
 
-Rectangle::~Rectangle()
+AARectangle::~AARectangle()
 {
 	m_aabb.reset();
 }
 
-void Rectangle::apply()
+void AARectangle::apply()
 {
 	if (m_dataChange.load())
 	{
@@ -65,7 +66,7 @@ void Rectangle::apply()
 	}
 }
 
-void Rectangle::rotate(float angle, const glm::vec3& axis)
+void AARectangle::rotate(float angle, const glm::vec3& axis)
 {
 	glm::mat4 I{ 1.f };
 	I = glm::rotate(I, glm::radians(angle), axis);
@@ -73,24 +74,24 @@ void Rectangle::rotate(float angle, const glm::vec3& axis)
 	m_dataChange.store(true);
 }
 
-void Rectangle::resetRotate()
+void AARectangle::resetRotate()
 {
 	m_rotateMat = glm::mat4(1.f);
 	m_dataChange.store(true);
 }
 
-bool Rectangle::boundingBox(AABB& box) const
+bool AARectangle::boundingBox(AABB& box) const
 {
 	box = *m_aabb;
 	return true;
 }
 
-glm::vec3 Rectangle::center() const
+glm::vec3 AARectangle::center() const
 {
 	return m_center;
 }
 
-bool Rectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& record) const
+bool AARectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& record) const
 {
 	glm::vec3 dir = ray.direction();
 	glm::vec3 invDir = 1.f / dir;
@@ -119,23 +120,25 @@ bool Rectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& record)
 	}
 	else 
 	{
+		record.hit = false;
+		record.hitInd = -1;
 		return false;
 	}
 }
 
-void Rectangle::setCenter(const glm::vec3& center)
+void AARectangle::setCenter(const glm::vec3& center)
 {
 	m_center = center;
 	m_dataChange.store(true);
 }
 
-void Rectangle::setFront(const glm::vec3& front)
+void AARectangle::setFront(const glm::vec3& front)
 {
 	m_front = glm::normalize(front);
 	m_dataChange.store(true);
 }
 
-void Rectangle::setSize(float width, float height, float thickness)
+void AARectangle::setSize(float width, float height, float thickness)
 {
 	m_width = width;
 	m_height = height;

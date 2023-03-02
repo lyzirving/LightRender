@@ -10,12 +10,12 @@ class RrtTexture;
 class Metal : public RrtMaterial
 {
 public:
-	Metal(const glm::vec3& color = glm::vec3(0.5f));
+	Metal(const glm::vec3& color = glm::vec3(0.5f), float fuzzy = 0.f);
 	virtual ~Metal();
 
 	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const override;
 
-	void setFluzzy(float fuzzy);
+	void setFuzzy(float fuzzy);
 
 private:
 	std::shared_ptr<RrtTexture> m_color;

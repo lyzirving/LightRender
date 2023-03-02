@@ -13,7 +13,7 @@
 #endif
 #define LOCAL_TAG "Metal"
 
-Metal::Metal(const glm::vec3& color) : RrtMaterial(), m_color(new SolidColor(color)), m_fuzzy(0.f) {}
+Metal::Metal(const glm::vec3& color, float fuzzy) : RrtMaterial(), m_color(new SolidColor(color)), m_fuzzy(fuzzy) {}
 
 Metal::~Metal()
 {
@@ -30,7 +30,7 @@ bool Metal::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuati
 	return (glm::dot(scatterRay.direction(), rec.n) > 0.f);
 }
 
-void Metal::setFluzzy(float fuzzy)
+void Metal::setFuzzy(float fuzzy)
 {
 	m_fuzzy = GfxLib::clamp(fuzzy, 0.f, 1.f);
 }
