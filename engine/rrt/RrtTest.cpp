@@ -19,7 +19,7 @@
 #include "Ray.h"
 
 #include "Sphere.h"
-#include "Plane.h"
+#include "Rectangle.h"
 #include "HittableList.h"
 
 #include "LambDiffuse.h"
@@ -59,6 +59,7 @@ void RrtTest::main()
 
 	std::shared_ptr<RrtCamera> camera = std::make_shared<PinholeCamera>();
 	camera->setViewportSize(glm::vec2(width, height));
+	camera->setPosition(glm::vec3(2.f, 0.f, 1.5f));
 	camera->apply();
 
 	HittableList world;
@@ -70,8 +71,8 @@ void RrtTest::main()
 	std::shared_ptr<RrtMaterial> leftMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.8f, 0.8f));
 	sphereLeft->setMatl(leftMatl);
 
-	/*std::shared_ptr<RrtMaterial> planeMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.6f, 0.2f));
-	std::shared_ptr<Hittable> planeRight = std::make_shared<Plane>(glm::vec3(0.7f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f), 0.6f, 1.f, planeMatl);*/
+	std::shared_ptr<RrtMaterial> planeMatl = std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.6f, 0.2f));
+	std::shared_ptr<Hittable> planeRight = std::make_shared<Rectangle>(glm::vec3(0.8f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f), 0.6f, 1.f, 0.1f, planeMatl);
 
 	std::shared_ptr<Hittable> sphereRight = std::make_shared<Sphere>(glm::vec3(1.f, 0.f, 0.f), 0.5f);
 	std::shared_ptr<RrtMaterial> rightMatl = std::make_shared<Metal>(glm::vec3(0.8f, 0.6f, 0.2f));
@@ -89,7 +90,8 @@ void RrtTest::main()
 
 	world.add(sphereCenter);
 	world.add(sphereLeft);
-	world.add(sphereRight);
+	world.add(planeRight);
+	//world.add(sphereRight);
 	world.add(sphereGround);
 
 	uint8_t* data = (uint8_t *)std::calloc(width * height * channel, sizeof(uint8_t));

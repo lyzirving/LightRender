@@ -130,7 +130,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\rrt\material\texture\SolidColor.cpp" />
     <ClCompile Include="engine\rrt\obj\AABB.cpp" />
     <ClCompile Include="engine\rrt\obj\BVHNode.cpp" />
-    <ClCompile Include="engine\rrt\obj\Plane.cpp" />
+    <ClCompile Include="engine\rrt\obj\Rectangle.cpp" />
     <ClCompile Include="engine\rrt\tools\BVHBuilder.cpp" />
     <ClCompile Include="engine\rrt\material\Dilectric.cpp" />
     <ClCompile Include="engine\rrt\material\LambDiffuse.cpp" />
@@ -184,7 +184,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\rrt\material\texture\include\SolidColor.h" />
     <ClInclude Include="engine\rrt\obj\include\AABB.h" />
     <ClInclude Include="engine\rrt\obj\include\BVHNode.h" />
-    <ClInclude Include="engine\rrt\obj\include\Plane.h" />
+    <ClInclude Include="engine\rrt\obj\include\Rectangle.h" />
     <ClInclude Include="engine\rrt\tools\include\BVHBuilder.h" />
     <ClInclude Include="engine\rrt\material\include\Dielectric.h" />
     <ClInclude Include="engine\rrt\material\include\LambDiffuse.h" />
