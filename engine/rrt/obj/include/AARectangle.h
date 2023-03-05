@@ -30,7 +30,11 @@ public:
 	void setSize(float width, float height, float thickness);
 
 private:
+	bool hitPtNormal(const glm::vec3 pt, const glm::vec3 center, glm::vec3 &out) const;
+
 	glm::vec3 m_center;
+	glm::vec3 m_lbFrontPt, m_lbBackPt, m_ltFrontPt, m_ltBackPt;
+	glm::vec3 m_rbFrontPt, m_rbBackPt, m_rtFrontPt, m_rtBackPt;
 	glm::vec3 m_front, m_right, m_up;
 	glm::mat4 m_rotateMat;
 	std::shared_ptr<AABB> m_aabb;

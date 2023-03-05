@@ -18,6 +18,7 @@ public:
 	inline void setAA(const glm::vec3& aa) { m_aa = aa; }
 	inline void setBB(const glm::vec3& bb) { m_bb = bb; }
 
+	bool contains(const glm::vec3& pt) const;
 	bool hit(const Ray& ray, float &hitTime) const;
 
 	static AABB surroundingBox(const AABB &lhs, const AABB &rhs);

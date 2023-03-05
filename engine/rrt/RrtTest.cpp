@@ -66,7 +66,7 @@ void RrtTest::main()
 
 	HittableList world;
 	glm::vec3 backgroundColor;
-	scene1(world, backgroundColor);
+	scene2(world, backgroundColor, camera);
 
 	uint8_t* data = (uint8_t *)std::calloc(width * height * channel, sizeof(uint8_t));
 	if (!data)
@@ -75,7 +75,7 @@ void RrtTest::main()
 		assert(0);
 	}
 
-	draw(camera, world, backgroundColor, width, height, channel, 10, 5, data);
+	draw(camera, world, backgroundColor, width, height, channel, 10, 9, data);
 
 	int ret = stbi_write_png(path.c_str(), width, height, channel, data, 0);
 	if (ret == 0)
@@ -190,7 +190,7 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 	}
 }
 
-void RrtTest::scene0(HittableList& world, glm::vec3& backgroundColor)
+void RrtTest::scene0(HittableList& world, glm::vec3& backgroundColor, const std::shared_ptr<RrtCamera>& camera)
 {
 	std::shared_ptr<Hittable> centerSphere = std::make_shared<Sphere>(glm::vec3(0.f, 0.f, 0.f), 0.5f, 
 		                                                              std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f)));
@@ -217,7 +217,7 @@ void RrtTest::scene0(HittableList& world, glm::vec3& backgroundColor)
 	backgroundColor = glm::vec3(-1.f);
 }
 
-void RrtTest::scene1(HittableList &world, glm::vec3& backgroundColor)
+void RrtTest::scene1(HittableList &world, glm::vec3& backgroundColor, const std::shared_ptr<RrtCamera>& camera)
 {
 	//scene1 is a scene with light
 
@@ -233,4 +233,56 @@ void RrtTest::scene1(HittableList &world, glm::vec3& backgroundColor)
 	world.add(plane);
 
 	backgroundColor = glm::vec3(0.f);
+}
+
+void RrtTest::scene2(HittableList& world, glm::vec3& backgroundColor, const std::shared_ptr<RrtCamera> &camera)
+{
+	//scene2 is cornel box
+	std::shared_ptr<AARectangle> left = std::make_shared<AARectangle>(
+		glm::vec3(-1.f, 0.f, 0.f), 
+		glm::vec3(1.f, 0.f, 0.f), 
+		glm::vec3(2.f, 2.f, 0.01f),
+		std::make_shared<LambDiffuse>(glm::vec3(0.12f, 0.45f, 0.15f)));
+
+	std::shared_ptr<AARectangle> right = std::make_shared<AARectangle>(
+		glm::vec3(1.f, 0.f, 0.f),
+		glm::vec3(-1.f, 0.f, 0.f),
+		glm::vec3(2.f, 2.f, 0.01f),
+		std::make_shared<LambDiffuse>(glm::vec3(0.65f, 0.05f, 0.05f)));
+
+	std::shared_ptr<AARectangle> top = std::make_shared<AARectangle>(
+		glm::vec3(0.f, 1.f, 0.f),
+		glm::vec3(0.f, -1.f, 0.f),
+		glm::vec3(2.f, 2.f, 0.01f),
+		std::make_shared<LambDiffuse>(glm::vec3(0.73f, 0.73f, 0.73f)));
+
+	std::shared_ptr<AARectangle> bottom = std::make_shared<AARectangle>(
+		glm::vec3(0.f, -1.f, 0.f),
+		glm::vec3(0.f, 1.f, 0.f),
+		glm::vec3(2.f, 2.f, 0.01f),
+		std::make_shared<LambDiffuse>(glm::vec3(0.73f, 0.73f, 0.73f)));
+
+	std::shared_ptr<AARectangle> back = std::make_shared<AARectangle>(
+		glm::vec3(0.f, 0.f, -1.f),
+		glm::vec3(0.f, 0.f, 1.f),
+		glm::vec3(2.f, 2.f, 0.01f),
+		std::make_shared<LambDiffuse>(glm::vec3(0.73f, 0.73f, 0.73f)));
+
+	std::shared_ptr<AARectangle> topLight = std::make_shared<AARectangle>(
+		glm::vec3(0.f, 1.f - 0.01 * 0.5f, 0.f),
+		glm::vec3(0.f, -1.f, 0.f),
+		glm::vec3(0.7f, 0.7f, 0.1f),
+		std::make_shared<DiffuseLight>(std::make_shared<SolidColor>(glm::vec3(3.f))));
+
+	world.add(left);
+	world.add(right);
+	world.add(top);
+	world.add(bottom);
+	world.add(back);
+	world.add(topLight);
+
+	backgroundColor = glm::vec3(0.f);
+
+	camera->setPosition(glm::vec3(0.f, 0.f, 2.3f));
+	camera->apply();
 }

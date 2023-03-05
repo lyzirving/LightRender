@@ -1,4 +1,5 @@
 #include <cmath>
+#include <functional>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "AARectangle.h"
@@ -6,9 +7,18 @@
 #include "Ray.h"
 #include "Hittable.h"
 
+#include "Logger.h"
+
+#ifdef LOCAL_TAG
+#undef LOCAL_TAG
+#endif
+#define LOCAL_TAG "AARectangle"
+
 AARectangle::AARectangle(const glm::vec3& center, const glm::vec3& front, const glm::vec3& size, const std::shared_ptr<RrtMaterial>& material)
 	         : Hittable(material)
 	         , m_center(center)
+			 , m_lbFrontPt(0.f), m_lbBackPt(0.f), m_ltFrontPt(0.f), m_ltBackPt(0.f)
+	         , m_rbFrontPt(0.f), m_rbBackPt(0.f), m_rtFrontPt(0.f), m_rtBackPt(0.f)
 	         , m_front(glm::normalize(front)), m_right(1.f, 0.f, 0.f), m_up(0.f, 1.f, 0.f)
 	         , m_rotateMat(1.f), m_aabb(new AABB)
 	         , m_width(size.x), m_height(size.y), m_thickness(size.z)
@@ -31,7 +41,14 @@ void AARectangle::apply()
 		m_front = m_rotateMat* glm::vec4(m_front, 0.f);
 
 		glm::vec3 worldUp{ 0.f, 1.f, 0.f };
-		m_right = glm::normalize(glm::cross(worldUp, m_front));
+		if (m_front == worldUp || m_front == glm::vec3(0.f, -1.f, 0.f))
+		{
+			m_right = glm::vec3(1.f, 0.f, 0.f);
+		}
+		else
+		{
+			m_right = glm::normalize(glm::cross(worldUp, m_front));
+		}
 		m_up = glm::normalize(glm::cross(m_front, m_right));
 
 		float halfWidth = m_width * 0.5f;
@@ -44,23 +61,23 @@ void AARectangle::apply()
 		glm::vec3 rb = m_center + m_right * halfWidth - m_up * halfHeight;
 		glm::vec3 rt = m_center + m_right * halfWidth + m_up * halfHeight;
 
-		glm::vec3 lbFront = lb + m_front * halfThickness;
-		glm::vec3 lbBack = lb - m_front * halfThickness;
-		glm::vec3 ltFront = lt + m_front * halfThickness;
-		glm::vec3 ltBack = lt - m_front * halfThickness;
+		m_lbFrontPt = lb + m_front * halfThickness;
+		m_lbBackPt = lb - m_front * halfThickness;
+		m_ltFrontPt = lt + m_front * halfThickness;
+		m_ltBackPt = lt - m_front * halfThickness;
 
-		glm::vec3 rbFront = rb + m_front * halfThickness;
-		glm::vec3 rbBack = rb - m_front * halfThickness;
-		glm::vec3 rtFront = rt + m_front * halfThickness;
-		glm::vec3 rtBack = rt - m_front * halfThickness;
+		m_rbFrontPt = rb + m_front * halfThickness;
+		m_rbBackPt = rb - m_front * halfThickness;
+		m_rtFrontPt = rt + m_front * halfThickness;
+		m_rtBackPt = rt - m_front * halfThickness;
 
-		glm::vec3 minBottom = glm::min(glm::min(glm::min(lbFront, lbBack), rbFront), rbBack);
-		glm::vec3 minTop = glm::min(glm::min(glm::min(ltFront, ltBack), rtFront), rtBack);
+		glm::vec3 minBottom = glm::min(glm::min(glm::min(m_lbFrontPt, m_lbBackPt), m_rbFrontPt), m_rbBackPt);
+		glm::vec3 minTop = glm::min(glm::min(glm::min(m_ltFrontPt, m_ltBackPt), m_rtFrontPt), m_rtBackPt);
 
 		m_aabb->setAA(glm::min(minBottom, minTop));
 
-		glm::vec3 maxBottom = glm::max(glm::max(glm::max(lbFront, lbBack), rbFront), rbBack);
-		glm::vec3 maxTop = glm::max(glm::max(glm::max(ltFront, ltBack), rtFront), rtBack);
+		glm::vec3 maxBottom = glm::max(glm::max(glm::max(m_lbFrontPt, m_lbBackPt), m_rbFrontPt), m_rbBackPt);
+		glm::vec3 maxTop = glm::max(glm::max(glm::max(m_ltFrontPt, m_ltBackPt), m_rtFrontPt), m_rtBackPt);
 
 		m_aabb->setBB(glm::max(maxBottom, maxTop));
 	}
@@ -114,8 +131,13 @@ bool AARectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& recor
 		record.t = t0;
 		record.pt = ray.at(record.t);
 		record.frontFace = true;
-		// t0 is the nearest pt that hits the surface of rectangle£¬ it should always be the outside normal
-		record.n = glm::normalize(record.pt - m_center);
+		glm::vec3 dstPlaneN;
+		if (!hitPtNormal(ray.origin(), m_center, record.n))
+		{
+			record.hit = false;
+			record.hitInd = -1;
+			return false;
+		}
 		return true;
 	}
 	else 
@@ -124,6 +146,104 @@ bool AARectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& recor
 		record.hitInd = -1;
 		return false;
 	}
+}
+
+/*
+* find the normal of hit plane
+* current implementation might be optimized
+*/
+bool AARectangle::hitPtNormal(const glm::vec3 pt, const glm::vec3 center, glm::vec3& out) const
+{
+	Ray r;
+	r.setOrigin(pt);
+	r.setDirection(center - pt);
+
+	glm::vec3 planeCenter, normal;
+	float t;
+
+	auto computeT = [&r](glm::vec3 c, glm::vec3 n) 
+	{
+		return (glm::dot(n, c) - glm::dot(n, r.origin())) / glm::dot(n, r.direction());
+	};
+
+	if (glm::dot(r.direction(), m_front) <= 0.f)
+	{
+		// front plane
+		planeCenter = (m_lbFrontPt + m_rtFrontPt) * 0.5f;
+		normal = m_front;
+		t = computeT(planeCenter, normal);
+		if (t >= 0.f)
+		{
+			out = normal;
+			return true;
+		}
+	} 
+
+	if (glm::dot(r.direction(), -m_front) <= 0.f)
+	{
+		// back plane
+		planeCenter = (m_lbBackPt + m_rtBackPt) * 0.5f;
+		normal = -m_front;
+		t = computeT(planeCenter, normal);
+		if (t >= 0.f)
+		{
+			out = normal;
+			return true;
+		}
+	}
+	
+	if (glm::dot(r.direction(), m_right) <= 0.f)
+	{
+		// right plane
+		planeCenter = (m_rbFrontPt + m_rtBackPt) * 0.5f;
+		normal = m_right;
+		t = computeT(planeCenter, normal);
+		if (t >= 0.f)
+		{
+			out = normal;
+			return true;
+		}
+	}
+	
+	if (glm::dot(r.direction(), -m_right) <= 0.f)
+	{
+		// left plane
+		planeCenter = (m_lbFrontPt + m_ltBackPt) * 0.5f;
+		normal = -m_right;
+		t = computeT(planeCenter, normal);
+		if (t >= 0.f)
+		{
+			out = normal;
+			return true;
+		}
+	}
+	
+	if (glm::dot(r.direction(), m_up) <= 0.f)
+	{
+		// top plane
+		planeCenter = (m_ltFrontPt + m_rtBackPt) * 0.5f;
+		normal = m_up;
+		t = computeT(planeCenter, normal);
+		if (t >= 0.f)
+		{
+			out = normal;
+			return true;
+		}
+	}
+	
+	if (glm::dot(r.direction(), -m_up) <= 0.f)
+	{
+		// bottom plane
+		planeCenter = (m_lbFrontPt + m_rbBackPt) * 0.5f;
+		normal = -m_up;
+		t = computeT(planeCenter, normal);
+		if (t >= 0.f)
+		{
+			out = normal;
+			return true;
+		}
+	}
+	return false;
 }
 
 void AARectangle::setCenter(const glm::vec3& center)
