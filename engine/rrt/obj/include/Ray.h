@@ -7,7 +7,9 @@ class Ray
 {
 public:
 	Ray();
+	Ray(const Ray &other);
 	Ray(const glm::vec3& orig, const glm::vec3& dir);
+	Ray& operator=(const Ray& other);
 	virtual ~Ray() = default;
 
 	inline const glm::vec3& origin() const { return m_orig; }

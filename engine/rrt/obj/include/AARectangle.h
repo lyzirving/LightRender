@@ -28,6 +28,7 @@ public:
 	void setCenter(const glm::vec3& center);
 	void setFront(const glm::vec3 &front);
 	void setSize(float width, float height, float thickness);
+	void setRotate();
 
 private:
 	bool hitPtNormal(const glm::vec3 pt, const glm::vec3 center, glm::vec3 &out) const;
@@ -40,6 +41,7 @@ private:
 	std::shared_ptr<AABB> m_aabb;
 	float m_width, m_height, m_thickness;
 	std::atomic<bool> m_dataChange;
+	bool m_ro;
 };
 
 #endif

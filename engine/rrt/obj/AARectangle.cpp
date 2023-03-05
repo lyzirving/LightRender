@@ -22,7 +22,7 @@ AARectangle::AARectangle(const glm::vec3& center, const glm::vec3& front, const 
 	         , m_front(glm::normalize(front)), m_right(1.f, 0.f, 0.f), m_up(0.f, 1.f, 0.f)
 	         , m_rotateMat(1.f), m_aabb(new AABB)
 	         , m_width(size.x), m_height(size.y), m_thickness(size.z)
-	         , m_dataChange(true)
+	         , m_dataChange(true), m_ro(false)
 {
 	apply();
 }
@@ -110,14 +110,30 @@ glm::vec3 AARectangle::center() const
 
 bool AARectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& record) const
 {
-	glm::vec3 dir = ray.direction();
+	Ray inputRay = ray;
+
+	if (m_ro)
+	{
+		glm::vec3 origin = inputRay.origin();
+		glm::vec3 dir = inputRay.direction();
+
+		glm::mat4 m{ 1.f };
+		m = glm::rotate(m, glm::radians(-30.f), glm::vec3(0.f, 1.f, 0.f));
+		origin = m * glm::vec4(origin, 1.f);
+		dir = m * glm::vec4(dir, 0.f);
+
+		inputRay.setOrigin(origin);
+		inputRay.setDirection(dir);
+	}
+
+	glm::vec3 dir = inputRay.direction();
 	glm::vec3 invDir = 1.f / dir;
 
 	glm::vec3 AA = m_aabb->AA();
 	glm::vec3 BB = m_aabb->BB();
 
-	glm::vec3 far = (BB - ray.origin()) * invDir;
-	glm::vec3 near = (AA - ray.origin()) * invDir;
+	glm::vec3 far = (BB - inputRay.origin()) * invDir;
+	glm::vec3 near = (AA - inputRay.origin()) * invDir;
 
 	glm::vec3 tMax = glm::max(far, near);
 	glm::vec3 tMin = glm::min(far, near);
@@ -129,14 +145,21 @@ bool AARectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& recor
 	{
 		record.hit = true;
 		record.t = t0;
-		record.pt = ray.at(record.t);
+		record.pt = inputRay.at(record.t);
 		record.frontFace = true;
 		glm::vec3 dstPlaneN;
-		if (!hitPtNormal(ray.origin(), m_center, record.n))
+		if (!hitPtNormal(inputRay.origin(), m_center, record.n))
 		{
 			record.hit = false;
 			record.hitInd = -1;
 			return false;
+		}
+		if (m_ro)
+		{
+			glm::mat4 m{ 1.f };
+			m = glm::rotate(m, glm::radians(30.f), glm::vec3(0.f, 1.f, 0.f));
+			record.pt = m * glm::vec4(record.pt, 1.f);
+			record.n = m * glm::vec4(record.n, 0.f);
 		}
 		return true;
 	}
@@ -264,4 +287,9 @@ void AARectangle::setSize(float width, float height, float thickness)
 	m_height = height;
 	m_thickness = thickness;
 	m_dataChange.store(true);
+}
+
+void AARectangle::setRotate()
+{
+	m_ro = true;
 }

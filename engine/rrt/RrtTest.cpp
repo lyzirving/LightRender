@@ -274,12 +274,22 @@ void RrtTest::scene2(HittableList& world, glm::vec3& backgroundColor, const std:
 		glm::vec3(0.7f, 0.7f, 0.1f),
 		std::make_shared<DiffuseLight>(std::make_shared<SolidColor>(glm::vec3(3.f))));
 
+	std::shared_ptr<AARectangle> rectangle = std::make_shared<AARectangle>(
+		glm::vec3(-0.4f, -1.f + 0.01f + 0.6f, -0.1f),
+		glm::vec3(0.f, 0.f, 1.f),
+		glm::vec3(0.5f, 1.2f, 0.6f),
+		std::make_shared<LambDiffuse>(glm::vec3(0.73f, 0.73f, 0.73f)));
+
+	//todo: wrap it as a component
+	rectangle->setRotate();
+
 	world.add(left);
 	world.add(right);
 	world.add(top);
 	world.add(bottom);
 	world.add(back);
 	world.add(topLight);
+	world.add(rectangle);
 
 	backgroundColor = glm::vec3(0.f);
 
