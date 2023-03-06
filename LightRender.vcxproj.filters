@@ -181,6 +181,9 @@
     <ClCompile Include="engine\rrt\obj\AARectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="engine\rrt\attr\RrtTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\gfx\include\GfxShader.h">
@@ -340,6 +343,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine\rrt\obj\include\AARectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\attr\include\RrtComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rrt\attr\include\RrtTransform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

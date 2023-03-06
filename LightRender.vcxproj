@@ -66,7 +66,7 @@
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;D:\Visual Studio Project\LightRender\engine\gre\include;D:\Visual Studio Project\LightRender\engine\rrt\include;D:\Visual Studio Project\LightRender\engine\rrt\tools\include;D:\Visual Studio Project\LightRender\engine\rrt\obj\include;D:\Visual Studio Project\LightRender\engine\rrt\material\include;D:\Visual Studio Project\LightRender\engine\rrt\material\texture\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;D:\Visual Studio Project\LightRender\engine\gre\include;D:\Visual Studio Project\LightRender\engine\rrt\include;D:\Visual Studio Project\LightRender\engine\rrt\tools\include;D:\Visual Studio Project\LightRender\engine\rrt\obj\include;D:\Visual Studio Project\LightRender\engine\rrt\material\include;D:\Visual Studio Project\LightRender\engine\rrt\material\texture\include;D:\Visual Studio Project\LightRender\engine\rrt\attr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TYPE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <PreBuildEvent>
@@ -76,7 +76,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;D:\Visual Studio Project\LightRender\engine\gre\include;D:\Visual Studio Project\LightRender\engine\rrt\include;D:\Visual Studio Project\LightRender\engine\rrt\tools\include;D:\Visual Studio Project\LightRender\engine\rrt\obj\include;D:\Visual Studio Project\LightRender\engine\rrt\material\include;D:\Visual Studio Project\LightRender\engine\rrt\material\texture\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio Project\LightRender\third\include;D:\Visual Studio Project\LightRender\engine\gfx\include;D:\Visual Studio Project\LightRender\common\include;D:\Visual Studio Project\LightRender\ui\include;D:\Visual Studio Project\LightRender\engine\view\include;D:\Visual Studio Project\LightRender\engine\view\layer\include;D:\Visual Studio Project\LightRender\engine\view\layer\items\include;D:\Visual Studio Project\LightRender\engine\view\render\include;D:\Visual Studio Project\LightRender\engine\gre\include;D:\Visual Studio Project\LightRender\engine\rrt\include;D:\Visual Studio Project\LightRender\engine\rrt\tools\include;D:\Visual Studio Project\LightRender\engine\rrt\obj\include;D:\Visual Studio Project\LightRender\engine\rrt\material\include;D:\Visual Studio Project\LightRender\engine\rrt\material\texture\include;D:\Visual Studio Project\LightRender\engine\rrt\attr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\Visual Studio Project\LightRender\third\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -126,6 +126,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClCompile Include="engine\gfx\GfxMesh.cpp" />
     <ClCompile Include="engine\gfx\GfxShaderMgr.cpp" />
     <ClCompile Include="engine\gre\GreEventQueue.cpp" />
+    <ClCompile Include="engine\rrt\attr\RrtTransform.cpp" />
     <ClCompile Include="engine\rrt\material\DiffuseLight.cpp" />
     <ClCompile Include="engine\rrt\material\texture\SolidColor.cpp" />
     <ClCompile Include="engine\rrt\obj\AABB.cpp" />
@@ -179,6 +180,8 @@ xcopy "$(SolutionDir)assets" "$(OutDir)"  /A /F /I /Y /C /E</Command>
     <ClInclude Include="engine\gfx\include\GfxShaderMgr.h" />
     <ClInclude Include="engine\gre\include\GreDef.h" />
     <ClInclude Include="engine\gre\include\GreEventQueue.h" />
+    <ClInclude Include="engine\rrt\attr\include\RrtComponent.h" />
+    <ClInclude Include="engine\rrt\attr\include\RrtTransform.h" />
     <ClInclude Include="engine\rrt\material\include\DiffuseLight.h" />
     <ClInclude Include="engine\rrt\material\texture\include\RrtTexture.h" />
     <ClInclude Include="engine\rrt\material\texture\include\SolidColor.h" />

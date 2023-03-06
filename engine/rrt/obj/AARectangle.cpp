@@ -5,7 +5,6 @@
 #include "AARectangle.h"
 #include "AABB.h"
 #include "Ray.h"
-#include "Hittable.h"
 
 #include "Logger.h"
 
@@ -20,9 +19,9 @@ AARectangle::AARectangle(const glm::vec3& center, const glm::vec3& front, const 
 			 , m_lbFrontPt(0.f), m_lbBackPt(0.f), m_ltFrontPt(0.f), m_ltBackPt(0.f)
 	         , m_rbFrontPt(0.f), m_rbBackPt(0.f), m_rtFrontPt(0.f), m_rtBackPt(0.f)
 	         , m_front(glm::normalize(front)), m_right(1.f, 0.f, 0.f), m_up(0.f, 1.f, 0.f)
-	         , m_rotateMat(1.f), m_aabb(new AABB)
+	         , m_aabb(new AABB)
 	         , m_width(size.x), m_height(size.y), m_thickness(size.z)
-	         , m_dataChange(true), m_ro(false)
+	         , m_dataChange(true)
 {
 	apply();
 }
@@ -37,8 +36,6 @@ void AARectangle::apply()
 	if (m_dataChange.load())
 	{
 		m_dataChange.store(false);
-
-		m_front = m_rotateMat* glm::vec4(m_front, 0.f);
 
 		glm::vec3 worldUp{ 0.f, 1.f, 0.f };
 		if (m_front == worldUp || m_front == glm::vec3(0.f, -1.f, 0.f))
@@ -83,20 +80,6 @@ void AARectangle::apply()
 	}
 }
 
-void AARectangle::rotate(float angle, const glm::vec3& axis)
-{
-	glm::mat4 I{ 1.f };
-	I = glm::rotate(I, glm::radians(angle), axis);
-	m_rotateMat = I * m_rotateMat;
-	m_dataChange.store(true);
-}
-
-void AARectangle::resetRotate()
-{
-	m_rotateMat = glm::mat4(1.f);
-	m_dataChange.store(true);
-}
-
 bool AARectangle::boundingBox(AABB& box) const
 {
 	box = *m_aabb;
@@ -111,20 +94,8 @@ glm::vec3 AARectangle::center() const
 bool AARectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& record) const
 {
 	Ray inputRay = ray;
-
-	if (m_ro)
-	{
-		glm::vec3 origin = inputRay.origin();
-		glm::vec3 dir = inputRay.direction();
-
-		glm::mat4 m{ 1.f };
-		m = glm::rotate(m, glm::radians(-30.f), glm::vec3(0.f, 1.f, 0.f));
-		origin = m * glm::vec4(origin, 1.f);
-		dir = m * glm::vec4(dir, 0.f);
-
-		inputRay.setOrigin(origin);
-		inputRay.setDirection(dir);
-	}
+	RrtCompArg arg;
+	processAllComp(inputRay, arg);
 
 	glm::vec3 dir = inputRay.direction();
 	glm::vec3 invDir = 1.f / dir;
@@ -154,13 +125,11 @@ bool AARectangle::hit(const Ray& ray, float tStart, float tEnd, HitRecord& recor
 			record.hitInd = -1;
 			return false;
 		}
-		if (m_ro)
-		{
-			glm::mat4 m{ 1.f };
-			m = glm::rotate(m, glm::radians(30.f), glm::vec3(0.f, 1.f, 0.f));
-			record.pt = m * glm::vec4(record.pt, 1.f);
-			record.n = m * glm::vec4(record.n, 0.f);
-		}
+		RrtCompArg arg;
+		Ray tmpRay(record.pt, record.n);
+		postProcessAllComp(tmpRay, arg);
+		record.pt = tmpRay.origin();
+		record.n = tmpRay.direction();
 		return true;
 	}
 	else 
@@ -287,9 +256,4 @@ void AARectangle::setSize(float width, float height, float thickness)
 	m_height = height;
 	m_thickness = thickness;
 	m_dataChange.store(true);
-}
-
-void AARectangle::setRotate()
-{
-	m_ro = true;
 }

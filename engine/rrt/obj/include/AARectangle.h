@@ -23,12 +23,9 @@ public:
 	virtual bool hit(const Ray& ray, float tStart, float tEnd, HitRecord& record) const override;
 
 	void apply();
-	void rotate(float angle, const glm::vec3& axis);
-	void resetRotate();
 	void setCenter(const glm::vec3& center);
 	void setFront(const glm::vec3 &front);
 	void setSize(float width, float height, float thickness);
-	void setRotate();
 
 private:
 	bool hitPtNormal(const glm::vec3 pt, const glm::vec3 center, glm::vec3 &out) const;
@@ -37,11 +34,9 @@ private:
 	glm::vec3 m_lbFrontPt, m_lbBackPt, m_ltFrontPt, m_ltBackPt;
 	glm::vec3 m_rbFrontPt, m_rbBackPt, m_rtFrontPt, m_rtBackPt;
 	glm::vec3 m_front, m_right, m_up;
-	glm::mat4 m_rotateMat;
 	std::shared_ptr<AABB> m_aabb;
 	float m_width, m_height, m_thickness;
 	std::atomic<bool> m_dataChange;
-	bool m_ro;
 };
 
 #endif

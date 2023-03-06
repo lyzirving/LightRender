@@ -3,6 +3,9 @@
 
 #include <memory>
 #include <glm/glm.hpp>
+#include <map>
+
+#include "RrtComponent.h"
 
 class Ray;
 class RrtMaterial;
@@ -19,12 +22,82 @@ struct HitRecord
 	HitRecord() : pt(0.f), n(0.f), t(0.f), u(0.f), v(0.f), hitInd(-1), hit(false), frontFace(false) {}
 };
 
-class Hittable
+class Assemble
 {
 public:
-	Hittable() : m_matl(nullptr) {}
-	Hittable(const std::shared_ptr<RrtMaterial> &material) : m_matl(material) {}
-	virtual ~Hittable() { m_matl.reset(); }
+	Assemble() : m_components() {}
+	virtual ~Assemble()
+	{
+		auto itr = m_components.begin();
+		while (itr != m_components.end())
+		{
+			itr->second.reset();
+			itr = m_components.erase(itr);
+		}
+	}
+
+	inline void addComp(RrtCompType type, const std::shared_ptr<RrtComponent> &comp)
+	{
+		auto itr = m_components.find(type);
+		if (itr == m_components.end())
+		{
+			m_components.emplace(std::make_pair(type, comp));
+		}
+		else
+		{
+			itr->second = comp;
+		}
+	}
+
+	inline void deleteComp(RrtCompType type)
+	{
+		auto itr = m_components.find(type);
+		if (itr != m_components.end())
+		{
+			itr->second.reset();
+			m_components.erase(itr);
+		}
+	}
+
+	inline const std::shared_ptr<RrtComponent>& getComponent(RrtCompType type) const
+	{
+		auto itr = m_components.find(type);
+		if (itr != m_components.end())
+		{
+			return itr->second;
+		}
+		return std::shared_ptr<RrtComponent>();
+	};
+
+	inline void processAllComp(Ray& ray, RrtCompArg& arg) const
+	{
+		auto itr = m_components.begin();
+		while (itr != m_components.end())
+		{
+			itr->second->process(ray, arg);
+			itr++;
+		}
+	};
+
+	inline void postProcessAllComp(Ray& ray, RrtCompArg& arg) const
+	{
+		auto itr = m_components.begin();
+		while (itr != m_components.end())
+		{
+			itr->second->postProcess(ray, arg);
+			itr++;
+		}
+	};
+protected:
+	std::map<RrtCompType, std::shared_ptr<RrtComponent>> m_components;
+};
+
+class Hittable : public Assemble
+{
+public:
+	Hittable() : Assemble(), m_matl(nullptr) {}
+	Hittable(const std::shared_ptr<RrtMaterial> &material) : Assemble(), m_matl(material) {}
+	virtual ~Hittable()  { m_matl.reset(); }
 
 	inline const std::shared_ptr<RrtMaterial>& getMatl() const { return m_matl; };
 	inline void setMatl(const std::shared_ptr<RrtMaterial>& matl) { m_matl = matl; }

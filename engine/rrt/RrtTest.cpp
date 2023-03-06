@@ -21,6 +21,7 @@
 #include "Sphere.h"
 #include "AARectangle.h"
 #include "HittableList.h"
+#include "RrtTransform.h"
 
 #include "LambDiffuse.h"
 #include "Metal.h"
@@ -280,8 +281,10 @@ void RrtTest::scene2(HittableList& world, glm::vec3& backgroundColor, const std:
 		glm::vec3(0.5f, 1.2f, 0.6f),
 		std::make_shared<LambDiffuse>(glm::vec3(0.73f, 0.73f, 0.73f)));
 
-	//todo: wrap it as a component
-	rectangle->setRotate();
+	std::shared_ptr<RrtTransform> trans = std::make_shared<RrtTransform>();
+	trans->setTranslation(glm::vec3(0.25f, 0.f, 0.f));
+	trans->setRotate(20.f, glm::vec3(0.f, 1.f, 0.f));
+	rectangle->addComp(RRT_TRANSFORM, trans);
 
 	world.add(left);
 	world.add(right);
