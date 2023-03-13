@@ -6,6 +6,8 @@
 #include "AABB.h"
 #include "Ray.h"
 
+#include "GfxLib.h"
+
 #include "Logger.h"
 
 #ifdef LOCAL_TAG
@@ -236,6 +238,19 @@ bool AARectangle::hitPtNormal(const glm::vec3 pt, const glm::vec3 center, glm::v
 		}
 	}
 	return false;
+}
+
+glm::vec3 AARectangle::randomPtOnFrontFace()
+{
+	apply();
+	glm::vec3 aa = glm::min(m_lbFrontPt, m_rtFrontPt);
+	glm::vec3 bb = glm::max(m_lbFrontPt, m_rtFrontPt);
+
+	glm::vec3 pt;
+	pt.x = GfxLib::random(aa.x, bb.x);
+	pt.y = GfxLib::random(aa.y, bb.y);
+	pt.z = (m_lbFrontPt.z + m_rtFrontPt.z) * 0.5f;
+	return pt;
 }
 
 void AARectangle::setCenter(const glm::vec3& center)

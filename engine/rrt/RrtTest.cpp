@@ -155,15 +155,18 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 
 		glm::vec3 emitVal = mat->emit(rec.u, rec.v, rec.pt);
 
-		float pdf{1.f};
+		float lightPdf{1.f};
 
-		if (!mat->scatter(ray, rec, attenu, scatterRay, pdf))
+		if (!mat->scatter(ray, rec, attenu, scatterRay, lightPdf))
 			return emitVal;
 
 		float scatterPdf = mat->scatterPdf(ray, rec, scatterRay);
 
+		if (g_light && !sampleToLight(g_light, rec, scatterRay, lightPdf))
+			return emitVal;
+
 		glm::vec3 retColor = rayColor(scatterRay, objList, --reflectDepth);
-		return emitVal + attenu * scatterPdf * retColor / pdf;
+		return emitVal + attenu * scatterPdf * retColor / lightPdf;
 	}
 	else
 	{
@@ -188,20 +191,49 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 
 		glm::vec3 emitVal = mat->emit(rec.u, rec.v, rec.pt);
 
-		float pdf{ 1.f };
+		float lightPdf{ 1.f };
 
-		if (!mat->scatter(ray, rec, attenu, scatterRay, pdf))
+		if (!mat->scatter(ray, rec, attenu, scatterRay, lightPdf))
 			return emitVal;
 
 		float scatterPdf = mat->scatterPdf(ray, rec, scatterRay);
 
+		if (g_light && !sampleToLight(g_light, rec, scatterRay, lightPdf))
+			return emitVal;
+
 		glm::vec3 retColor = rayColor(scatterRay, objList, --reflectDepth, background);
-		return emitVal + attenu * scatterPdf * retColor / pdf;
+		return emitVal + attenu * scatterPdf * retColor / lightPdf;
 	}
 	else
 	{
 		return background;
 	}
+}
+
+bool RrtTest::sampleToLight(const std::shared_ptr<AARectangle>& areaLightSrc, const HitRecord& rec, Ray& scatter, float& pdf)
+{
+	areaLightSrc->apply();
+	glm::vec3 lightFront = areaLightSrc->getFrontDir();
+	glm::vec3 ptOnLight = areaLightSrc->randomPtOnFrontFace();
+	float area = areaLightSrc->getWidth() * areaLightSrc->getHeight();
+
+	glm::vec3 dir2Light = glm::normalize(ptOnLight - rec.pt);
+	float dist = glm::distance(ptOnLight, rec.pt);
+
+	if (glm::dot(dir2Light, rec.n) < 0.f)
+		return false;
+
+	float lightCosine = std::abs(glm::dot(dir2Light, lightFront));
+	//float lightCosine = std::abs(dir2Light.y);
+	if (lightCosine < 1e-6)
+		return false;
+
+	pdf = (dist * dist) / (lightCosine * area);
+
+	scatter.setOrigin(rec.pt);
+	scatter.setDirection(dir2Light);
+
+	return true;
 }
 
 void RrtTest::scene0(HittableList& world, glm::vec3& backgroundColor, const std::shared_ptr<RrtCamera>& camera)
@@ -289,14 +321,14 @@ void RrtTest::scene2(HittableList& world, glm::vec3& backgroundColor, const std:
 		std::make_shared<DiffuseLight>(std::make_shared<SolidColor>(glm::vec3(3.f))));
 
 	std::shared_ptr<AARectangle> rectangle = std::make_shared<AARectangle>(
-		glm::vec3(-0.4f, -1.f + 0.01f + 0.6f, -0.1f),
+		glm::vec3(-0.45f, -1.f + 0.01f + 0.6f, -0.3f),
 		glm::vec3(0.f, 0.f, 1.f),
 		glm::vec3(0.5f, 1.2f, 0.6f),
 		std::make_shared<LambDiffuse>(glm::vec3(0.73f, 0.73f, 0.73f)));
 
 	std::shared_ptr<RrtTransform> trans = std::make_shared<RrtTransform>();
 	trans->setTranslation(glm::vec3(0.25f, 0.f, 0.f));
-	trans->setRotate(20.f, glm::vec3(0.f, 1.f, 0.f));
+	trans->setRotate(25.f, glm::vec3(0.f, 1.f, 0.f));
 	rectangle->addComp(RRT_TRANSFORM, trans);
 
 	world.add(left);

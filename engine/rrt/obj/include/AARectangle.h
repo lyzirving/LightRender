@@ -22,7 +22,12 @@ public:
 	virtual glm::vec3 center() const override;
 	virtual bool hit(const Ray& ray, float tStart, float tEnd, HitRecord& record) const override;
 
+	inline float getWidth() const { return m_width; }
+	inline float getHeight() const { return m_height; }
+	inline glm::vec3 getFrontDir() const { return m_front; }
+
 	void apply();
+	glm::vec3 randomPtOnFrontFace();
 	void setCenter(const glm::vec3& center);
 	void setFront(const glm::vec3 &front);
 	void setSize(float width, float height, float thickness);
