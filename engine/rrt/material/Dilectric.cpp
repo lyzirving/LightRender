@@ -17,7 +17,7 @@ Dilectric::~Dilectric()
 	m_color.reset();
 }
 
-bool Dilectric::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const
+bool Dilectric::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay, float& pdf) const
 {
 	// judge whether ray travels from air to inner surface or on the other hand
 	float ratio = rec.frontFace ? (1.f / m_refractIndex) : m_refractIndex;
@@ -42,5 +42,8 @@ bool Dilectric::scatter(const Ray& input, const HitRecord& rec, glm::vec3& atten
 	scatterRay.setOrigin(rec.pt);
 	scatterRay.setDirection(dir);
 	attenuation = m_color->value(rec.u, rec.v, rec.pt);
+
+	// todo: need to compute the pdf of Dilectric
+
 	return true;
 }

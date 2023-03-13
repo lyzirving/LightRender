@@ -44,6 +44,8 @@
 
 static std::atomic_bool g_running{false};
 
+static std::shared_ptr<AARectangle> g_light{ nullptr };
+
 bool RrtTest::checkRunning() { return g_running.load(); }
 
 void RrtTest::main()
@@ -85,6 +87,9 @@ void RrtTest::main()
 	}
 
 	std::free(data);
+
+	if (g_light)
+		g_light.reset();
 
 	int64_t end = SystemUtil::curTimeMs();
 	LOG_INFO("finish generating rrt img[%s], take time[%.3f]", path.c_str(), (end - start) / 1000.f);
@@ -150,11 +155,15 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 
 		glm::vec3 emitVal = mat->emit(rec.u, rec.v, rec.pt);
 
-		if (!mat->scatter(ray, rec, attenu, scatterRay))
+		float pdf{1.f};
+
+		if (!mat->scatter(ray, rec, attenu, scatterRay, pdf))
 			return emitVal;
 
+		float scatterPdf = mat->scatterPdf(ray, rec, scatterRay);
+
 		glm::vec3 retColor = rayColor(scatterRay, objList, --reflectDepth);
-		return emitVal + attenu * retColor;
+		return emitVal + attenu * scatterPdf * retColor / pdf;
 	}
 	else
 	{
@@ -179,11 +188,15 @@ glm::vec3 RrtTest::rayColor(const Ray& ray, const HittableList& objList, int ref
 
 		glm::vec3 emitVal = mat->emit(rec.u, rec.v, rec.pt);
 
-		if (!mat->scatter(ray, rec, attenu, scatterRay))
+		float pdf{ 1.f };
+
+		if (!mat->scatter(ray, rec, attenu, scatterRay, pdf))
 			return emitVal;
 
+		float scatterPdf = mat->scatterPdf(ray, rec, scatterRay);
+
 		glm::vec3 retColor = rayColor(scatterRay, objList, --reflectDepth, background);
-		return emitVal + attenu * retColor;
+		return emitVal + attenu * scatterPdf * retColor / pdf;
 	}
 	else
 	{
@@ -226,12 +239,12 @@ void RrtTest::scene1(HittableList &world, glm::vec3& backgroundColor, const std:
 		                                                              std::make_shared<LambDiffuse>(glm::vec3(0.7f, 0.3f, 0.3f)));
 	std::shared_ptr<Hittable> groundSphere = std::make_shared<Sphere>(glm::vec3(0.f, -100.5f, 0.f), 100.f,
 		                                                              std::make_shared<LambDiffuse>(glm::vec3(0.8f, 0.8f, 0.f)));
-	std::shared_ptr<AARectangle> plane = std::make_shared<AARectangle>(glm::vec3(1.f, 0.f, 0.f), glm::vec3(-1.f, 0.f, 0.f), glm::vec3(0.8f, 1.f, 0.1f),
+	g_light = std::make_shared<AARectangle>(glm::vec3(1.f, 0.f, 0.f), glm::vec3(-1.f, 0.f, 0.f), glm::vec3(0.8f, 1.f, 0.1f),
 		                                                               std::make_shared<DiffuseLight>(std::make_shared<SolidColor>(glm::vec3(1.f))));
 
 	world.add(centerSphere);
 	world.add(groundSphere);
-	world.add(plane);
+	world.add(g_light);
 
 	backgroundColor = glm::vec3(0.f);
 }
@@ -269,7 +282,7 @@ void RrtTest::scene2(HittableList& world, glm::vec3& backgroundColor, const std:
 		glm::vec3(2.f, 2.f, 0.01f),
 		std::make_shared<LambDiffuse>(glm::vec3(0.73f, 0.73f, 0.73f)));
 
-	std::shared_ptr<AARectangle> topLight = std::make_shared<AARectangle>(
+	g_light = std::make_shared<AARectangle>(
 		glm::vec3(0.f, 1.f - 0.01 * 0.5f, 0.f),
 		glm::vec3(0.f, -1.f, 0.f),
 		glm::vec3(0.7f, 0.7f, 0.1f),
@@ -291,7 +304,7 @@ void RrtTest::scene2(HittableList& world, glm::vec3& backgroundColor, const std:
 	world.add(top);
 	world.add(bottom);
 	world.add(back);
-	world.add(topLight);
+	world.add(g_light);
 	world.add(rectangle);
 
 	backgroundColor = glm::vec3(0.f);

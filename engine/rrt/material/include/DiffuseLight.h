@@ -14,7 +14,7 @@ public:
 	virtual ~DiffuseLight();
 
 	virtual glm::vec3 emit(float u, float v, const glm::vec3 p) const override;
-	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const override;
+	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay, float& pdf) const override;
 
 private:
 	std::shared_ptr<RrtTexture> m_emit;

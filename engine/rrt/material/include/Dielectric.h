@@ -13,7 +13,7 @@ public:
 	Dilectric(float refractIndex, const glm::vec3 &color = glm::vec3(0.5f));
 	virtual ~Dilectric();
 
-	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const override;
+	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay, float& pdf) const override;
 
 private:
 	std::shared_ptr<RrtTexture> m_color;

@@ -19,7 +19,7 @@ LambDiffuse::~LambDiffuse()
 	m_albedo.reset();
 }
 
-bool LambDiffuse::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const
+bool LambDiffuse::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay, float& pdf) const
 {
 	if (rec.hit)
 	{
@@ -27,18 +27,28 @@ bool LambDiffuse::scatter(const Ray& input, const HitRecord& rec, glm::vec3& att
 		// so we create a random method to simulate it 
 		// if the target point is on the sphere surface, it produces true Lambertian reflection
 		// reflected ray for Lambertian reflection has higher probability to be scattered close to normal, as its distribution is uniform.
-		glm::vec3 dir = rec.n + GfxLib::randomOnUnitSphere();
-		if (GfxLib::nearZero(dir))
-		{
-			dir = rec.n;
-		}
+
+		// generate a random direction in hemisphere
+		glm::vec3 dir = GfxLib::randomInHemisphere(rec.n);
 		scatterRay.setOrigin(rec.pt);
 		scatterRay.setDirection(dir);
 		attenuation = m_albedo->value(rec.u, rec.v, rec.pt);
+
+		// solid angle of a whole sphere is 4 * PI
+		// lambert diffuse create light on hemisphere, so it's pdf is 1 / (2 * PI)
+		pdf = 1.f / (2.f * GfxLib::PI);
+
 		return true;
 	}
 	else
 	{
 		return false;
 	}
+}
+
+float LambDiffuse::scatterPdf(const Ray& input, const HitRecord& rec, Ray& scatterRay) const
+{
+	// compute a pdf that is mainly around normal
+	float cosVal = glm::dot(rec.n, scatterRay.direction());
+	return cosVal < 0.f ? 0 : cosVal / GfxLib::PI;
 }

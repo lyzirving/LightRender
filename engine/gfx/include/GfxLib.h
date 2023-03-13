@@ -8,6 +8,8 @@ class Ray;
 class GfxLib
 {
 public:
+	static float PI;
+
 	static glm::vec3 blend(const glm::vec3& start, const glm::vec3& end, float t);
 	static float clamp(float val, float min, float max);
 
@@ -23,6 +25,7 @@ public:
 
 	static glm::vec3 randomVec3(double min, double max);
 	static glm::vec3 randomInUnitSphere();
+	static glm::vec3 randomInHemisphere(const glm::vec3 n);
 	static glm::vec3 randomOnUnitSphere();
 
 	static glm::vec3 reflect(const glm::vec3& directionIn, const glm::vec3& n);

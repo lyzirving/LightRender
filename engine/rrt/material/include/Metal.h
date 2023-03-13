@@ -13,7 +13,7 @@ public:
 	Metal(const glm::vec3& color = glm::vec3(0.5f), float fuzzy = 0.f);
 	virtual ~Metal();
 
-	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const override;
+	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay, float& pdf) const override;
 
 	void setFuzzy(float fuzzy);
 

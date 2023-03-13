@@ -13,6 +13,8 @@
 #endif
 #define LOCAL_TAG "GfxLib"
 
+float GfxLib::PI = std::acos(-1.f);
+
 glm::vec3 GfxLib::blend(const glm::vec3& start, const glm::vec3& end, float t)
 {
     if (t < 0.f)
@@ -91,6 +93,13 @@ glm::vec3 GfxLib::randomInUnitSphere()
         if (glm::length(ret) >= 1.f) continue;
         return ret;
     }*/
+}
+
+glm::vec3 GfxLib::randomInHemisphere(const glm::vec3 n)
+{
+    glm::vec3 res = randomInUnitSphere();
+    res = (glm::dot(n, res) >= 0.f) ? res : (-1.f * res);
+    return res;
 }
 
 glm::vec3 GfxLib::randomOnUnitSphere()

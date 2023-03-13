@@ -20,13 +20,16 @@ Metal::~Metal()
 	m_color.reset();
 }
 
-bool Metal::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const
+bool Metal::scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay, float& pdf) const
 {
 	glm::vec3 refDir = GfxLib::reflect(input.direction(), rec.n);
 
 	scatterRay.setOrigin(rec.pt);
 	scatterRay.setDirection(refDir + m_fuzzy * GfxLib::randomOnUnitSphere());
 	attenuation = m_color->value(rec.u, rec.v, rec.pt);
+
+	// todo: need to compute the pdf of metal
+
 	return (glm::dot(scatterRay.direction(), rec.n) > 0.f);
 }
 

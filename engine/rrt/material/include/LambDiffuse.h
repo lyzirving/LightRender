@@ -14,7 +14,8 @@ public:
 	LambDiffuse(const glm::vec3& color = glm::vec3(0.5f));
 	virtual ~LambDiffuse();
 
-	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay) const override;
+	virtual bool scatter(const Ray& input, const HitRecord& rec, glm::vec3& attenuation, Ray& scatterRay, float& pdf) const override;
+	virtual float scatterPdf(const Ray& input, const HitRecord& rec, Ray& scatterRay) const override;
 
 private:
 	std::shared_ptr<RrtTexture> m_albedo;

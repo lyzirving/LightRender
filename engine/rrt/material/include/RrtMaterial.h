@@ -13,14 +13,21 @@ public:
 	virtual ~RrtMaterial() = default;
 
 	/*
-	* emit light for light emitter
+	* @brif emit light for light emitter.
 	*/
 	virtual glm::vec3 emit(float u, float v, const glm::vec3 p) const { return glm::vec3(0.f); };
 
 	/*
-	* reflect of refract light, and notice that light emitter always return false for this method
+	* @brif reflection or refraction of incident light.
+	*       light emitter always return false for this method.
+	* @param input:      input ray
+	* @param rec:        hit record of input ray on this material
+	* @param scatterRay: ray reflected of refracted by this material
+	* @param pdf:        probability distribution function of the light
 	*/
-	virtual bool scatter(const Ray &input, const HitRecord &rec, glm::vec3 &attenuation, Ray &scatterRay) const = 0;
+	virtual bool scatter(const Ray &input, const HitRecord &rec, glm::vec3 &albedo, Ray &scatterRay, float &pdf) const = 0;
+
+	virtual float scatterPdf(const Ray& input, const HitRecord& rec, Ray& scatterRay) const { return 1.f; }
 };
 
 #endif
